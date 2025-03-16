@@ -8,11 +8,11 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.CNPM</groupId>
-	<artifactId>backend</artifactId>
+	<groupId>com.prototype</groupId>
+	<artifactId>arpartment-managing</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>project</name>
-	<description>Demo project for Spring Boot</description>
+	<name>arpartment-managing</name>
+	<description>Managing App for An Apartment</description>
 	<url/>
 	<licenses>
 		<license/>
