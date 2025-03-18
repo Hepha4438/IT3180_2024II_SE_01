@@ -9,15 +9,16 @@ export default function EditUser() {
     const {id}=useParams()
 
     const [user, setUser] = useState({
-        name: "",
+        fullName: "",
         username: "",
         email: "",
-        phone_number: "",
+        phoneNumber: "",
         password: "",
-        citizen_identification: ""
+        citizenIdentification: "",
+        role: ""
     })
 
-    const{ full_name, username, email, phone_number, password, citizen_identification } = user;
+    const{ fullName, username, email, phoneNumber, password, citizenIdentification, role } = user;
 
     const onInputChange = (e) => {
         setUser({...user, [e.target.name]:e.target.value})
@@ -48,8 +49,8 @@ export default function EditUser() {
                 <label htmlFor="Name" className="form-label">
                     Full Name
                 </label>
-                <input type={"text"} className="form-control" placeholder="Enter your full name" name="full_name"
-                    value={full_name}
+                <input type={"text"} className="form-control" placeholder="Enter your full name" name="fullName"
+                    value={fullName}
                     onChange={(e)=>onInputChange(e)}
                 />
             </div>
@@ -75,8 +76,8 @@ export default function EditUser() {
                 <label htmlFor="PhoneNumber" className="form-label">
                     Phone Number
                 </label>
-                <input type={"text"} className="form-control" placeholder="Enter your phone number" name="phone_number"
-                    value={phone_number}
+                <input type={"text"} className="form-control" placeholder="Enter your phone number" name="phoneNumber"
+                    value={phoneNumber}
                     onChange={(e)=>onInputChange(e)}
                 />
             </div>
@@ -84,8 +85,8 @@ export default function EditUser() {
                 <label htmlFor="CitizenIdentification" className="form-label">
                     Citizen Identification
                 </label>
-                <input type={"text"} className="form-control" placeholder="Enter your citizen identification" name="citizen_identification"
-                    value={citizen_identification}
+                <input type={"text"} className="form-control" placeholder="Enter your citizen identification" name="citizenIdentification"
+                    value={citizenIdentification}
                     onChange={(e)=>onInputChange(e)}
                 />
             </div>
@@ -95,6 +96,15 @@ export default function EditUser() {
                 </label>
                 <input type={"text"} className="form-control" placeholder="Enter your password" name="password"
                     value={password}
+                    onChange={(e)=>onInputChange(e)}
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="Role" className="form-label">
+                    Role
+                </label>
+                <input type={"text"} className="form-control" placeholder="Enter your role" name="role"
+                    value={role}
                     onChange={(e)=>onInputChange(e)}
                 />
             </div>

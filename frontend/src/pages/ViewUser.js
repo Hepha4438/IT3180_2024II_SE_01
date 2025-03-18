@@ -5,12 +5,13 @@ import axios from 'axios';
 export default function ViewUser(){
 
     const [user, setUser] = useState({
-        name: "",
+        fullName: "",
         username: "",
         email: "",
-        phone_number: "",
+        phoneNumber: "",
         password: "",
-        citizen_identification: ""
+        citizenIdentification: "",
+        role: ""
     })
 
     const {id}=useParams()
@@ -36,7 +37,7 @@ export default function ViewUser(){
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item">
                                 <b>Full Name: </b>
-                                {user.full_name}
+                                {user.fullName}
                             </li>
                             <li className="list-group-item">
                                 <b>User Name: </b>
@@ -48,15 +49,19 @@ export default function ViewUser(){
                             </li>
                             <li className="list-group-item">
                                 <b>Phone Number: </b>
-                                {user.phone_number}
+                                {user.phoneNumber}
                             </li>
                             <li className="list-group-item">
                                 <b>Citizen Identification: </b>
-                                {user.citizen_identification}
+                                {user.citizenIdentification}
                             </li>
                             <li className="list-group-item">
                                 <b>Password: </b>
                                 {user.password}
+                            </li>
+                            <li className="list-group-item">
+                                <b>Role: </b>
+                                {user.role}
                             </li>
                         </ul>
                     </div>
