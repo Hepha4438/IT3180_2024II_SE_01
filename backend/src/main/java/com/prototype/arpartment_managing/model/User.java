@@ -1,21 +1,37 @@
 package com.prototype.arpartment_managing.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table( name = "NoIdea")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String full_name;
+    @Column(nullable = false, name = "full_name")
+    private String fullName;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
-    private String phone_number;
-    private String citizen_identification;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    private String role;
+    @Column(nullable = false, unique = true)
+    private String citizenIdentification;
+    @Column(nullable = false)
+    private Long room;
+    @Column(nullable = false)
+    public Long getRoom() {
+        return room;
+    }
+
+    public void setRoom(Long room) {
+        this.room = room;
+    }
+
     public Long getId() {
         return id;
     }
@@ -24,12 +40,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUsername() {
@@ -56,19 +72,27 @@ public class User {
         this.password = password;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getCitizen_identification() {
-        return citizen_identification;
+    public String getRole() {
+        return role;
     }
 
-    public void setCitizen_identification(String citizen_identification) {
-        this.citizen_identification = citizen_identification;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getCitizenIdentification() {
+        return citizenIdentification;
+    }
+
+    public void setCitizenIdentification(String citizenIdentification) {
+        this.citizenIdentification = citizenIdentification;
     }
 }

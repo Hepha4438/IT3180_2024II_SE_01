@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.welcome-box {
+  background: white;
+  padding: 20px 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-top: 8px; 
+}
+.welcome-text {
+  margin-top: 20px; 
+  color: #333;
+  font-size: 24px;
+  text-align: center;
+}
+
