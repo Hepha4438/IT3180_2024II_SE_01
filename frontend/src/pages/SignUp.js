@@ -62,7 +62,7 @@ export default function SignUp() {
                 if (data.username) {
                     localStorage.setItem("username", data.username); // Lưu username vào Local Storage
                     alert("Đăng ký thành công!");
-                    navigate("/admin");
+                    navigate("/userslist");
                 } else {
                     alert("Dữ liệu trả về không hợp lệ!");
                 }
@@ -173,7 +173,7 @@ export default function SignUp() {
                         <button type="submit" className="btn btn-outline-primary">
                             Submit
                         </button>
-                        <Link className="btn btn-outline-danger mx-2" to="/admin">
+                        <Link className="btn btn-outline-danger mx-2" to="/userslist">
                             Cancel
                         </Link>
                     </form>

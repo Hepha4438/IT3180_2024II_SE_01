@@ -10,7 +10,7 @@ import "./Sidebar.css";
 
 const Header = () => {
   const { collapseSidebar, collapsed } = useProSidebar();
-  const [menuCollapse, setMenuCollapse] = useState(false);
+  const [menuCollapse, setMenuCollapse] = useState(true);
 
   const menuIconClick = () => {
     setMenuCollapse(!menuCollapse);

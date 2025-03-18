@@ -36,13 +36,18 @@ export default function LoginUser() {
             }
     
             if (response.ok) {
-                if (data.username) {
-                    localStorage.setItem("username", data.username);
-                    alert("Đăng nhập thành công!");
-                    navigate("/home");
-                } else {
-                    alert("Dữ liệu trả về không hợp lệ!");
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("username", data.username);
+                localStorage.setItem("role", data.role);
+                
+                // Check if role is empty
+                if (!data.role) {
+                    alert("Bạn không có quyền truy cập!");
+                    return;
                 }
+                
+                alert("Đăng nhập thành công!");
+                navigate("/home");
             } else {
                 alert(data?.error || "Đăng nhập thất bại!");
             }
@@ -81,7 +86,7 @@ export default function LoginUser() {
                 <button type="submit" className="btn btn-outline-primary">
                     Submit
                 </button>
-                <Link className="btn btn-outline-danger mx-2" to ="/admin">
+                <Link className="btn btn-outline-danger mx-2" to ="/userslist">
                     Cancel
                 </Link>
                 </form>

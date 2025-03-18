@@ -8,6 +8,7 @@ import ViewUser from './pages/ViewUser';
 import LoginUser from './pages/LoginUser';
 import SignUp from './pages/SignUp';
 import UserList from './pages/UserList';
+import LoggedIn from './pages/LoggedIn';
 import { Switch, Redirect } from 'react-router-dom';
 import "./components/Sidebar.css";
 import Home from './pages/Home';
@@ -16,6 +17,8 @@ import Apartment from './pages/Apartment';
 import Auth from './components/Auth';
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import ProtectedRouteLogin from './components/ProtectedRouteLogin';
+import ProtectedRouteWithRole from './components/ProtectedRouteWithRole';
 
 
 export const isLoggedIn = () => !!localStorage.getItem('token');
@@ -67,10 +70,17 @@ function App() {
       <Router>
       <Navbar/>
       <Routes>
-        <Route exact path='/login' element={<LoginUser/>}/>
+        <Route exact path='/login' element={<ProtectedRouteLogin>
+          <LoginUser/>
+        </ProtectedRouteLogin>}/>
+        <Route exact path='/loggedin' element={<LoggedIn/>}/>
         <Route exact path='/home' element={<Home/>}/>
-        <Route exact path='/admin' element={<UserList/>}/>
-        <Route exact path='/register' element={<SignUp/>}/>
+        <Route exact path='/userslist' element={<ProtectedRouteWithRole requiredRole="ADMIN">
+          <UserList/>
+        </ProtectedRouteWithRole>}/>
+        <Route exact path='/register' element={<ProtectedRouteWithRole requiredRole="ADMIN">
+          <SignUp/>
+        </ProtectedRouteWithRole>}/>
         <Route exact path='/edituser/:id' element={<EditUser/>}/>
         <Route exact path='/viewuser/:id' element={<ViewUser/>}/>
         <Route exact path='/apartment' element={<Apartment/>}/>

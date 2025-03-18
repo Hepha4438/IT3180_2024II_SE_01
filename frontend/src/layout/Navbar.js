@@ -6,7 +6,7 @@ export default function Navbar() {
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/admin">
+                    <Link className="navbar-brand" to="/home">
                         <img src="https://static.vecteezy.com/system/resources/previews/038/107/379/non_2x/apartment-icon-logo-design-template-vector.jpg" alt="Apartment Managing" width="45" height="45" />
                     </Link>
                     <button
