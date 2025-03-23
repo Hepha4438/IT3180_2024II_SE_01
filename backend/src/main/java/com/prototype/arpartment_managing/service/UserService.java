@@ -22,8 +22,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     public Optional<User> getUserByUsername(String username) {
@@ -47,7 +47,7 @@ public class UserService {
             user.setEmail(userDetails.getEmail());
             user.setPhoneNumber(userDetails.getPhoneNumber());
             user.setRole(userDetails.getRole());
-            user.setRoom(userDetails.getRoom());
+            user.setApartment(userDetails.getApartment());
             return userRepository.save(user);
         }).orElse(null);
     }
