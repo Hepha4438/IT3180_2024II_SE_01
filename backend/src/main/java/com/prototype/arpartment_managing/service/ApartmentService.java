@@ -61,4 +61,6 @@ public class ApartmentService {
                 }).orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
     }
 
+
+
 }
