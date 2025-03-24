@@ -33,17 +33,15 @@ public class Apartment {
     @JsonManagedReference
     private List<User> residents;
 
+    @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
+            fetch = FetchType.LAZY, orphanRemoval = false)
+    @JsonManagedReference
+    private List<Revenue> revenues;
+
     // Constructors
     public Apartment() {
     }
 
-    public Apartment(String apartmentId, Integer floor) {
-        this.apartmentId = apartmentId;
-        this.floor = floor;
-        this.occupants = 0;
-        this.area = area;
-        this.apartmentType = apartmentType;
-    }
 
     // Getters and Setters
     public Long getId() {
@@ -114,5 +112,13 @@ public class Apartment {
 
     public void setResidents(List<User> residents) {
         this.residents = residents;
+    }
+
+    public List<Revenue> getRevenues() {
+        return revenues;
+    }
+
+    public void setRevenues(List<Revenue> revenues) {
+        this.revenues = revenues;
     }
 }
