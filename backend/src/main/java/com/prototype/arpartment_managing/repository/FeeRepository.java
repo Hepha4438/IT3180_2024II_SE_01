@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface FeeRepository extends JpaRepository<Fee, Long> {
 
-    List<Fee> findByType(String type);
-    Optional<Fee> findByTypeAndApartment_ApartmentId(String type, String apartmentId);
+    Optional<Fee> findByType(String type);
+
 }

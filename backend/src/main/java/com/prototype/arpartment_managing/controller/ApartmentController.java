@@ -92,10 +92,10 @@ public class ApartmentController {
         return apartmentService.updateApartment(newApartment, apartmentId);
     }
 
-    @GetMapping("/apartment/total")
-    public double totalFee(@RequestBody Apartment apartment){
-
-
-        return 122345;
-    }
+//    @GetMapping("/apartment/total")
+//    public double totalFee(@RequestBody Apartment apartment){
+//
+//
+//        return 122345;
+//    }
 }
