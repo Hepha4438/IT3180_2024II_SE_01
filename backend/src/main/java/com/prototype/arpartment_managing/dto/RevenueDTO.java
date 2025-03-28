@@ -13,16 +13,18 @@ public class RevenueDTO {
     private String status;
 
     private double used;
+
+    private double total;
     public RevenueDTO() {
 
     }
-
     public RevenueDTO(Revenue revenue) {
         this.id = revenue.getId();
         this.type = revenue.getType();
         this.status = revenue.getStatus();
-        this.apartmentId = revenue.getApartment().getApartmentId();
+        this.apartmentId = (revenue.getApartment() != null) ? revenue.getApartment().getApartmentId() : null;
         this.used = revenue.getUsed();
+        this.total = revenue.getTotal();
     }
 
     public long getId() {

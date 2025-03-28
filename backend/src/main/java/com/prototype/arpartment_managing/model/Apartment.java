@@ -38,10 +38,16 @@ public class Apartment {
     @JsonManagedReference
     private List<Revenue> revenues;
 
+    @Column( name = "total" )
+    private Double total;
+
     // Constructors
     public Apartment() {
     }
 
+    public Apartment(String apartmentId){
+
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -120,5 +126,13 @@ public class Apartment {
 
     public void setRevenues(List<Revenue> revenues) {
         this.revenues = revenues;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 }

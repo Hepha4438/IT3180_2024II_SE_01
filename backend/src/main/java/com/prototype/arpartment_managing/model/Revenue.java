@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Revenue")
+@Table(name = "Revenues")
 public class Revenue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "type")
+    @Column(nullable = false, unique = true, name = "type")
     private String type;
 
     @Column(nullable = false, name = "status")
@@ -20,12 +20,13 @@ public class Revenue {
     @Column(nullable = false, name = "used")
     private double used;
 
+    @Column(name = "total")
+    private Double total;
+
     @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id")
     @JsonBackReference
     private Apartment apartment;
-
-
 
     public void setId(Long id) {
         this.id = id;
@@ -59,6 +60,14 @@ public class Revenue {
         this.used = used;
     }
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
     public Apartment getApartment() {
         return apartment;
     }
@@ -66,5 +75,4 @@ public class Revenue {
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
     }
-
 }

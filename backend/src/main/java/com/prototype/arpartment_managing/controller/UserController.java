@@ -36,7 +36,6 @@ public class UserController {
     // Tạo user mới
     @PostMapping("/user")
     public ResponseEntity<?> newUser(@RequestBody UserDTO userDTO) {
-        // Tạo user từ DTO
         userService.newUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
@@ -49,9 +48,9 @@ public class UserController {
     // Xóa User
     @Transactional
     @DeleteMapping("/deleteuser")
-    String deleteUser(@RequestParam(required = false) Long id){
+    ResponseEntity<?> deleteUser(@RequestParam(required = false) Long id){
         userService.deleteUser(id);
-        return "User with id "+id+" has been deleted sucessfully";
+        return ResponseEntity.status(HttpStatus.CREATED).body("User delete successfully");
     }
     // Login
     @PostMapping("/login")
@@ -69,10 +68,4 @@ public class UserController {
     User updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) {
         return userService.updateUser(userDTO, id);
     }
-
-    // cai nay dung de lam gi ????
-    public void removeUserFromPreviousApartment(User user) {
-       userService.removeUserFromPreviousApartment(user);
-    }
-
 }

@@ -3,7 +3,6 @@ package com.prototype.arpartment_managing.controller;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Apartment;
-import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.repository.UserRepository;
 import com.prototype.arpartment_managing.service.ApartmentResidentService;
@@ -14,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
@@ -29,34 +26,35 @@ public class ApartmentController {
     private ApartmentResidentService apartmentResidentService;
     @Autowired
     private ApartmentService apartmentService;
-
-    /**
-     *
-     * @param newApartment : new apartment
-     * @return: return new apartment from UI
-     */
-    @PostMapping("/apartment")
-    Apartment newApartment(@RequestBody Apartment newApartment){
-        return apartmentService.createApartment(newApartment);
-    }
-
-
     @GetMapping("/apartments")
     List<Apartment> getAllApartments(){
         return apartmentService.getAllApartments();
     }
 
+    @PostMapping("/apartment")
+    public ResponseEntity<?> newApartment(@RequestBody Apartment newApartment){
+        apartmentService.createApartment(newApartment);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Apartment created successfully");
+
+    }
+
     //Apartment Id (Room's number)
     @GetMapping("/apartment")
-    Optional<Apartment> getApartment(@RequestParam(required = false) String apartmentId) {
-        return apartmentService.getApartmentById(apartmentId);
+    ResponseEntity<?> getApartment(@RequestParam(required = false) String apartmentId) {
+        return apartmentService.getApartmentById1(apartmentId);
     }
     // Delete Apartment
-    @Transactional
     @DeleteMapping("/deleteapartment")
-    String deleteApartment(@RequestParam(required = false) String apartmentId){
-       return apartmentService.deleteApartment(apartmentId);
+    ResponseEntity<?> deleteApartment(@RequestParam(required = false) String apartmentId){
+       apartmentService.deleteApartment(apartmentId);
+       return ResponseEntity.status(HttpStatus.OK).body("Apartment delete successfully");
     }
+
+    @PutMapping("/apartment/{apartmentId}")
+    public Apartment updateApartment(@RequestBody Apartment newApartment, @PathVariable String apartmentId) {
+        return apartmentService.updateApartment(newApartment, apartmentId);
+    }
+
     // Add resident to apartment
     @PutMapping("/apartment/add-resident/{apartmentId}")
     public ResponseEntity<?> addResidentToApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
@@ -71,7 +69,7 @@ public class ApartmentController {
         }
     }
 
-    //Remove a resident from an apartment
+    // Remove a resident from an apartment
     @PutMapping("/apartment/remove-resident/{apartmentId}")
     public ResponseEntity<?> removeResidentFromApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
         try {
@@ -87,15 +85,35 @@ public class ApartmentController {
         }
     }
 
-    @PutMapping("/apartment/{apartmentId}")
-    public Apartment updateApartment(@RequestBody Apartment newApartment, @PathVariable String apartmentId) {
-        return apartmentService.updateApartment(newApartment, apartmentId);
+    @PutMapping("/apartment/{apartmentId}/total")
+    public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId) {
+        try {
+            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            double total = apartmentService.calculateTotalPayment(apartmentId);
+            apartment.setTotal(total);
+            apartmentRepository.save(apartment);
+            return ResponseEntity.ok(apartment);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating total revenue: " + e.getMessage());
+        }
     }
 
-//    @GetMapping("/apartment/total")
-//    public double totalFee(@RequestBody Apartment apartment){
-//
-//
-//        return 122345;
+//    @PostMapping("/apartment/{apartmentId}/{feeType}")
+//    public ResponseEntity<?> totalRevenueOfApartmentByType(@PathVariable String apartmentId ,@PathVariable String feeType) {
+//        try {
+//            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+//                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+//            double total = apartmentService.calculateFee(apartmentId, feeType);
+//            return ResponseEntity.ok(total);
+//        } catch (ApartmentNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating total revenue: " + e.getMessage());
+//        }
 //    }
+
+    
 }
