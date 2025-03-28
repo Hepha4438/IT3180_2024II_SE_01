@@ -11,4 +11,5 @@ public interface RevenueRepository extends JpaRepository<Revenue, Long> {
     Optional<Revenue> findById(Long id);
 
     List<Revenue> findByApartment_ApartmentId(String apartmentId);
+
 }

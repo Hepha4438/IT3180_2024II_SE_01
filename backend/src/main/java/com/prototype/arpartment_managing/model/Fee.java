@@ -15,10 +15,6 @@ public class Fee {
     @Column(nullable = false,name = "price_per_unit")
     private double pricePerUnit; // Giá tiền mỗi đơn vị tiêu thụ
 
-//    @OneToOne
-//    @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id")
-//    private Apartment apartment;
-
     // Getters & Setters
     public String getType() {
         return type;

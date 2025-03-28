@@ -1,7 +1,9 @@
 package com.prototype.arpartment_managing.service;
 
 import com.prototype.arpartment_managing.controller.FeeController;
+import com.prototype.arpartment_managing.exception.FeeNotFoundException;
 import com.prototype.arpartment_managing.exception.RevenueNotFoundException;
+import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,43 +24,45 @@ public class FeeService {
         return feeRepository.save(fee);
     }
 
-    public Fee getFee(Long id) {
-        return feeRepository.getReferenceById(id);
+    public Optional<Fee> getFee(String type) {
+        return feeRepository.findByType(type);
     }
 
-    public Fee getFeeByType(String type) {
-        Optional<Fee> fee =  feeRepository.findByType(type);
-        return fee.orElse(null);
+//    public Fee getFeeByType(String type) {
+//        Optional<Fee> fee =  feeRepository.findByType(type);
+//        return fee.orElse(null);
+//    }
+
+    public Optional<Fee> getFeeByType(String type){
+        return feeRepository.findByType(type);
     }
-
-    public Fee updateFee(Fee fee, Long id) {
-        return feeRepository.findById(id)
-                .map(existingRevenue -> {
-                    // Cập nhật dữ liệu từ request vào bản ghi cũ
-                    existingRevenue.setPricePerUnit(fee.getPricePerUnit());
-                    existingRevenue.setType(fee.getType());
-
-                    return feeRepository.save(existingRevenue);
-                })
-                .orElseThrow(() -> new RevenueNotFoundException(id));
-
-    }
+//    public Fee updateFee(Fee fee, Long id) {
+//        return feeRepository.findById(id)
+//                .map(existingRevenue -> {
+//                    existingRevenue.setPricePerUnit(fee.getPricePerUnit());
+//                    existingRevenue.setType(fee.getType());
+//
+//                    return feeRepository.save(existingRevenue);
+//                })
+//                .orElseThrow(() -> new RevenueNotFoundException(id));
+//
+//    }
 
     public Fee updateFee(Fee fee, String type) {
         return feeRepository.findByType(type)
-                .map(existingRevenue -> {
-                    // Cập nhật dữ liệu từ request vào bản ghi cũ
-                    existingRevenue.setPricePerUnit(fee.getPricePerUnit());
-                    existingRevenue.setType(fee.getType());
-
-                    return feeRepository.save(existingRevenue);
+                .map(existingFee -> {
+                    existingFee.setPricePerUnit(fee.getPricePerUnit());
+                    existingFee.setType(fee.getType());
+                    return feeRepository.save(existingFee);
                 })
-                .orElseThrow(() -> new RevenueNotFoundException(100));
-
+                .orElseThrow(() -> new FeeNotFoundException(type));
     }
 
-
-    void deleteFee(Long id) {
-        feeRepository.deleteById(id);
+    public void deleteFeeByType(String type) {
+        Fee fee = feeRepository.findByType(type)
+                .orElseThrow(()-> new FeeNotFoundException(type));
+        feeRepository.deleteByType(type);
+        return;
     }
+
 }

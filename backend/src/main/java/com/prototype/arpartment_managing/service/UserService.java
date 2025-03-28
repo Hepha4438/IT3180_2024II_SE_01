@@ -8,6 +8,7 @@ import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.token.JwtUtil;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -23,15 +24,11 @@ import java.util.*;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ApartmentRepository apartmentRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
@@ -46,12 +43,13 @@ public class UserService {
     }
 
 
-    public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash password bằng BCrypt
-        return userRepository.save(user);
+    // Get all users
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    public void newUser(UserDTO userDTO){
+    // Create new user
+    public User newUser(UserDTO userDTO){
         User user = new User();
         user.setFullName(userDTO.getFullName());
         user.setUsername(userDTO.getUsername());
@@ -61,7 +59,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setCitizenIdentification(userDTO.getCitizenIdentification());
 
-        // Nếu có apartmentId, tìm căn hộ tương ứng và gán cho user
         if (userDTO.getApartmentId() != null) {
             Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
                     .orElseThrow(() -> new ApartmentNotFoundException(userDTO.getApartmentId()));
@@ -75,8 +72,10 @@ public class UserService {
             apartment.setIsOccupied(!apartment.getResidents().isEmpty());
             apartmentRepository.save(apartment);
         }
+        return user;
     }
 
+    // Get user by id or username
     public ResponseEntity<?> getUser(String username, Long id){
         User user;
         if (username != null) {
@@ -92,12 +91,14 @@ public class UserService {
         return ResponseEntity.ok(new UserDTO(user));
     }
 
+
+    // Delete user
     public void deleteUser(Long id){
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException(id));
         Apartment apartment = user.getApartment();
         if(apartment != null && apartment.getResidents() != null){
-            apartment.getResidents().remove(user);
+            apartment.getResidents().removeIf(r -> r.getId().equals(id));
             user.setApartment(null);
             apartment.setOccupants(apartment.getResidents().size());
             apartment.setIsOccupied(!apartment.getResidents().isEmpty());
@@ -107,6 +108,7 @@ public class UserService {
         return;
     }
 
+    // Login
     public ResponseEntity<?> loginUser(Map<String, String> loginRequest) {
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
@@ -131,6 +133,7 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Invalid username or password");
     }
+
     //Register
     public ResponseEntity<?> registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -142,12 +145,31 @@ public class UserService {
         if (userRepository.findByCitizenIdentification(user.getCitizenIdentification()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Số CCCD đã được đăng kí"));
         }
-        User newUser = createUser(user);
+        UserDTO userDTO = new UserDTO(user);
+        User newUser = newUser(userDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("username", newUser.getUsername()));
     }
 
+    // Transfer userDTO to User
+    public User userDTOtouser(UserDTO userDTO,User user){
+        user.setFullName(userDTO.getFullName());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setRole(userDTO.getRole());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setCitizenIdentification(userDTO.getCitizenIdentification());
 
+        if (userDTO.getApartmentId() != null) {
+            Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
+                    .orElseThrow(() -> new ApartmentNotFoundException(userDTO.getApartmentId()));
+            user.setApartment(apartment);
+        }
+        return user;
+    }
+
+    // Update user information
     public User updateUser(UserDTO userDTO, Long id){
         // Cập nhật thông tin căn hộ nếu apartmentId thay đổi
         return userRepository.findById(id)
