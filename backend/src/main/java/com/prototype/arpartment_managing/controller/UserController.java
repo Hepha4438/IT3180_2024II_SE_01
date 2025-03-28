@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.prototype.arpartment_managing.service.ApartmentResidentService;
@@ -19,6 +20,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -28,26 +30,30 @@ public class UserController {
     private ApartmentResidentService apartmentResidentService;
 
     // Get all users
-    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all")
     List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
     // Tạo user mới
-    @PostMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
     public ResponseEntity<?> newUser(@RequestBody UserDTO userDTO) {
         userService.newUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
     // Tìm kiếm user
-    @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN', 'USER')")
+    @GetMapping("/profile")
     ResponseEntity<?> getUser(@RequestParam(required = false) String username, @RequestParam(required = false) Long id) {
         return userService.getUser(username, id);
     }
     // Xóa User
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    @DeleteMapping("/deleteuser")
+    @DeleteMapping("/delete")
     ResponseEntity<?> deleteUser(@RequestParam(required = false) Long id){
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.CREATED).body("User delete successfully");
@@ -58,13 +64,14 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
     //Register
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         return userService.registerUser(user);
     }
 
     // Update your existing updateUser method to include apartment synchronization
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     User updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) {
         return userService.updateUser(userDTO, id);
     }
