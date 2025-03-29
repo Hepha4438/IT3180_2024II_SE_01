@@ -12,4 +12,6 @@ public interface RevenueRepository extends JpaRepository<Revenue, Long> {
 
     List<Revenue> findByApartment_ApartmentId(String apartmentId);
 
+    List<Revenue> findByType(String type);
+
 }
