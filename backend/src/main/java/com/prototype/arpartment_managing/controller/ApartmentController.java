@@ -101,9 +101,20 @@ public class ApartmentController {
         }
     }
 
-    @GetMapping("/apartment/{apartmentID}/{type}")
-    public double getFeeByType(@PathVariable String apartmentID, @PathVariable String type) {
-        return apartmentService.calculateFeeByType(apartmentID, type);
+    @PutMapping("/apartment/{apartmentId}/{feeType}")
+    public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId,@PathVariable String feeType) {
+        try {
+            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            double total = apartmentService.calculateTotalPayment(apartmentId);
+            apartment.setTotal(total);
+            apartmentRepository.save(apartment);
+            return ResponseEntity.ok(apartment);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating total revenue: " + e.getMessage());
+        }
     }
 
 //    @PostMapping("/apartment/{apartmentId}/{feeType}")

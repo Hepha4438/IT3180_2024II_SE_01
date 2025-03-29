@@ -120,7 +120,7 @@ public class UserService {
 
             if (passwordEncoder.matches(password,user.getPassword())) {
                 JwtUtil jwtUtil = new JwtUtil();
-                String token = jwtUtil.generateToken(user);
+                String token = jwtUtil.generateToken(username,user.getRole());
                 Map<String, Object> response = new HashMap<>();
                 response.put("id", user.getId());
                 response.put("username", user.getUsername());
