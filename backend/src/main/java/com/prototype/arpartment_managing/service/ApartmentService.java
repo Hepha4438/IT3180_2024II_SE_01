@@ -1,10 +1,7 @@
 package com.prototype.arpartment_managing.service;
 
-import com.prototype.arpartment_managing.dto.UserDTO;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.FeeNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundExceptionUsername;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.model.Revenue;
 import com.prototype.arpartment_managing.model.User;
@@ -38,17 +35,18 @@ public class ApartmentService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<Apartment> getAllApartments() {
+
         return apartmentRepository.findAll();
     }
 
-    public Optional<Apartment> getApartmentById(String apartmentId) {
-        if (apartmentId != null) {
-            return Optional.ofNullable(apartmentRepository.findByApartmentId(apartmentId)
-                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId)));
-        } else {
-            throw new IllegalArgumentException("Must provide either apartment room's number");
-        }
-    }
+//    public Optional<Apartment> getApartmentById(String apartmentId) {
+//        if (apartmentId != null) {
+//            return Optional.ofNullable(apartmentRepository.findByApartmentId(apartmentId)
+//                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId)));
+//        } else {
+//            throw new IllegalArgumentException("Must provide either apartment room's number");
+//        }
+//    }
     public ResponseEntity<?> getApartmentById1(String apartmentId){
         if (apartmentId != null) {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
@@ -59,8 +57,9 @@ public class ApartmentService {
         return ResponseEntity.ok(new Apartment(apartmentId));
     }
 
-    public Apartment createApartment(Apartment apartment) {
-        return apartmentRepository.save(apartment);
+    public void createApartment(Apartment apartment) {
+
+        apartmentRepository.save(apartment);
     }
 
     @Transactional
@@ -73,9 +72,7 @@ public class ApartmentService {
         }
         userRepository.saveAll(apartment.getResidents()); // Save changes to users
 
-        for (Revenue revenue : new ArrayList<>(apartment.getRevenues())) {
-            revenueRepository.delete(revenue);
-        }
+        revenueRepository.deleteAll(new ArrayList<>(apartment.getRevenues()));
         apartmentRepository.delete(apartment);
     }
 
@@ -93,7 +90,7 @@ public class ApartmentService {
                     return apartmentRepository.save(apartment);
                 }).orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
     }
-    public Double calculateFee(String apartmentId, String feeType) {
+    public Double calculateFeeByType(String apartmentId, String feeType) {
         List<Revenue> revenues = findAllRevenueByApartmentId(apartmentId);
         if (revenues.isEmpty()) {
             return 0.0;

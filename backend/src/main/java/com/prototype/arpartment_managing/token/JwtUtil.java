@@ -26,29 +26,29 @@ public class JwtUtil {
     }
 
     // Extract Username from Token
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    // Extract Expiration Date
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    // Extract any Claim
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
-        return claimsResolver.apply(claims);
-    }
-    // Validate Token
-    public boolean validateToken(String token, String username) {
-        return (extractUsername(token).equals(username) && !isTokenExpired(token));
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+//    public String extractUsername(String token) {
+//        return extractClaim(token, Claims::getSubject);
+//    }
+//
+//    // Extract Expiration Date
+//    public Date extractExpiration(String token) {
+//        return extractClaim(token, Claims::getExpiration);
+//    }
+//
+//    // Extract any Claim
+//    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+//        final Claims claims = Jwts.parser()
+//                .setSigningKey(secretKey)
+//                .parseClaimsJws(token)
+//                .getBody();
+//        return claimsResolver.apply(claims);
+//    }
+//    // Validate Token
+//    public boolean validateToken(String token, String username) {
+//        return (extractUsername(token).equals(username) && !isTokenExpired(token));
+//    }
+//
+//    private boolean isTokenExpired(String token) {
+//        return extractExpiration(token).before(new Date());
+//    }
 }

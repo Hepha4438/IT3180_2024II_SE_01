@@ -101,6 +101,11 @@ public class ApartmentController {
         }
     }
 
+    @GetMapping("/apartment/{apartmentID}/{type}")
+    public double getFeeByType(@PathVariable String apartmentID, @PathVariable String type) {
+        return apartmentService.calculateFeeByType(apartmentID, type);
+    }
+
 //    @PostMapping("/apartment/{apartmentId}/{feeType}")
 //    public ResponseEntity<?> totalRevenueOfApartmentByType(@PathVariable String apartmentId ,@PathVariable String feeType) {
 //        try {

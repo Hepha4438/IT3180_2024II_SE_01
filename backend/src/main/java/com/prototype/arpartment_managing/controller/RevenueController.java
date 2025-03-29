@@ -20,6 +20,7 @@ public class RevenueController {
 
     @GetMapping("/revenues")
     public List<Revenue> getAllRevenues() {
+
         return revenueService.getAllRevenues();
     }
 
@@ -35,6 +36,7 @@ public class RevenueController {
 
     @GetMapping("/revenue")
     ResponseEntity<?> getRevenue(@RequestParam(required = false) Long id) {
+
         return revenueService.getRevenue(id);
     }
 
