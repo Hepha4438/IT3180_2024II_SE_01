@@ -21,7 +21,7 @@ export default function ViewUser(){
     },[])
 
     const loadUser = async ()=>{
-        const result = await axios.get(`http://localhost:7070/user/${id}`)
+        const result = await axios.get(`http://localhost:7070/user?id=${id}`)
         setUser(result.data)
     }
 
@@ -54,10 +54,6 @@ export default function ViewUser(){
                             <li className="list-group-item">
                                 <b>Citizen Identification: </b>
                                 {user.citizenIdentification}
-                            </li>
-                            <li className="list-group-item">
-                                <b>Password: </b>
-                                {user.password}
                             </li>
                             <li className="list-group-item">
                                 <b>Role: </b>

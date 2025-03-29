@@ -1,5 +1,4 @@
 import React from "react";
-import "../../App.css";
 import Header from "../../components/Sidebar";
 import { Link } from "react-router-dom";
 
