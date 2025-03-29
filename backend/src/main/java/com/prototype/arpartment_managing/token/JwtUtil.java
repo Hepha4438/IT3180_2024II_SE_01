@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtUtil {
 
     @Value("${jwt.secret:MySuperSecretKeyForJWTAuthentication}")
-    private String secretString;
+    private String secretString = "MySuperSecretKeyForJWTAuthentication";
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secretString.getBytes());
@@ -24,7 +24,7 @@ public class JwtUtil {
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role)
+                .claim("role","ROLE_" + role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
@@ -36,9 +36,9 @@ public class JwtUtil {
     }
 
     public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("role", String.class));
+        String role = extractClaim(token, claims -> claims.get("role", String.class));
+        return role != null ? role : "";
     }
-
     public <T> T extractClaim(String token, ClaimsResolver<T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.resolve(claims);

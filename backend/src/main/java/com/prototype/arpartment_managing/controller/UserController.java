@@ -30,14 +30,12 @@ public class UserController {
     private ApartmentResidentService apartmentResidentService;
 
     // Get all users
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
     // Tạo user mới
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> newUser(@RequestBody UserDTO userDTO) {
         userService.newUser(userDTO);
@@ -45,13 +43,11 @@ public class UserController {
     }
 
     // Tìm kiếm user
-    @PreAuthorize("hasRole('ADMIN', 'USER')")
     @GetMapping("/profile")
     ResponseEntity<?> getUser(@RequestParam(required = false) String username, @RequestParam(required = false) Long id) {
         return userService.getUser(username, id);
     }
     // Xóa User
-    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @DeleteMapping("/delete")
     ResponseEntity<?> deleteUser(@RequestParam(required = false) Long id){
@@ -64,7 +60,6 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
     //Register
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         return userService.registerUser(user);
