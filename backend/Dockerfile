@@ -8,6 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build file JAR bằng Maven
+RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Tạo stage chạy ứng dụng
