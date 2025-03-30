@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.prototype.arpartment_managing.service.ApartmentResidentService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
@@ -29,9 +30,15 @@ public class UserController {
     @Autowired
     private ApartmentResidentService apartmentResidentService;
 
+    @Autowired
+    private ApartmentRepository apartmentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     // Get all users
     @GetMapping("/all")
-    List<User> getAllUsers(){
+    List<UserDTO> getAllUsers(){
         return userService.getAllUsers();
     }
 
@@ -70,4 +77,15 @@ public class UserController {
     User updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) {
         return userService.updateUser(userDTO, id);
     }
+
+    @GetMapping("/{id}/apartmentresident")
+    public List<UserDTO> getUserinApartment(@PathVariable Long id) {
+        return userService.getUserSameApartment(id);
+    }
+
+    @GetMapping("/{id}/apartment")
+    public Apartment getApartmentOfUser(@PathVariable Long id){
+        return userService.getApartmentofUser(id);
+    }
+
 }

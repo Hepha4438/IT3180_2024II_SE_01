@@ -52,6 +52,10 @@ public class RevenueService {
         return ResponseEntity.ok(new RevenueDTO(revenue));
     }
 
+    public List<Revenue> getRevenueByApartmentId(String apartmentId) {
+        return revenueRepository.findByApartment_ApartmentId(apartmentId);
+    }
+
     @Transactional
     // Create Revenue
     public Revenue createRevenue(RevenueDTO revenueDTO) {

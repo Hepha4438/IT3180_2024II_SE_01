@@ -29,7 +29,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/user/**","/apartments","/apartment","/apartment/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/revenues").permitAll()
+                        .requestMatchers("/revenue/**").permitAll()
+                        .requestMatchers("/apartment").permitAll()
+                        .requestMatchers(("/deleterevenue")).permitAll()
+                        .requestMatchers("/fee/**").permitAll()
+                        .requestMatchers("/revenue").permitAll()
                         .anyRequest().authenticated()
                 )
 

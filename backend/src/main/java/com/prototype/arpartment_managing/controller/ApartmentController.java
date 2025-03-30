@@ -57,9 +57,18 @@ public class ApartmentController {
 
     // Add resident to apartment
     @PutMapping("/apartment/add-resident/{apartmentId}")
-    public ResponseEntity<?> addResidentToApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
+    public ResponseEntity<?> addResidentToApartment(
+            @PathVariable String apartmentId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String citizenIdentification) {
         try {
-            apartmentResidentService.addResidentToApartment(userId, apartmentId);
+            if (citizenIdentification != null) {
+                apartmentResidentService.addResidentToApartmentByCitizenIdentification(citizenIdentification, apartmentId);
+            } else if (userId != null) {
+                apartmentResidentService.addResidentToApartment(userId, apartmentId);
+            } else {
+                return ResponseEntity.badRequest().body("Must provide either userId or citizenIdentification.");
+            }
             return ResponseEntity.ok("User successfully added to apartment " + apartmentId);
         } catch (ApartmentNotFoundException | UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -71,18 +80,25 @@ public class ApartmentController {
 
     // Remove a resident from an apartment
     @PutMapping("/apartment/remove-resident/{apartmentId}")
-    public ResponseEntity<?> removeResidentFromApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
-        try {
-            apartmentResidentService.removeResidentFromApartment(userId, apartmentId);
-            return ResponseEntity.ok("User successfully removed from apartment " + apartmentId);
-        } catch (ApartmentNotFoundException | UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to remove resident from apartment: " + e.getMessage());
-        }
+    public ResponseEntity<?> removeResidentFromApartment(
+        @PathVariable String apartmentId,
+        @RequestParam(required = false) Long userId,
+        @RequestParam(required = false) String citizenIdentification) {
+            try {
+                if (citizenIdentification != null) {
+                    apartmentResidentService.removeResidentFromApartmentByCitizenIdentification(citizenIdentification, apartmentId);
+                } else if (userId != null) {
+                    apartmentResidentService.removeResidentFromApartment(userId, apartmentId);
+                } else {
+                    return ResponseEntity.badRequest().body("Must provide either userId or citizenIdentification.");
+                }
+                return ResponseEntity.ok("User successfully removed from apartment " + apartmentId);
+            } catch (ApartmentNotFoundException | UserNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Failed to remove resident from apartment: " + e.getMessage());
+            }
     }
 
     @PutMapping("/apartment/{apartmentId}/total")

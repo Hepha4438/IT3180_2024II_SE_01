@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class ApartmentResidentService {
@@ -169,5 +170,17 @@ public class ApartmentResidentService {
                 apartmentRepository.save(previousApartment);
             }
         }
+    }
+
+    @Transactional
+    public void addResidentToApartmentByCitizenIdentification(String citizenIdentificaition, String apartmentId) {
+        Optional<User> user = userRepository.findByCitizenIdentification(citizenIdentificaition);
+        addResidentToApartment(user.get().getId(), apartmentId);
+    }
+
+    @Transactional
+    public void removeResidentFromApartmentByCitizenIdentification(String citizenIdentificaition, String apartmentId) {
+        Optional<User> user = userRepository.findByCitizenIdentification(citizenIdentificaition);
+        removeResidentFromApartment(user.get().getId(), apartmentId);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.prototype.arpartment_managing.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -44,8 +45,23 @@ public class UserService {
 
 
     // Get all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getUserSameApartment(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException(id));
+        UserDTO userDTO = new UserDTO(user);
+        Optional<Apartment> apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId());
+
+        if (apartment.isPresent()) {
+            List<User> users = userRepository.findByApartment(apartment.get());
+            return users.stream().map(UserDTO::new).collect(Collectors.toList());
+        }
+
+        return Collections.emptyList(); // Trả về danh sách rỗng nếu không tìm thấy apartment
     }
 
     // Create new user
@@ -117,15 +133,16 @@ public class UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-
-            if (passwordEncoder.matches(password,user.getPassword())) {
+            UserDTO userDTO = new UserDTO(user);
+            if (passwordEncoder.matches(password,userDTO.getPassword())) {
                 JwtUtil jwtUtil = new JwtUtil();
-                String token = jwtUtil.generateToken(username,user.getRole());
+                String token = jwtUtil.generateToken(username,userDTO.getRole());
                 Map<String, Object> response = new HashMap<>();
-                response.put("id", user.getId());
-                response.put("username", user.getUsername());
+                response.put("id", userDTO.getId());
+                response.put("username", userDTO.getUsername());
                 response.put("token",token);
-                response.put("role", user.getRole());
+                response.put("role", userDTO.getRole());
+                response.put("apartmentId", userDTO.getApartmentId());
 
                 return ResponseEntity.ok(response);
             }
@@ -180,7 +197,7 @@ public class UserService {
                     user.setPhoneNumber(userDTO.getPhoneNumber());
                     user.setRole(userDTO.getRole());
                     user.setCitizenIdentification(userDTO.getCitizenIdentification());
-                    user.setPassword(userDTO.getPassword());
+                    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                     // Cập nhật thông tin căn hộ nếu apartmentId thay đổi
                     if (userDTO.getApartmentId() != null) {
                         Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
@@ -201,6 +218,15 @@ public class UserService {
             previousApartment.setIsOccupied(!previousApartment.getResidents().isEmpty());
             apartmentRepository.save(previousApartment);
         }
+    }
+
+    public Apartment getApartmentofUser(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+        return userOptional.get().getApartment();
     }
 
 }
