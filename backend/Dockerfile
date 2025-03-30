@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
 # Cấu hình cổng
-EXPOSE 8080
+EXPOSE 7070
 
 # Chạy ứng dụng Spring Boot
 CMD ["java", "-jar", "app.jar"]
