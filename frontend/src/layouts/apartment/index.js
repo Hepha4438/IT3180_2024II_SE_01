@@ -99,7 +99,7 @@ function Apartment() {
 
       console.log(`Loading apartment with ID: ${apartmentIdToUse}`);
       const result = await axios.get(
-        `http://localhost:7070/apartment?apartmentId=${apartmentIdToUse}`
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/apartment?apartmentId=${apartmentIdToUse}`
       );
       console.log("Apartment data loaded:", result.data);
       setApartment(result.data);
@@ -172,7 +172,7 @@ function Apartment() {
       setAddingResident(true);
       console.log("Adding resident with citizen ID:", citizenId);
       const response = await axios.put(
-        `http://localhost:7070/apartment/add-resident/${apartment.apartmentId}?citizenIdentification=${citizenId}`
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/apartment/add-resident/${apartment.apartmentId}?citizenIdentification=${citizenId}`
       );
       console.log("Add resident response:", response);
       setAddingResident(false);
@@ -200,7 +200,7 @@ function Apartment() {
       setRemovingResident(true);
       console.log("Removing resident with citizen ID:", citizenId);
       const response = await axios.put(
-        `http://localhost:7070/apartment/remove-resident/${apartment.apartmentId}?citizenIdentification=${citizenId}`
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/apartment/remove-resident/${apartment.apartmentId}?citizenIdentification=${citizenId}`
       );
       console.log("Remove resident response:", response);
       setRemovingResident(false);

@@ -192,7 +192,7 @@ export default function data() {
 
   const loadApartments = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/apartments");
+      const response = await axios.get("https://it3180-2024ii-se-01-sprint1.onrender.com/apartments");
       setApartments(response.data);
       setErrorMessage("");
     } catch (error) {
@@ -253,7 +253,7 @@ export default function data() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("http://localhost:7070/apartment", newApartment);
+      await axios.post("https://it3180-2024ii-se-01-sprint1.onrender.com/apartment", newApartment);
       loadApartments(); // Reload the apartments list after successful creation
       handleCreateClose();
     } catch (error) {

@@ -56,7 +56,7 @@ function ChangePassword({ onCancel, onSave }) {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`http://localhost:7070/user/profile?id=${userId}`);
+      const result = await axios.get(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/profile?id=${userId}`);
       setFormData({
         id: result.data.id,
         fullName: result.data.fullName || "",
@@ -95,7 +95,7 @@ function ChangePassword({ onCancel, onSave }) {
       setPasswordError("");
     }
     try {
-      await axios.put(`http://localhost:7070/user/${formData.id}`, formData);
+      await axios.put(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/${formData.id}`, formData);
       alert("Password updated successfully!");
       if (onSave) {
         onSave();
