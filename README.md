@@ -54,7 +54,7 @@ Sau khi đăng nhập thành công, bạn sẽ được chuyển đến giao di�
 
 ## Các chức năng chính trong ứng dụng
 
-Ứng dụng của bạn bao gồm 4 mục chính sau:
+Ứng dụng của bạn bao gồm 6 mục chính sau:
 
 ### 1. **Welcome**:
 - Đây là trang giới thiệu ứng dụng, giúp người dùng hiểu được các chức năng và mục đích của ứng dụng. Bạn có thể tìm thấy các thông tin cơ bản về cách sử dụng và tính năng nổi bật của ứng dụng tại đây.
@@ -70,3 +70,6 @@ Sau khi đăng nhập thành công, bạn sẽ được chuyển đến giao di�
   
 ### 5. **Apartment**:
 - Đây là phần quản lý căn hộ. Quản lý có thể chỉnh sửa thông tin căn hộ, thêm người dùng vào căn hộ.
+
+### 6. **Login**:
+- Đây là phần đăng nhập. Khi mới vào trang web người dùng sẽ ở trang này để đăng nhập bằng tài khoản được cấp. Không có phần đăng kí vì phần đăng kí sẽ do ban quản trị chung cư thực hiện.
