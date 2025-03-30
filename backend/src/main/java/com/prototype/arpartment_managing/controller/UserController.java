@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("https://it3180se01sprint1-pdzb1nz8e-hephas-projects.vercel.app")
+@CrossOrigin("https://it3180se01sprint1-9ecjvnlvb-hephas-projects.vercel.app/")
 @RequestMapping("/user")
 public class UserController {
 
