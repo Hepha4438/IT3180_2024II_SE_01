@@ -66,5 +66,7 @@ Sau khi đăng nhập thành công, bạn sẽ được chuyển đến giao di�
 - Mục này cho phép người dùng quản lý thông tin cá nhân của mình. Bạn có thể chỉnh sửa các thông tin như tên, email, số điện thoại và các thông tin cá nhân khác.
 
 ### 4. **Management**:
-- Đây là phần quản lý căn hộ và nhân khẩu trong từng căn hộ. Người quản lý có thể thêm mới, chỉnh sửa hoặc xóa các căn hộ cũng như các thành viên sống trong căn hộ đó. Mục này thực hiện việc quản lý và duy trì thông tin chính xác về các căn hộ và người cư trú.
-
+- Đây là phần quản lý căn hộ và nhân khẩu. Người quản lý có thể thêm mới, chỉnh sửa hoặc xóa các căn hộ. Mục này thực hiện việc quản lý và duy trì thông tin chính xác về các căn hộ và các người cư trú.
+  
+### 5. **Apartment**:
+- Đây là phần quản lý căn hộ. Quản lý có thể chỉnh sửa thông tin căn hộ, thêm người dùng vào căn hộ.
