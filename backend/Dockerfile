@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
 # Cấu hình cổng
-EXPOSE 7070
+EXPOSE 10000
 
 # Chạy ứng dụng Spring Boot
 CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT:-7070}"]
