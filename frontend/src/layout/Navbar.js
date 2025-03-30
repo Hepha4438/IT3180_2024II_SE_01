@@ -23,9 +23,6 @@ export default function Navbar() {
                     <Link className='btn btn-outline-light' to="/login">
                         Log in
                     </Link>
-                    <Link className='btn btn-outline-light' to="/register">
-                        Sign up
-                    </Link>
                 </div>
             </nav>
         </div>
