@@ -52,6 +52,12 @@ public class RevenueService {
         return ResponseEntity.ok(new RevenueDTO(revenue));
     }
 
+    // lay revenue theo apartmentId
+
+    public List<Revenue> getRevenueByApartmentId(String apartmentId) {
+        return revenueRepository.findByApartment_ApartmentId(apartmentId);
+    }
+
     @Transactional
     // Create Revenue
     public Revenue createRevenue(RevenueDTO revenueDTO) {
@@ -59,7 +65,6 @@ public class RevenueService {
         revenue.setUsed(revenueDTO.getUsed());
         revenue.setStatus(revenueDTO.getStatus());
         revenue.setType(revenueDTO.getType());
-
         // Validate Apartment ID
         if (revenueDTO.getApartmentId() == null) {
             throw new IllegalArgumentException("Apartment ID must not be null");
@@ -116,6 +121,29 @@ public class RevenueService {
                 })
                 .orElseThrow(() -> new RevenueNotFoundException(id));
     }
+
+//    public Revenue updateRevenueByApartmentID(RevenueDTO revenueDTO) {
+//        Revenue revenue = new Revenue();
+//        revenue.setUsed(revenueDTO.getUsed());
+//        revenue.setUsed(revenueDTO.getUsed());
+//        revenue.setStatus(revenueDTO.getStatus());
+//        revenue.setType(revenueDTO.getType());
+//        if (revenueDTO.getApartmentId() == null) {
+//            throw new IllegalArgumentException("Apartment ID must not be null");
+//        }
+//        else{
+//            Optional<Apartment> apartment = apartmentRepository.findByApartmentId(revenueDTO.getApartmentId());
+//            if(apartment.isPresent()) {
+//                revenue.setApartment(apartment.get());
+//                apartment.get().getRevenues().add(revenue);
+//                apartmentRepository.save(apartment.get());
+//            }
+//            else{
+//                return null;
+//            }
+//        }
+//        return revenueRepository.save(revenue);
+//    }
 
 
 //    // tinh khoan thu theo loai cua 1 can ho (theo dien tich)

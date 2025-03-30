@@ -101,6 +101,7 @@ public class ApartmentController {
         }
     }
 
+
     @PutMapping("/apartment/{apartmentId}/{feeType}")
     public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId,@PathVariable String feeType) {
         try {

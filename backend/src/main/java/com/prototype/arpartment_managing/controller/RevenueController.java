@@ -60,6 +60,13 @@ public class RevenueController {
         return revenueService.updateRevenueByID(revenueDTO, id);
     }
 
+    // lay hoa don theo apratment
+
+    @GetMapping("revenue/{apartmentId}")
+    public List<Revenue> getRevenuesByApartmentID(@PathVariable String apartmentId) {
+        return revenueService.getRevenueByApartmentId(apartmentId);
+    }
+
 //    // tinh tien 1 khoan thu
 //    @GetMapping("/revenue/{apartment_id}/{fee}")
 //    public double getRevenueFee(@PathVariable String apartment_id, @PathVariable String fee) {

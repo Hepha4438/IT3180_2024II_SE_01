@@ -126,7 +126,7 @@ public class UserService {
                 response.put("username", user.getUsername());
                 response.put("token",token);
                 response.put("role", user.getRole());
-
+                response.put(("apartmentId"), user.getApartment().getId());
                 return ResponseEntity.ok(response);
             }
         }
