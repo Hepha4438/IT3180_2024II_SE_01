@@ -31,10 +31,11 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "Application.ArpartmentManagingApplication.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "minh3",
+    "git-widget-placeholder": "Hieu3",
     "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01"
   }
 }]]></component>
@@ -73,7 +74,71 @@
       <option name="project" value="LOCAL" />
       <updated>1743356760411</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743358373522</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1743358373522</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743358829990</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1743358829990</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743358939749</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1743358939749</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743359281987</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1743359281987</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743359693002</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1743359693002</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743361289231</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1743361289231</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743362000540</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1743362000540</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Sprint 1 - Update">
+      <option name="closed" value="true" />
+      <created>1743362201409</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1743362201409</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

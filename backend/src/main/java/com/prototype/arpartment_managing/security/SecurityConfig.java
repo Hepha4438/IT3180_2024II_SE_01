@@ -29,6 +29,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/user/**","/apartments","/apartment","/apartment/**").permitAll()
                         .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/revenues").permitAll()
