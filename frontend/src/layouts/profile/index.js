@@ -95,7 +95,9 @@ function Overview() {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/profile?id=${userId}`);
+      const result = await axios.get(
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/user/profile?id=${userId}`
+      );
       setUser(result.data);
       loadResidents(userId);
     } catch (error) {
@@ -105,7 +107,9 @@ function Overview() {
 
   const loadResidents = async (userId) => {
     try {
-      const result = await axios.get(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/${userId}/apartmentresident`);
+      const result = await axios.get(
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/user/${userId}/apartmentresident`
+      );
       setResidents(result.data);
     } catch (error) {
       console.error("Error loading apartment residents:", error);

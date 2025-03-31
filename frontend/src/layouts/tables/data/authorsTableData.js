@@ -180,7 +180,9 @@ export default function data() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/delete?id=${selectedUser.id}`);
+      await axios.delete(
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/user/delete?id=${selectedUser.id}`
+      );
       loadUsers(); // Reload the users list after successful deletion
       setDeleteDialogOpen(false);
       setSelectedUser(null);

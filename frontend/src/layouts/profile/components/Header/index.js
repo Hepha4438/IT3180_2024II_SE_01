@@ -63,7 +63,9 @@ function Header({ children }) {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`https://it3180-2024ii-se-01-sprint1.onrender.com/user/profile?id=${userId}`);
+      const result = await axios.get(
+        `https://it3180-2024ii-se-01-sprint1.onrender.com/user/profile?id=${userId}`
+      );
       setUser(result.data);
     } catch (error) {
       console.error("Error loading user profile:", error);

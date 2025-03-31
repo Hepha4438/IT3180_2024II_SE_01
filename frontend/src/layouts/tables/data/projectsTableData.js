@@ -192,7 +192,9 @@ export default function data() {
 
   const loadApartments = async () => {
     try {
-      const response = await axios.get("https://it3180-2024ii-se-01-sprint1.onrender.com/apartments");
+      const response = await axios.get(
+        "https://it3180-2024ii-se-01-sprint1.onrender.com/apartments"
+      );
       setApartments(response.data);
       setErrorMessage("");
     } catch (error) {

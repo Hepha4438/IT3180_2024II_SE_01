@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("https://it3180se01sprint1-9ecjvnlvb-hephas-projects.vercel.app/")
+@CrossOrigin("https://it3180se01sprint1-1djp8kr9i-hephas-projects.vercel.app")
 public class RevenueController {
     @Autowired
     private RevenueService revenueService;
