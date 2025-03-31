@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:7070"; // URL
+const API_URL = "https://it3180-2024ii-se-01-sprint1.onrender.com"; // URL
 
 // lấy danh sách hóa đơn
 export const getAllInvoices = async () => {
