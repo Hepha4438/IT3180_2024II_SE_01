@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("https://it3180se01sprint1-1djp8kr9i-hephas-projects.vercel.app /")
+@CrossOrigin("https://it3180se01sprint1-1djp8kr9i-hephas-projects.vercel.app")
 public class FeeController {
 
     @Autowired
