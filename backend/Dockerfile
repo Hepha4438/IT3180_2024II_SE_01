@@ -21,5 +21,5 @@ COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 10000
 
 # Chạy ứng dụng Spring Boot
-CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT:-7070}"]
+CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT:-10000}"]
 
