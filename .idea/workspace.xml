@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Sắp xếp lại pages cho Function 1">
-      <change beforePath="$PROJECT_DIR$/.idea/IT3180_2024II_SE_01.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IT3180_2024II_SE_01.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,9 +25,24 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="MIXED" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Hepha4438"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Hepha4438/IT3180_2024II_SE_01.git",
+    "accountId": "497fc96c-5473-441f-9318-d626ec8c1441"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
   <component name="ProjectId" id="2v2sWZ8LNhQe8Bgkf9jLwldJpPZ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -43,8 +55,12 @@
     "Application.ArpartmentManagingApplication.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "minh3",
-    "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01"
+    "git-widget-placeholder": "minh3__hieu",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="RunManager">

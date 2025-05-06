@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("https://it3180se01sprint1-pdzb1nz8e-hephas-projects.vercel.app")
+@CrossOrigin("http://localhost:3000")
 public class ApartmentController {
     @Autowired
     private ApartmentRepository apartmentRepository;
