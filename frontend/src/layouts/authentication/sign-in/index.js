@@ -121,6 +121,19 @@ function Login() {
                 &nbsp;&nbsp;Remember me
               </MDTypography>
             </MDBox>
+            <MDBox display="flex" justifyContent="left" mt={0.5}>
+              <MDTypography
+                variant="button"
+                fontWeight="regular"
+                color="info"
+                component={Link}
+                to="/authentication/forget-password"
+                sx={{ cursor: "pointer", userSelect: "none", ml: -0.5, mt: 0.5 }}
+              >
+                {" "}
+                &nbsp;&nbsp;Forget password?
+              </MDTypography>
+            </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth type="submit">
                 Sign in

@@ -229,4 +229,20 @@ public class UserService {
         return userOptional.get().getApartment();
     }
 
+    public boolean isUsernameMatchingEmail(String username, String email) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt.isPresent() && userOpt.get().getEmail().equals(email);
+    }
+
+    public boolean changePassword(String username, String newPassword) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
 }

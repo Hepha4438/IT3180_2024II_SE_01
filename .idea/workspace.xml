@@ -4,17 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Sắp xếp lại pages cho Function 1">
-      <change afterPath="$PROJECT_DIR$/frontend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" afterDir="false" />
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Bản chạy trên local">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/EmailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/authentication/forget-password/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/authentication/sign-in/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/authentication/sign-in/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -60,7 +70,8 @@
     "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "inlay.hints"
   }
 }]]></component>
   <component name="RunManager">
@@ -90,6 +101,15 @@
       <option name="presentableId" value="Default" />
       <updated>1743354535589</updated>
     </task>
+    <task id="LOCAL-00001" summary="Bản chạy trên local">
+      <option name="closed" value="true" />
+      <created>1746527783451</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746527783451</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -105,6 +125,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Sắp xếp lại pages cho Function 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sắp xếp lại pages cho Function 1" />
+    <MESSAGE value="Bản chạy trên local" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bản chạy trên local" />
   </component>
 </project>
