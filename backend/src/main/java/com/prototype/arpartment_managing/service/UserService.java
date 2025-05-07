@@ -144,16 +144,16 @@ public class UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            UserDTO userDTO = new UserDTO(user);
-            if (passwordEncoder.matches(password,userDTO.getPassword())) {
-                JwtUtil jwtUtil = new JwtUtil();
-                String token = jwtUtil.generateToken(username,userDTO.getRole());
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                String token = jwtUtil.generateToken(username, user.getRole());
                 Map<String, Object> response = new HashMap<>();
-                response.put("id", userDTO.getId());
-                response.put("username", userDTO.getUsername());
-                response.put("token",token);
-                response.put("role", userDTO.getRole());
-                response.put("apartmentId", userDTO.getApartmentId());
+                response.put("id", user.getId());
+                response.put("username", user.getUsername());
+                response.put("token", token);
+                response.put("role", user.getRole());
+                if (user.getApartment() != null) {
+                    response.put("apartmentId", user.getApartment().getApartmentId());
+                }
 
                 return ResponseEntity.ok(response);
             }
@@ -163,20 +163,24 @@ public class UserService {
     }
 
     //Register
-    public ResponseEntity<?> registerUser(User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public ResponseEntity<?> registerUser(UserDTO userDTO) {
+        // Validate required fields
+        if (userDTO.getApartmentId() == null || userDTO.getApartmentId().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", "Apartment ID is required"));
+        }
+
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Tên đăng nhập đã tồn tại"));
         }
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Email đã được sử dụng"));
         }
-        if (userRepository.findByCitizenIdentification(user.getCitizenIdentification()).isPresent()) {
+        if (userRepository.findByCitizenIdentification(userDTO.getCitizenIdentification()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Số CCCD đã được đăng kí"));
         }
-        UserDTO userDTO = new UserDTO(user);
-        User newUser = newUser(userDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("username", newUser.getUsername()));
+        User newUser = createUser(userDTO);
+        return ResponseEntity.ok(newUser);
     }
 
     // Transfer userDTO to User
