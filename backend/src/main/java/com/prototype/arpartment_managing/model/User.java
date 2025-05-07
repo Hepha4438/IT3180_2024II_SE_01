@@ -2,6 +2,7 @@ package com.prototype.arpartment_managing.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table( name = "users")
@@ -23,9 +24,13 @@ public class User {
     @Column(nullable = false, unique = true, name = "citizen_identification")
     private String citizenIdentification;
     @ManyToOne(fetch = FetchType.EAGER )
-    @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id")
+    @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id", nullable = false)
     @JsonBackReference
     private Apartment apartment;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<Notification> notifications;
 
     public Long getId() {
         return id;
@@ -96,5 +101,13 @@ public class User {
 
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
+    }
+
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

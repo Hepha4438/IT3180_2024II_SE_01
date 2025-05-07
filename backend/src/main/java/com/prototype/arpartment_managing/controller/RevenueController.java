@@ -19,7 +19,7 @@ public class RevenueController {
     private RevenueService revenueService;
 
     @GetMapping("/revenues")
-    public List<Revenue> getAllRevenues() {
+    public List<RevenueDTO> getAllRevenues() {
         return revenueService.getAllRevenues();
     }
 
@@ -33,9 +33,16 @@ public class RevenueController {
         return revenueService.createRevenue(revenueDTO);
     }
 
-    @GetMapping("/revenue")
+    //Get Revenue for testing backend
+    @GetMapping("/testrevenue")
     ResponseEntity<?> getRevenue(@RequestParam(required = false) Long id) {
         return revenueService.getRevenue(id);
+    }
+
+    //Get Revenue for frontend
+    @GetMapping("/revenue")
+    ResponseEntity<?> getRevenueByApartmentandType(@RequestParam(required = true) String apartmentId , @RequestParam(required = true) String type ) {
+        return revenueService.getRevenueByApartmentandType(apartmentId, type);
     }
 
     // xoa theo ID

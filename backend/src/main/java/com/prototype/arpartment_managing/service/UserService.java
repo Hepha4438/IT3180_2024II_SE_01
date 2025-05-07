@@ -8,6 +8,7 @@ import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.token.JwtUtil;
+import jakarta.transaction.Transactional;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -27,16 +28,14 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
-    }
-
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 
     public Optional<User> getUserByEmail(String email) {
@@ -48,6 +47,24 @@ public class UserService {
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    // Get user by id
+    public ResponseEntity<?> getUser(Long id){
+        if (id != null) {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException(id));
+            return ResponseEntity.ok(new UserDTO(user));
+        } else {
+            return ResponseEntity.badRequest().body("Must provide id");
+        }
+    }
+
+    // Get user by username
+    public ResponseEntity<?> getUserByUsername(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new UserNotFoundExceptionUsername(username));
+        return ResponseEntity.ok(new UserDTO(user));
     }
 
     public List<UserDTO> getUserSameApartment(Long id) {
@@ -64,8 +81,14 @@ public class UserService {
         return Collections.emptyList(); // Trả về danh sách rỗng nếu không tìm thấy apartment
     }
 
+    @Transactional
     // Create new user
-    public User newUser(UserDTO userDTO){
+    public User createUser(UserDTO userDTO){
+        // Validate required fields
+        if (userDTO.getApartmentId() == null || userDTO.getApartmentId().isEmpty()) {
+            throw new IllegalArgumentException("Apartment ID is required");
+        }
+
         User user = new User();
         user.setFullName(userDTO.getFullName());
         user.setUsername(userDTO.getUsername());
@@ -91,31 +114,19 @@ public class UserService {
         return user;
     }
 
-    // Get user by id or username
-    public ResponseEntity<?> getUser(String username, Long id){
-        User user;
-        if (username != null) {
-            user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UserNotFoundExceptionUsername(username));
-        } else if (id != null) {
-            user = userRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(id));
-        } else {
-            return ResponseEntity.badRequest().body("Must provide either username or id");
-        }
-
-        return ResponseEntity.ok(new UserDTO(user));
-    }
-
-
     // Delete user
+    @Transactional
     public void deleteUser(Long id){
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException(id));
+
         Apartment apartment = user.getApartment();
         if(apartment != null && apartment.getResidents() != null){
+            // Remove from list and break relationship
             apartment.getResidents().removeIf(r -> r.getId().equals(id));
             user.setApartment(null);
+
+            // Update and save
             apartment.setOccupants(apartment.getResidents().size());
             apartment.setIsOccupied(!apartment.getResidents().isEmpty());
             apartmentRepository.save(apartment);
@@ -187,6 +198,7 @@ public class UserService {
     }
 
     // Update user information
+    @Transactional
     public User updateUser(UserDTO userDTO, Long id){
         // Cập nhật thông tin căn hộ nếu apartmentId thay đổi
         return userRepository.findById(id)
@@ -210,6 +222,7 @@ public class UserService {
     }
 
 
+    @Transactional
     public void removeUserFromPreviousApartment(User user) {
         Apartment previousApartment = user.getApartment();
         if (previousApartment != null && previousApartment.getResidents() != null) {

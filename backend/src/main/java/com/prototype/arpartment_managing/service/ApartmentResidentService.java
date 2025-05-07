@@ -109,7 +109,7 @@ public class ApartmentResidentService {
      */
     @Transactional
     public void updateUserApartmentAssignment(User user) {
-        // If user has no apartment, remove from any previous apartment
+        // If user has apartment, remove from any previous apartment
         if (user.getApartment() == null) {
             Long userId = user.getId();
             User existingUser = userRepository.findById(user.getId())
