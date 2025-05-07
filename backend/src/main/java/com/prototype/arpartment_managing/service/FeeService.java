@@ -9,6 +9,7 @@ import com.prototype.arpartment_managing.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,35 +20,19 @@ public class FeeService {
     @Autowired
     private FeeRepository feeRepository;
 
-
+    @Transactional
     public Fee createFee(Fee fee) {
+        if (fee.getPricePerUnit() <= 0) {
+            throw new IllegalArgumentException("Price per unit must be greater than 0");
+        }
         return feeRepository.save(fee);
     }
-
-    public Optional<Fee> getFee(String type) {
-        return feeRepository.findByType(type);
-    }
-
-//    public Fee getFeeByType(String type) {
-//        Optional<Fee> fee =  feeRepository.findByType(type);
-//        return fee.orElse(null);
-//    }
 
     public Optional<Fee> getFeeByType(String type){
         return feeRepository.findByType(type);
     }
-//    public Fee updateFee(Fee fee, Long id) {
-//        return feeRepository.findById(id)
-//                .map(existingRevenue -> {
-//                    existingRevenue.setPricePerUnit(fee.getPricePerUnit());
-//                    existingRevenue.setType(fee.getType());
-//
-//                    return feeRepository.save(existingRevenue);
-//                })
-//                .orElseThrow(() -> new RevenueNotFoundException(id));
-//
-//    }
 
+    @Transactional
     public Fee updateFee(Fee fee, String type) {
         return feeRepository.findByType(type)
                 .map(existingFee -> {
@@ -58,6 +43,7 @@ public class FeeService {
                 .orElseThrow(() -> new FeeNotFoundException(type));
     }
 
+    @Transactional
     public void deleteFeeByType(String type) {
         Fee fee = feeRepository.findByType(type)
                 .orElseThrow(()-> new FeeNotFoundException(type));

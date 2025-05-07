@@ -35,13 +35,12 @@ public class ApartmentController {
     public ResponseEntity<?> newApartment(@RequestBody Apartment newApartment){
         apartmentService.createApartment(newApartment);
         return ResponseEntity.status(HttpStatus.CREATED).body("Apartment created successfully");
-
     }
 
     //Apartment Id (Room's number)
     @GetMapping("/apartment")
     ResponseEntity<?> getApartment(@RequestParam(required = false) String apartmentId) {
-        return apartmentService.getApartmentById1(apartmentId);
+        return apartmentService.getApartmentById(apartmentId);
     }
     // Delete Apartment
     @DeleteMapping("/deleteapartment")

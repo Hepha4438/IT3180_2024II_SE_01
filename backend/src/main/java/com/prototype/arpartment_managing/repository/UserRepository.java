@@ -3,8 +3,6 @@ package com.prototype.arpartment_managing.repository;
 import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.NativeQuery;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

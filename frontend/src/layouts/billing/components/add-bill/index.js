@@ -91,7 +91,7 @@ function AddRevenue() {
     }
     const payload = {
       type: newRevenue.type,
-      apartmentId: (localStorage.getItem("apartmentId") || 3333).toString(), // Lấy từ localStorage
+      apartmentId: localStorage.getItem("apartmentId").toString(), // Lấy từ localStorage
       // fee: newRevenue.fee,
       used: newRevenue.used,
       total: newRevenue.used * newRevenue.fee, // Tính tổng tiền
