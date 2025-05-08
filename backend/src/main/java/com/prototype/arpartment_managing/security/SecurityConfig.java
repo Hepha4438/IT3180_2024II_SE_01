@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/revenue/**").permitAll()
                         .requestMatchers("/apartment").permitAll()
                         .requestMatchers(("/deleterevenue")).permitAll()
-                        .requestMatchers("/fee/**").permitAll()
+                        .requestMatchers("/fees/**").permitAll()
                         .requestMatchers("/revenue").permitAll()
                         .anyRequest().authenticated()
                 )

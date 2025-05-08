@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Bản chạy trên local">
+      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/authorsTableData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Fee.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Fee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/FeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/FeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,22 +44,22 @@
     &quot;assignee&quot;: &quot;Hepha4438&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Hepha4438/IT3180_2024II_SE_01.git",
-    "accountId": "497fc96c-5473-441f-9318-d626ec8c1441"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Hepha4438/IT3180_2024II_SE_01.git&quot;,
+    &quot;accountId&quot;: &quot;497fc96c-5473-441f-9318-d626ec8c1441&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "Hepha4438",
-    "repository": "IT3180_2024II_SE_01"
+    &quot;owner&quot;: &quot;Hepha4438&quot;,
+    &quot;repository&quot;: &quot;IT3180_2024II_SE_01&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -69,15 +78,20 @@
     "Application.ArpartmentManagingApplication.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "minh3__hieu__2",
+    "git-widget-placeholder": "#67 on minh3__hieu__2",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01",
+    "last_opened_file_path": "/Users/HIEU/Downloads/IT3180_2024II_SE_01/frontend/src/layouts/fee/data",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "inlay.hints"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/layouts/fee/data" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="ArpartmentManagingApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <envs>
