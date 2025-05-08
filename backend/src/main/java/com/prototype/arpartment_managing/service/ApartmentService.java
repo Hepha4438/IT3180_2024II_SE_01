@@ -53,10 +53,10 @@ public class ApartmentService {
         if (apartmentId != null) {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
                     .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            return ResponseEntity.ok(apartment);
         } else {
             return ResponseEntity.badRequest().body("Must provide either username or id");
         }
-        return ResponseEntity.ok(new Apartment(apartmentId));
     }
 
     public Apartment createApartment(Apartment apartment) {
@@ -84,8 +84,8 @@ public class ApartmentService {
         return apartmentRepository.findByApartmentId(apartmentId)
                 .map(apartment -> {
                     apartment.setFloor(newApartment.getFloor());
-                    apartment.setIsOccupied(newApartment.getIsOccupied());
                     apartment.setOccupants(newApartment.getOccupants());
+                    apartment.setIsOccupied(newApartment.getOccupants() > 0);
                     apartment.setOwner(newApartment.getOwner());
                     apartment.setArea(newApartment.getArea());
                     apartment.setApartmentType(newApartment.getApartmentType());
@@ -93,6 +93,8 @@ public class ApartmentService {
                     return apartmentRepository.save(apartment);
                 }).orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
     }
+
+
     public Double calculateFee(String apartmentId, String feeType) {
         List<Revenue> revenues = findAllRevenueByApartmentId(apartmentId);
         if (revenues.isEmpty()) {

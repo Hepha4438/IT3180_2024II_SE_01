@@ -16,6 +16,14 @@ public class Fee {
     private double pricePerUnit; // Giá tiền mỗi đơn vị tiêu thụ
 
     // Getters & Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getType() {
         return type;
     }

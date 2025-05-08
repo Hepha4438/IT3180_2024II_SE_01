@@ -11,7 +11,7 @@ public class Revenue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, name = "type")
+    @Column(nullable = false, name = "type")
     private String type;
 
     @Column(nullable = false, name = "status")

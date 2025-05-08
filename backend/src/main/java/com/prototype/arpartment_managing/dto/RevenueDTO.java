@@ -66,4 +66,12 @@ public class RevenueDTO {
     public void setUsed(double used) {
         this.used = used;
     }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 }

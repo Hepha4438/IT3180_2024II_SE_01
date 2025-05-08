@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5000")
+@CrossOrigin("http://localhost:3000")
 public class RevenueController {
     @Autowired
     private RevenueService revenueService;
@@ -56,6 +56,11 @@ public class RevenueController {
     @PutMapping("/revenue/{id}")
     public Revenue updateRevenue(@RequestBody RevenueDTO revenueDTO, @PathVariable Long id) {
         return revenueService.updateRevenueByID(revenueDTO, id);
+    }
+
+    @GetMapping("revenue/{apartmentId}")
+    public List<Revenue> getRevenuesByApartmentID(@PathVariable String apartmentId) {
+        return revenueService.getRevenueByApartmentId(apartmentId);
     }
 
 //    // tinh tien 1 khoan thu
