@@ -4,18 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Bản chạy trên local">
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/authorsTableData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Fee.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Fee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/FeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/FeeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes.js" afterDir="false" />
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update Fee bản local">
+      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +117,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746527783451</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update Fee bản local">
+      <option name="closed" value="true" />
+      <created>1746690314157</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746690314157</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -144,6 +142,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Sắp xếp lại pages cho Function 1" />
     <MESSAGE value="Bản chạy trên local" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bản chạy trên local" />
+    <MESSAGE value="Update Fee bản local" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Fee bản local" />
   </component>
 </project>
