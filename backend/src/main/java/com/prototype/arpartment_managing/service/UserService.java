@@ -8,8 +8,8 @@ import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.token.JwtUtil;
+import com.prototype.arpartment_managing.token.TokenBlackList;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -30,6 +30,9 @@ public class UserService {
     private ApartmentRepository apartmentRepository;
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TokenBlackList tokenBlacklist;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -244,6 +247,29 @@ public class UserService {
             throw new UserNotFoundException(id);
         }
         return userOptional.get().getApartment();
+    }
+
+    // Logout function
+    public ResponseEntity<?> logoutUser(String token) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Token is required"));
+        }
+
+        try {
+            // Verify the token is valid before processing logout
+            if (jwtUtil.validateToken(token)) {
+                // Add token to blacklist
+                tokenBlacklist.addToBlacklist(token);
+
+                return ResponseEntity.ok(Collections.singletonMap("message", "Successfully logged out"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Collections.singletonMap("error", "Invalid token"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Error processing logout"));
+        }
     }
 
     public boolean isUsernameMatchingEmail(String username, String email) {

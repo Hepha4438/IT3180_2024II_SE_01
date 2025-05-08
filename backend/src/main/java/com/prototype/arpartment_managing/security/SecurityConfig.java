@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints - authentication and swagger
-                        .requestMatchers("/user/login", "/user/setup").permitAll()
+                        .requestMatchers("/user/login", "/user/setup", "/user/forget-password", "/user/change-password", "/user/verify-otp").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/apartments", "/apartment/**").hasRole("ADMIN")
 
@@ -93,7 +93,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:5000")
 @RequestMapping("/user")
 public class UserController {
 
@@ -43,26 +43,38 @@ public class UserController {
 
     private Map<String, String> otpStorage = new HashMap<>();
 
-    // Login
+    // Login - No authorization needed
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginRequest) {
         return userService.loginUser(loginRequest);
     }
-    //Register
+
+    // Logout - Requires authentication
+    @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String authorization) {
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7);
+            return userService.logoutUser(token);
+        }
+        return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Authorization header is required"));
+    }
+
+    // Register - Admin only
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         return userService.registerUser(userDTO);
     }
 
-    // Get all users
+    // Get all users - Admin only
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     List<UserDTO> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    // Tạo user mới
+    // Create new user - Admin only
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> newUser(@RequestBody UserDTO userDTO) {
@@ -70,13 +82,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
-    // Tìm kiếm user bằng username
-    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
-    @GetMapping("/profile/{username}")
-    ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    // Get user profile - Admin or own profile
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#username)")
+    @GetMapping("/profile/{id}")
+    ResponseEntity<?> getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
-    // Xóa User
+
+    // Delete user - Admin only
     @Transactional
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
@@ -85,26 +98,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User delete successfully");
     }
 
-    // Update your existing updateUser method to include apartment synchronization
+    // Update user - Admin or own profile
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     User updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) {
         return userService.updateUser(userDTO, id);
     }
 
+    // Get users in same apartment - Admin or own apartment
     @GetMapping("/{id}/apartmentresident")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public List<UserDTO> getUserinApartment(@PathVariable Long id) {
         return userService.getUserSameApartment(id);
     }
 
+    // Get user's apartment - Admin or own apartment
     @GetMapping("/{id}/apartment")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public Apartment getApartmentOfUser(@PathVariable Long id){
         return userService.getApartmentofUser(id);
     }
 
-    // Initial admin setup - no authentication required
+    // Initial admin setup - No authorization required
     @PostMapping("/setup")
     public ResponseEntity<?> setupInitialAdmin(@RequestBody UserDTO userDTO) {
         // Check if any user exists

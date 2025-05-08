@@ -4,14 +4,18 @@ const API_URL = "http://localhost:7070"; // URL
 
 // lấy danh sách hóa đơn
 export const getAllInvoices = async () => {
-  const response = await axios.get(`${API_URL}/revenues`);
+  const response = await axios.get(`${API_URL}/revenue/all`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
   return response.data;
 };
 
 // lấy hóa đơn theo apartmentId
 export const getRevenue = async (id = null) => {
   try {
-    const response = await axios.get(`${API_URL}/revenue/${id}`);
+    const response = await axios.get(`${API_URL}/revenue/test?id=${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     return response.data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -22,7 +26,9 @@ export const getRevenue = async (id = null) => {
 // lấy số đơn vị trên 1 đơn theo type
 export const getFeeByType = async (type = null) => {
   try {
-    const response = await axios.get(`${API_URL}/fee/${type}`);
+    const response = await axios.get(`${API_URL}/fee/${type}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     return response.data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -47,7 +53,9 @@ export const getFeeByType = async (type = null) => {
 export const updateTotalRevenueOfApartment = async (apartmentId) => {
   try {
     // Gửi yêu cầu PUT đến server với apartmentId trong URL
-    const response = await axios.put(`${API_URL}/apartment/${apartmentId}/total`);
+    const response = await axios.put(`${API_URL}/apartment/${apartmentId}/total`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     return response.data; // Dữ liệu trả về là đối tượng apartment đã được cập nhật
   } catch (error) {
     console.error("Lỗi khi cập nhật doanh thu của căn hộ:", error);
@@ -59,7 +67,9 @@ export const updateTotalRevenueOfApartment = async (apartmentId) => {
 export const updateRevenue = async (id, revenueDTO) => {
   try {
     // Gửi yêu cầu PUT đến server với id trong URL và dữ liệu revenueDTO trong body
-    const response = await axios.put(`${API_URL}/revenue/${id}`, revenueDTO);
+    const response = await axios.put(`${API_URL}/revenue/${id}`, revenueDTO, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     return response.data; // Dữ liệu trả về là đối tượng Revenue đã được cập nhật
   } catch (error) {
     console.error("Lỗi khi cập nhật doanh thu:", error);
@@ -71,9 +81,13 @@ export const updateRevenue = async (id, revenueDTO) => {
 
 export const getRevenueByApartmentAndType = async (apartmentId = null, type = null) => {
   try {
-    const response = await axios.get(`${API_URL}/revenue`, {
-      params: apartmentId && type ? { apartmentId, type } : {}, // ID vaf type
-    });
+    const response = await axios.get(
+      `${API_URL}/revenue`,
+      {
+        params: apartmentId && type ? { apartmentId, type } : {}, // ID vaf type
+      },
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    );
     return response.data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -95,7 +109,9 @@ export const getRevenueByApartmentAndType = async (apartmentId = null, type = nu
 
 // tạo hóa đơn mới
 export const createRevenue = async (revenueDTO) => {
-  const response = await axios.post(`${API_URL}/revenue`, revenueDTO);
+  const response = await axios.post(`${API_URL}/revenue`, revenueDTO, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
   return response.data;
 };
 
@@ -103,9 +119,13 @@ export const createRevenue = async (revenueDTO) => {
 export const deleteRevenue = async (id) => {
   try {
     // Gửi yêu cầu DELETE đến server với id trong query string
-    const response = await axios.delete(`${API_URL}/deleterevenue`, {
-      params: { id }, // Truyền id qua query string
-    });
+    const response = await axios.delete(
+      `${API_URL}/delete`,
+      {
+        params: { id }, // Truyền id qua query string
+      },
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    );
     return response.data; // Dữ liệu trả về là thông điệp thành công
   } catch (error) {
     console.error("Lỗi khi xóa doanh thu:", error);

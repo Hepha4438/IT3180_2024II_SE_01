@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,9 @@ public class JwtUtil {
 
     @Value("${jwt.refreshExpiration:604800000}") // Default 7 days in milliseconds
     private long refreshExpiration;
+
+    @Autowired
+    private TokenBlackList tokenBlacklist;
 
     // Get secret key - created once and reused
     private SecretKey getSigningKey() {
@@ -100,6 +104,12 @@ public class JwtUtil {
     // Validate token with detailed exception handling
     public boolean validateToken(String token) {
         try {
+            // First check if token is blacklisted
+            if (tokenBlacklist.isBlacklisted(token)) {
+                logger.error("JWT token is blacklisted");
+                return false;
+            }
+
             Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
