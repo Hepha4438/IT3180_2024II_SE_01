@@ -322,6 +322,31 @@ export default function data() {
             </MDButton>
           </DialogActions>
         </Dialog>
+
+        {/* Edit Dialog */}
+        <Dialog open={editDialogOpen} onClose={handleEditClose}>
+          <DialogTitle>Edit Fee</DialogTitle>
+          <DialogContent>
+            <MDBox display="flex" flexDirection="column" gap={2} mt={1}>
+              <MDInput label="Type" name="type" value={editFee.type} disabled fullWidth />
+              <MDInput
+                label="Price Per Unit"
+                name="pricePerUnit"
+                value={editFee.pricePerUnit}
+                onChange={handleEditInputChange}
+                fullWidth
+              />
+            </MDBox>
+          </DialogContent>
+          <DialogActions>
+            <MDButton onClick={handleEditClose} color="dark">
+              Cancel
+            </MDButton>
+            <MDButton onClick={handleEditSubmit} color="info">
+              Save
+            </MDButton>
+          </DialogActions>
+        </Dialog>
       </MDBox>
     ),
   };
