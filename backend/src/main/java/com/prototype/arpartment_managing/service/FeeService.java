@@ -6,6 +6,7 @@ import com.prototype.arpartment_managing.exception.RevenueNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.repository.FeeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -46,9 +47,12 @@ public class FeeService {
     @Transactional
     public void deleteFeeByType(String type) {
         Fee fee = feeRepository.findByType(type)
-                .orElseThrow(()-> new FeeNotFoundException(type));
-        feeRepository.deleteByType(type);
-        return;
+                .orElseThrow(() -> new FeeNotFoundException(type));
+        feeRepository.delete(fee);
+    }
+
+    public Iterable<Fee> getAllFees() {
+        return feeRepository.findAll();
     }
 
 }

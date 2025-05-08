@@ -44,6 +44,7 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import FeeTable from "layouts/fee"; // Đảm bảo đường dẫn đúng với vị trí thực tế của tệp FeeTable.js
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -64,6 +65,14 @@ const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/tables",
     component: <Tables />,
+  },
+  {
+    type: "collapse",
+    name: "Fee",
+    key: "fee",
+    icon: <Icon fontSize="small">receipt_long</Icon>, // Bạn có thể thay đổi biểu tượng tùy ý
+    route: "/fee",
+    component: <FeeTable />, // Sử dụng component mới cho bảng Fee
   },
   {
     type: "collapse",
