@@ -29,7 +29,9 @@ export default function data() {
 
   const loadFees = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/fees");
+      const response = await axios.get("http://localhost:7070/fees", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setFees(response.data);
       setFilteredFees(response.data); // Set initial fees as filtered
     } catch (error) {
@@ -60,7 +62,9 @@ export default function data() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:7070/fees/${selectedFee.type}`);
+      await axios.delete(`http://localhost:7070/fees/${selectedFee.type}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       loadFees();
       setDeleteDialogOpen(false);
     } catch (error) {
@@ -84,7 +88,9 @@ export default function data() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("http://localhost:7070/fees", newFee);
+      await axios.post("http://localhost:7070/fees", newFee, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       loadFees();
       handleCreateClose();
     } catch (error) {
@@ -104,7 +110,9 @@ export default function data() {
 
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`http://localhost:7070/fees/${editFee.type}`, editFee);
+      await axios.put(`http://localhost:7070/fees/${editFee.type}`, editFee, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       loadFees();
       handleEditClose();
     } catch (error) {
