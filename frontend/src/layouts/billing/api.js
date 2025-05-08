@@ -26,7 +26,7 @@ export const getRevenue = async (id = null) => {
 // lấy số đơn vị trên 1 đơn theo type
 export const getFeeByType = async (type = null) => {
   try {
-    const response = await axios.get(`${API_URL}/fee/${type}`, {
+    const response = await axios.get(`${API_URL}/fees/${type}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data;

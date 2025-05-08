@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update OTP bản local" />
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Merge bổ sung chỉnh sửa fee">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/billing/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/billing/api.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="minh3" />
+        <entry key="$PROJECT_DIR$" value="minh3_hieu" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,21 +58,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.ArpartmentManagingApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;minh3__hieu&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.ArpartmentManagingApplication.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "#66 on minh3__hieu",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "inlay.hints"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="ArpartmentManagingApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <envs>
@@ -108,7 +116,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746603177670</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge bổ sung chỉnh sửa fee">
+      <option name="closed" value="true" />
+      <created>1746712970568</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746712970568</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -138,6 +154,7 @@
     <MESSAGE value="Sắp xếp lại pages cho Function 1" />
     <MESSAGE value="Bản chạy trên local" />
     <MESSAGE value="Update OTP bản local" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update OTP bản local" />
+    <MESSAGE value="Merge bổ sung chỉnh sửa fee" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge bổ sung chỉnh sửa fee" />
   </component>
 </project>

@@ -1,16 +1,12 @@
 package com.prototype.arpartment_managing.service;
 
-import com.prototype.arpartment_managing.controller.FeeController;
 import com.prototype.arpartment_managing.exception.FeeNotFoundException;
-import com.prototype.arpartment_managing.exception.RevenueNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.repository.FeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
