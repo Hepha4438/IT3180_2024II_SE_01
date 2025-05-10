@@ -29,7 +29,7 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import feeTableData from "layouts/fee/data/feeTableData";
+import feeTableData from "layouts/billing_management/data/feeTableData";
 
 function FeeTable() {
   const { columns, rows, searchUI } = feeTableData();

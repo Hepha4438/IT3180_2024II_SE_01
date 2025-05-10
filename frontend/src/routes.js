@@ -37,14 +37,14 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Tables from "layouts/resident_management";
 import Billing from "layouts/billing";
 import Apartment from "layouts/apartment";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import FeeTable from "layouts/fee"; // Đảm bảo đường dẫn đúng với vị trí thực tế của tệp FeeTable.js
+import FeeTable from "layouts/billing_management"; // Đảm bảo đường dẫn đúng với vị trí thực tế của tệp FeeTable.js
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -60,17 +60,17 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Managerment",
+    name: "Resident Management",
     key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">people</Icon>,
     route: "/tables",
     component: <Tables />,
   },
   {
     type: "collapse",
-    name: "Fee",
+    name: "Billing Management",
     key: "fee",
-    icon: <Icon fontSize="small">receipt_long</Icon>, // Bạn có thể thay đổi biểu tượng tùy ý
+    icon: <Icon fontSize="small">table_view</Icon>,
     route: "/fee",
     component: <FeeTable />, // Sử dụng component mới cho bảng Fee
   },
@@ -86,7 +86,7 @@ const routes = [
     type: "collapse",
     name: "Apartment",
     key: "apartment",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+    icon: <Icon fontSize="small">apartment</Icon>,
     route: "/apartment/:apartmentId",
     // The route is dynamic and will be replaced with the apartment id
     component: <Apartment />,
