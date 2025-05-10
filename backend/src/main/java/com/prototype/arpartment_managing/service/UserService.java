@@ -8,7 +8,8 @@ import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.token.JwtUtil;
-import org.apache.catalina.connector.Response;
+import com.prototype.arpartment_managing.token.TokenBlackList;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.prototype.arpartment_managing.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -26,6 +28,11 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private TokenBlackList tokenBlacklist;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -34,22 +41,57 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
 
     // Get all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
+    // Get user by id
+    public ResponseEntity<?> getUser(Long id){
+        if (id != null) {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException(id));
+            return ResponseEntity.ok(new UserDTO(user));
+        } else {
+            return ResponseEntity.badRequest().body("Must provide id");
+        }
+    }
+
+    // Get user by username
+    public ResponseEntity<?> getUserByUsername(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new UserNotFoundExceptionUsername(username));
+        return ResponseEntity.ok(new UserDTO(user));
+    }
+
+    public List<UserDTO> getUserSameApartment(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException(id));
+        UserDTO userDTO = new UserDTO(user);
+        Optional<Apartment> apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId());
+
+        if (apartment.isPresent()) {
+            List<User> users = userRepository.findByApartment(apartment.get());
+            return users.stream().map(UserDTO::new).collect(Collectors.toList());
+        }
+
+        return Collections.emptyList(); // Trả về danh sách rỗng nếu không tìm thấy apartment
+    }
+
+    @Transactional
     // Create new user
-    public User newUser(UserDTO userDTO){
+    public User createUser(UserDTO userDTO){
+        // Validate required fields
+        if (userDTO.getApartmentId() == null || userDTO.getApartmentId().isEmpty()) {
+            throw new IllegalArgumentException("Apartment ID is required");
+        }
+
         User user = new User();
         user.setFullName(userDTO.getFullName());
         user.setUsername(userDTO.getUsername());
@@ -75,31 +117,19 @@ public class UserService {
         return user;
     }
 
-    // Get user by id or username
-    public ResponseEntity<?> getUser(String username, Long id){
-        User user;
-        if (username != null) {
-            user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UserNotFoundExceptionUsername(username));
-        } else if (id != null) {
-            user = userRepository.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(id));
-        } else {
-            return ResponseEntity.badRequest().body("Must provide either username or id");
-        }
-
-        return ResponseEntity.ok(new UserDTO(user));
-    }
-
-
     // Delete user
+    @Transactional
     public void deleteUser(Long id){
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException(id));
+
         Apartment apartment = user.getApartment();
         if(apartment != null && apartment.getResidents() != null){
+            // Remove from list and break relationship
             apartment.getResidents().removeIf(r -> r.getId().equals(id));
             user.setApartment(null);
+
+            // Update and save
             apartment.setOccupants(apartment.getResidents().size());
             apartment.setIsOccupied(!apartment.getResidents().isEmpty());
             apartmentRepository.save(apartment);
@@ -117,15 +147,16 @@ public class UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-
-            if (passwordEncoder.matches(password,user.getPassword())) {
-                JwtUtil jwtUtil = new JwtUtil();
-                String token = jwtUtil.generateToken(username,user.getRole());
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                String token = jwtUtil.generateToken(username, user.getRole());
                 Map<String, Object> response = new HashMap<>();
                 response.put("id", user.getId());
                 response.put("username", user.getUsername());
-                response.put("token",token);
+                response.put("token", token);
                 response.put("role", user.getRole());
+                if (user.getApartment() != null) {
+                    response.put("apartmentId", user.getApartment().getApartmentId());
+                }
 
                 return ResponseEntity.ok(response);
             }
@@ -135,20 +166,24 @@ public class UserService {
     }
 
     //Register
-    public ResponseEntity<?> registerUser(User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public ResponseEntity<?> registerUser(UserDTO userDTO) {
+        // Validate required fields
+        if (userDTO.getApartmentId() == null || userDTO.getApartmentId().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", "Apartment ID is required"));
+        }
+
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Tên đăng nhập đã tồn tại"));
         }
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Email đã được sử dụng"));
         }
-        if (userRepository.findByCitizenIdentification(user.getCitizenIdentification()).isPresent()) {
+        if (userRepository.findByCitizenIdentification(userDTO.getCitizenIdentification()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", "Số CCCD đã được đăng kí"));
         }
-        UserDTO userDTO = new UserDTO(user);
-        User newUser = newUser(userDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("username", newUser.getUsername()));
+        User newUser = createUser(userDTO);
+        return ResponseEntity.ok(newUser);
     }
 
     // Transfer userDTO to User
@@ -170,6 +205,7 @@ public class UserService {
     }
 
     // Update user information
+    @Transactional
     public User updateUser(UserDTO userDTO, Long id){
         // Cập nhật thông tin căn hộ nếu apartmentId thay đổi
         return userRepository.findById(id)
@@ -180,7 +216,7 @@ public class UserService {
                     user.setPhoneNumber(userDTO.getPhoneNumber());
                     user.setRole(userDTO.getRole());
                     user.setCitizenIdentification(userDTO.getCitizenIdentification());
-                    user.setPassword(userDTO.getPassword());
+                    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                     // Cập nhật thông tin căn hộ nếu apartmentId thay đổi
                     if (userDTO.getApartmentId() != null) {
                         Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
@@ -193,6 +229,7 @@ public class UserService {
     }
 
 
+    @Transactional
     public void removeUserFromPreviousApartment(User user) {
         Apartment previousApartment = user.getApartment();
         if (previousApartment != null && previousApartment.getResidents() != null) {
@@ -201,6 +238,54 @@ public class UserService {
             previousApartment.setIsOccupied(!previousApartment.getResidents().isEmpty());
             apartmentRepository.save(previousApartment);
         }
+    }
+
+    public Apartment getApartmentofUser(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+        return userOptional.get().getApartment();
+    }
+
+    // Logout function
+    public ResponseEntity<?> logoutUser(String token) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Token is required"));
+        }
+
+        try {
+            // Verify the token is valid before processing logout
+            if (jwtUtil.validateToken(token)) {
+                // Add token to blacklist
+                tokenBlacklist.addToBlacklist(token);
+
+                return ResponseEntity.ok(Collections.singletonMap("message", "Successfully logged out"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Collections.singletonMap("error", "Invalid token"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Error processing logout"));
+        }
+    }
+
+    public boolean isUsernameMatchingEmail(String username, String email) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt.isPresent() && userOpt.get().getEmail().equals(email);
+    }
+
+    public boolean changePassword(String username, String newPassword) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
 }
