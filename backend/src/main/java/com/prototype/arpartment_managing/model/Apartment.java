@@ -14,9 +14,9 @@ public class Apartment {
     @Column(nullable = false, unique = true, name = "apartment_id")
     private String apartmentId;
 
-    @Column(name = "floor")
+    @Column(name = "floor", nullable = false)
     private Integer floor;
-    @Column(name = "area")
+    @Column(name = "area", nullable = false)
     private Float area;
     @Column(name = "apartmentType")
     private String apartmentType;

@@ -1,8 +1,8 @@
 package com.prototype.arpartment_managing.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Revenues")
@@ -11,7 +11,7 @@ public class Revenue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, name = "type")
+    @Column(nullable = false, name = "type")
     private String type;
 
     @Column(nullable = false, name = "status")
@@ -23,10 +23,35 @@ public class Revenue {
     @Column(name = "total")
     private Double total;
 
-    @ManyToOne(fetch = FetchType.EAGER )
+    @Column(nullable = false, name = "create_date", updatable = false)
+    private LocalDateTime createDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id")
     @JsonBackReference
     private Apartment apartment;
+
+    @Column(name = "payment_token", unique = true)
+    private String paymentToken;
+
+    // Constructor to set createDate automatically
+    public Revenue() {
+        this.createDate = LocalDateTime.now();
+        this.status = "Unpaid"; // Default status
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (createDate == null) {
+            createDate = LocalDateTime.now();
+        }
+        if (status == null) {
+            status = "Unpaid";
+        }
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -74,5 +99,49 @@ public class Revenue {
 
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getPaymentToken() {
+        return paymentToken;
+    }
+
+    public void setPaymentToken(String paymentToken) {
+        this.paymentToken = paymentToken;
+    }
+
+    // Method to check if revenue is overdue
+    public boolean isOverdue() {
+        return endDate != null && 
+               LocalDateTime.now().isAfter(endDate) && 
+               "Unpaid".equals(status);
+    }
+
+    // Method to update status based on payment and due date
+    public void updateStatus() {
+        // If already paid, keep it paid
+        if ("Paid".equals(status)) {
+            return;
+        }
+        
+        // If unpaid and past end date, mark as overdue
+        if (endDate != null && LocalDateTime.now().isAfter(endDate)) {
+            status = "Overdue";
+        }
     }
 }

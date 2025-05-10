@@ -1,8 +1,11 @@
 package com.prototype.arpartment_managing.exception;
 
 public class RevenueNotFoundException extends RuntimeException {
-    public RevenueNotFoundException(long id) {
+    public RevenueNotFoundException(String message) {
+        super(message);
+    }
 
-        super("Could not found revenue with id " + id);
+    public RevenueNotFoundException(Long id) {
+        super("Revenue not found with id: " + id);
     }
 }

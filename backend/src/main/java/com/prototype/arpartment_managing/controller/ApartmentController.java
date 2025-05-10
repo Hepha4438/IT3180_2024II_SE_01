@@ -11,12 +11,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
+@RequestMapping("/apartment")
 public class ApartmentController {
     @Autowired
     private ApartmentRepository apartmentRepository;
@@ -26,40 +28,59 @@ public class ApartmentController {
     private ApartmentResidentService apartmentResidentService;
     @Autowired
     private ApartmentService apartmentService;
-    @GetMapping("/apartments")
+
+    // Get all apartments - Admin only
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     List<Apartment> getAllApartments(){
         return apartmentService.getAllApartments();
     }
 
-    @PostMapping("/apartment")
+    // Create apartment - Admin only
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> newApartment(@RequestBody Apartment newApartment){
         apartmentService.createApartment(newApartment);
         return ResponseEntity.status(HttpStatus.CREATED).body("Apartment created successfully");
-
     }
 
-    //Apartment Id (Room's number)
-    @GetMapping("/apartment")
+    // Get apartment by ID - Admin or resident of the apartment
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     ResponseEntity<?> getApartment(@RequestParam(required = false) String apartmentId) {
-        return apartmentService.getApartmentById1(apartmentId);
-    }
-    // Delete Apartment
-    @DeleteMapping("/deleteapartment")
-    ResponseEntity<?> deleteApartment(@RequestParam(required = false) String apartmentId){
-       apartmentService.deleteApartment(apartmentId);
-       return ResponseEntity.status(HttpStatus.OK).body("Apartment delete successfully");
+        return apartmentService.getApartmentById(apartmentId);
     }
 
-    @PutMapping("/apartment/{apartmentId}")
+    // Delete apartment - Admin only
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    ResponseEntity<?> deleteApartment(@RequestParam(required = false) String apartmentId){
+        apartmentService.deleteApartment(apartmentId);
+        return ResponseEntity.status(HttpStatus.OK).body("Apartment delete successfully");
+    }
+
+    // Update apartment - Admin only
+    @PutMapping("/{apartmentId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Apartment updateApartment(@RequestBody Apartment newApartment, @PathVariable String apartmentId) {
         return apartmentService.updateApartment(newApartment, apartmentId);
     }
 
-    // Add resident to apartment
-    @PutMapping("/apartment/add-resident/{apartmentId}")
-    public ResponseEntity<?> addResidentToApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
+    // Add resident to apartment - Admin only
+    @PutMapping("/add-resident/{apartmentId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addResidentToApartment(
+            @PathVariable String apartmentId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String citizenIdentification) {
         try {
-            apartmentResidentService.addResidentToApartment(userId, apartmentId);
+            if (citizenIdentification != null) {
+                apartmentResidentService.addResidentToApartmentByCitizenIdentification(citizenIdentification, apartmentId);
+            } else if (userId != null) {
+                apartmentResidentService.addResidentToApartment(userId, apartmentId);
+            } else {
+                return ResponseEntity.badRequest().body("Must provide either userId or citizenIdentification.");
+            }
             return ResponseEntity.ok("User successfully added to apartment " + apartmentId);
         } catch (ApartmentNotFoundException | UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -69,23 +90,33 @@ public class ApartmentController {
         }
     }
 
-    // Remove a resident from an apartment
-    @PutMapping("/apartment/remove-resident/{apartmentId}")
-    public ResponseEntity<?> removeResidentFromApartment(@PathVariable String apartmentId, @RequestParam Long userId) {
+    // Remove resident from apartment - Admin only
+    @PutMapping("/remove-resident/{apartmentId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> removeResidentFromApartment(
+            @PathVariable String apartmentId,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String citizenIdentification) {
         try {
-            apartmentResidentService.removeResidentFromApartment(userId, apartmentId);
+            if (citizenIdentification != null) {
+                apartmentResidentService.removeResidentFromApartmentByCitizenIdentification(citizenIdentification, apartmentId);
+            } else if (userId != null) {
+                apartmentResidentService.removeResidentFromApartment(userId, apartmentId);
+            } else {
+                return ResponseEntity.badRequest().body("Must provide either userId or citizenIdentification.");
+            }
             return ResponseEntity.ok("User successfully removed from apartment " + apartmentId);
         } catch (ApartmentNotFoundException | UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to remove resident from apartment: " + e.getMessage());
         }
     }
 
-    @PutMapping("/apartment/{apartmentId}/total")
+    // Calculate total revenue - Admin or resident of the apartment
+    @PutMapping("/{apartmentId}/total")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId) {
         try {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
@@ -101,8 +132,10 @@ public class ApartmentController {
         }
     }
 
-    @PutMapping("/apartment/{apartmentId}/{feeType}")
-    public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId,@PathVariable String feeType) {
+    // Calculate revenue by fee type - Admin or resident of the apartment
+    @PutMapping("/{apartmentId}/{feeType}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> totalRevenueOfApartment(@PathVariable String apartmentId, @PathVariable String feeType) {
         try {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
                     .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
@@ -114,6 +147,20 @@ public class ApartmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating total revenue: " + e.getMessage());
+        }
+    }
+
+    // Generate bill for apartment - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}/bill")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId) {
+        try {
+            return apartmentService.generateBill(apartmentId);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating bill: " + e.getMessage());
         }
     }
 
@@ -131,5 +178,5 @@ public class ApartmentController {
 //        }
 //    }
 
-    
+
 }
