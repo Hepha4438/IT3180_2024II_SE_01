@@ -1,6 +1,5 @@
 package com.prototype.arpartment_managing.controller;
 
-
 import com.prototype.arpartment_managing.dto.RevenueDTO;
 import com.prototype.arpartment_managing.model.Revenue;
 import com.prototype.arpartment_managing.service.RevenueService;
@@ -8,18 +7,22 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
+@RequestMapping("/revenue")
 public class RevenueController {
     @Autowired
     private RevenueService revenueService;
 
-    @GetMapping("/revenues")
-    public List<Revenue> getAllRevenues() {
+    // Get all revenues - Admin only
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<RevenueDTO> getAllRevenues() {
         return revenueService.getAllRevenues();
     }
 
@@ -28,19 +31,33 @@ public class RevenueController {
 //        return revenueService.findAllRevenueByApartmentId(apartmentId);
 //    }
 
-    @PostMapping("/revenue")
+    // Create revenue - Admin only
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Revenue createRevenue(@RequestBody RevenueDTO revenueDTO) {
         return revenueService.createRevenue(revenueDTO);
     }
 
-    @GetMapping("/revenue")
+    // Get Revenue for testing - Admin only
+    @GetMapping("/test")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<?> getRevenue(@RequestParam(required = false) Long id) {
         return revenueService.getRevenue(id);
     }
 
-    // xoa theo ID
+    // Get Revenue by apartment and type - Admin or resident of the apartment
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    ResponseEntity<?> getRevenueByApartmentandType(
+            @RequestParam(required = true) String apartmentId,
+            @RequestParam(required = true) String type) {
+        return revenueService.getRevenueByApartmentandType(apartmentId, type);
+    }
+
+    // Delete revenue - Admin only
     @Transactional
-    @DeleteMapping("/deleterevenue")
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<?> deleteRevenueByID(@RequestParam(required = false) Long id) {
         revenueService.deleteRevenue(id);
         return ResponseEntity.status(HttpStatus.CREATED).body("Revenue delete successfully");
@@ -52,10 +69,18 @@ public class RevenueController {
 //        return "Deleted Revenue";
 //    }
 
-    // chinh sua khi ma thanh toan xong thay status => false
-    @PutMapping("/revenue/{id}")
+    // Update revenue - Admin only
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Revenue updateRevenue(@RequestBody RevenueDTO revenueDTO, @PathVariable Long id) {
         return revenueService.updateRevenueByID(revenueDTO, id);
+    }
+
+    // Get revenues by apartment ID - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public List<Revenue> getRevenuesByApartmentID(@PathVariable String apartmentId) {
+        return revenueService.getRevenueByApartmentId(apartmentId);
     }
 
 //    // tinh tien 1 khoan thu
