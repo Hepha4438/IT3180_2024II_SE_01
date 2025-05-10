@@ -150,6 +150,20 @@ public class ApartmentController {
         }
     }
 
+    // Generate bill for apartment - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}/bill")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId) {
+        try {
+            return apartmentService.generateBill(apartmentId);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating bill: " + e.getMessage());
+        }
+    }
+
 //    @PostMapping("/apartment/{apartmentId}/{feeType}")
 //    public ResponseEntity<?> totalRevenueOfApartmentByType(@PathVariable String apartmentId ,@PathVariable String feeType) {
 //        try {

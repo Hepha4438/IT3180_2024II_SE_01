@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("http://localhost:5000")
@@ -94,4 +95,24 @@ public class RevenueController {
 //    public double getTotalRevenue(@PathVariable String apartmentId) {
 //        return revenueService.calculateTotalPayment(apartmentId);
 //    }
+
+    @PostMapping("/create-with-qr")
+    public ResponseEntity<?> createRevenueWithQR(@RequestBody RevenueDTO revenueDTO) {
+        try {
+            Map<String, Object> response = revenueService.createRevenueWithQR(revenueDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/complete-payment/{paymentToken}")
+    public ResponseEntity<?> completePayment(@PathVariable String paymentToken) {
+        try {
+            Revenue revenue = revenueService.completePayment(paymentToken);
+            return ResponseEntity.ok(new RevenueDTO(revenue, revenue.getApartment()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

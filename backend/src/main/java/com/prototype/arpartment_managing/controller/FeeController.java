@@ -1,6 +1,7 @@
 package com.prototype.arpartment_managing.controller;
 
 
+import com.prototype.arpartment_managing.exception.FeeInUseException;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.service.FeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,8 +63,26 @@ public class FeeController {
     @DeleteMapping("/{type}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFee(@PathVariable String type) {
-        feeService.deleteFeeByType(type);
-        return ResponseEntity.ok("Fee deleted successfully");
+        try {
+            // Check if fee is safe to delete
+            if (!feeService.isFeeSafeToDelete(type)) {
+                long count = feeService.getRevenueCountForFeeType(type);
+                Map<String, Object> response = new HashMap<>();
+                response.put("error", "Cannot delete fee type '" + type + "'");
+                response.put("message", "This fee type is currently being used in " + count + " revenue records");
+                response.put("action", "Please update or delete the associated revenue records first");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
+
+            feeService.deleteFeeByType(type);
+            return ResponseEntity.ok(Map.of("message", "Fee deleted successfully"));
+        } catch (FeeInUseException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error deleting fee: " + e.getMessage()));
+        }
     }
 
 }
