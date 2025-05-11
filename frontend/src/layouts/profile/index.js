@@ -95,7 +95,7 @@ function Overview() {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`http://localhost:7070/user/profile?id=${userId}`, {
+      const result = await axios.get(`http://localhost:7070/user/profile/${userId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUser(result.data);

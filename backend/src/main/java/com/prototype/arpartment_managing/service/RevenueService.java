@@ -15,8 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.UUID;
+import java.util.HashMap;
 
 
 @Primary
@@ -28,6 +31,8 @@ public class RevenueService {
     private FeeRepository feeRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private QRCodeService qrCodeService;
 
     // Get all revenues
     public List<RevenueDTO> getAllRevenues() {
@@ -194,6 +199,48 @@ public class RevenueService {
     public List<Revenue> findAllRevenueByApartmentId(String apartmentId) {
         Optional<Apartment> apartment =  apartmentRepository.findByApartmentId(apartmentId);
         return apartment.map(Apartment::getRevenues).orElse(null);
+    }
+
+    @Transactional
+    public Map<String, Object> createRevenueWithQR(RevenueDTO revenueDTO) {
+        Revenue revenue = createRevenue(revenueDTO);
+
+        // Generate a unique payment token
+        String paymentToken = UUID.randomUUID().toString();
+        revenue.setPaymentToken(paymentToken);
+        revenue = revenueRepository.save(revenue);
+
+        // Generate QR code
+        String qrCodeBase64;
+        try {
+            qrCodeBase64 = qrCodeService.generateQRCodeImage(paymentToken);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate QR code", e);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("revenue", new RevenueDTO(revenue, revenue.getApartment()));
+        response.put("qrCode", qrCodeBase64);
+        response.put("paymentToken", paymentToken);
+
+        return response;
+    }
+
+    @Transactional
+    public Revenue completePayment(String paymentToken) {
+        Revenue revenue = revenueRepository.findByPaymentToken(paymentToken)
+                .orElseThrow(() -> new RevenueNotFoundException("Payment not found"));
+
+        if ("Paid".equals(revenue.getStatus())) {
+            throw new RuntimeException("Payment already completed");
+        }
+
+        if (revenue.isOverdue()) {
+            throw new RuntimeException("Payment is overdue");
+        }
+
+        revenue.setStatus("Paid");
+        return revenueRepository.save(revenue);
     }
 
 //    public double calculateUsedValue(Revenue revenue, Apartment apartment) {

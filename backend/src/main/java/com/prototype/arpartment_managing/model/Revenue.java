@@ -34,6 +34,9 @@ public class Revenue {
     @JsonBackReference
     private Apartment apartment;
 
+    @Column(name = "payment_token", unique = true)
+    private String paymentToken;
+
     // Constructor to set createDate automatically
     public Revenue() {
         this.createDate = LocalDateTime.now();
@@ -112,6 +115,14 @@ public class Revenue {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getPaymentToken() {
+        return paymentToken;
+    }
+
+    public void setPaymentToken(String paymentToken) {
+        this.paymentToken = paymentToken;
     }
 
     // Method to check if revenue is overdue

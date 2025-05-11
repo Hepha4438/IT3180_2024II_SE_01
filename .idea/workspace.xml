@@ -4,14 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Merge bổ sung chỉnh sửa fee">
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Sửa lại tên và icon các trang">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/exception/FeeInUseException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/UserSecurity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/QRCodeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserNotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/images/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/RevenueController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/exception/RevenueNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/exception/RevenueNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Revenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/NotificationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/NotificationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/RevenueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/RevenueRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/fee/data/feeTableData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/ApartmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/ApartmentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/FeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/RevenueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/RevenueService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/profile/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/profile/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,21 +74,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.ArpartmentManagingApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#66 on minh3__hieu&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.ArpartmentManagingApplication.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "sprint__2__hieu",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HOANG HAI/OneDrive - Hanoi University of Science and Technology/Desktop/Java Project/IT3180_2024II_SE_01",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "inlay.hints"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="ArpartmentManagingApplication" type="Application" factoryName="Application" nameIsGenerated="true">
       <envs>
@@ -132,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746715768634</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Sửa lại tên và icon các trang">
+      <option name="closed" value="true" />
+      <created>1746856142681</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746856142681</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,6 +187,7 @@
     <MESSAGE value="Bản chạy trên local" />
     <MESSAGE value="Update OTP bản local" />
     <MESSAGE value="Merge bổ sung chỉnh sửa fee" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge bổ sung chỉnh sửa fee" />
+    <MESSAGE value="Sửa lại tên và icon các trang" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sửa lại tên và icon các trang" />
   </component>
 </project>

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:5000")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/apartment")
 public class ApartmentController {
     @Autowired
@@ -147,6 +147,20 @@ public class ApartmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating total revenue: " + e.getMessage());
+        }
+    }
+
+    // Generate bill for apartment - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}/bill")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId) {
+        try {
+            return apartmentService.generateBill(apartmentId);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating bill: " + e.getMessage());
         }
     }
 
