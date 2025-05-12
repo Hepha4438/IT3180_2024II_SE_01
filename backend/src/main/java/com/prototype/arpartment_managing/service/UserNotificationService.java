@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserNotificationService {
@@ -227,4 +224,45 @@ public class UserNotificationService {
                     .body(Map.of("error", "Failed to add notification to users by role: " + e.getMessage()));
         }
     }
-} 
+    @Transactional
+    public ResponseEntity<?> updateUsersinNotiList(Long notificationId, List<Long> userIds){
+        try{
+            Notification notification = notificationRepository.findById(notificationId)
+                    .orElseThrow(()-> new NotificationNotFoundException(notificationId));
+            if (notification.getUsers() == null) {
+                notification.setUsers(new HashSet<>());
+            }
+            Set<User> userNoti = notification.getUsers();
+            List<User> users = new ArrayList<>(userNoti);
+            List<User> userss = userRepository.findAllById(userIds);
+            users.forEach(user -> {
+                if (user.getNotifications() != null) {
+                    user.getNotifications().remove(notification);
+                    userRepository.save(user);
+                }
+                if (notification.getUsers() != null) {
+                    notification.getUsers().remove(user);
+                    notificationRepository.save(notification);
+                }
+            });
+
+            userss.forEach(user -> {
+                if (user.getNotifications() == null) {
+                    user.setNotifications(new HashSet<>());
+                }
+                user.getNotifications().add(notification);
+                notification.getUsers().add(user);
+                userRepository.save(user);
+                notificationRepository.save(notification);
+            });
+            return ResponseEntity.ok(Map.of(
+                    "message", "Notification added to users successfully",
+                    "notificationId", notificationId,
+                    "userCount", userss.size()
+            ));
+        } catch (NotificationNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+}

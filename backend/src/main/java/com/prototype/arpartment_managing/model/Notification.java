@@ -3,6 +3,7 @@ package com.prototype.arpartment_managing.model;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
