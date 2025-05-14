@@ -214,8 +214,8 @@ export default function data() {
             setViewContentDialog(true);
           }}
         >
-          {notification.content.slice(0, 20)}
-          {notification.content.length > 20 ? "..." : ""}
+          {notification.content.slice(0, 40)}
+          {notification.content.length > 40 ? "..." : ""}
         </MDTypography>
       ),
       createdAt: (

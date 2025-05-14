@@ -45,14 +45,4 @@ public class UserNotificationService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
         return user.getNotifications();
     }
-
-    public Set<Notification> getUserUnreadNotifications(Long userId) {
-        Set<Notification> result = new HashSet<>();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        for (Notification n : user.getNotifications()) {
-            if (!n.isRead()) result.add(n);
-        }
-        return result;
-    }
 }

@@ -14,7 +14,6 @@ public class NotificationDTO {
     private String content;
     private String type;
     private LocalDateTime createdAt;
-    private Boolean isRead;
     private Set<String> usernames;
 
     // Constructor mặc định
@@ -27,7 +26,6 @@ public class NotificationDTO {
         this.content = notification.getContent();
         this.type = notification.getType();
         this.createdAt = notification.getCreatedAt();
-        this.isRead = notification.isRead();
         this.usernames = notification.getUsers().stream()
                 .map(user -> user.getUsername())
                 .collect(Collectors.toSet());
@@ -73,14 +71,6 @@ public class NotificationDTO {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Boolean getIsRead() {
-        return isRead;
-    }
-
-    public void setIsRead(Boolean isRead) {
-        this.isRead = isRead;
     }
 
     public Set<String> getUsernames() {

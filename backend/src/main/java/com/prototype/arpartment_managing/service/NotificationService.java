@@ -48,7 +48,6 @@ public class NotificationService {
         notification.setContent(dto.getContent());
         notification.setType(dto.getType());
         notification.setCreatedAt(dto.getCreatedAt());
-        notification.setIsRead(false);
 
         Set<User> users = getUsersByUsernames(dto.getUsernames());
         notification.setUsers(users);
@@ -85,27 +84,6 @@ public class NotificationService {
         return toDTO(saved);
     }
 
-    @Transactional
-    public NotificationDTO markNotificationAsRead(Long id) {
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new NotificationNotFoundException(id));
-        notification.markAsRead();
-        return toDTO(notificationRepository.save(notification));
-    }
-
-    @Transactional
-    public NotificationDTO markNotificationAsUnread(Long id) {
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new NotificationNotFoundException(id));
-        notification.markAsUnread();
-        return toDTO(notificationRepository.save(notification));
-    }
-
-    public List<NotificationDTO> getUnreadNotifications() {
-        return notificationRepository.findByIsReadFalse()
-                .stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
     public List<NotificationDTO> getNotificationsByUser(Long userId) {
         return notificationRepository.findByUsersId(userId)
                 .stream().map(this::toDTO).collect(Collectors.toList());
@@ -130,7 +108,6 @@ public class NotificationService {
 ////                notification.getContent(),
 ////                notification.getType(),
 ////                notification.getCreatedAt(),
-////                notification.isRead(),
 ////                usernames
 ////        );
         return new NotificationDTO(notification);

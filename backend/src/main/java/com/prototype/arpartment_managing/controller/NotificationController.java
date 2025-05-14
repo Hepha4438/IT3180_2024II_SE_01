@@ -53,24 +53,6 @@ public class NotificationController {
         return ResponseEntity.ok("Notification deleted");
     }
 
-    @PutMapping("/{id}/read")
-    @PreAuthorize("hasRole('ADMIN')")
-    public NotificationDTO markAsRead(@PathVariable Long id) {
-        return notificationService.markNotificationAsRead(id);
-    }
-
-    @PutMapping("/{id}/unread")
-    @PreAuthorize("hasRole('ADMIN')")
-    public NotificationDTO markAsUnread(@PathVariable Long id) {
-        return notificationService.markNotificationAsUnread(id);
-    }
-
-    @GetMapping("/unread")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<NotificationDTO> getUnread() {
-        return notificationService.getUnreadNotifications();
-    }
-
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public List<NotificationDTO> getByUser(@PathVariable Long userId) {

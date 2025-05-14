@@ -366,11 +366,7 @@ function Apartment() {
                         Residents ({apartment.residents?.length || 0})
                       </MDTypography>
                       <MDBox>
-                        {apartment.residents?.length > 0 && (
-                          <MDButton variant="outlined" color="info" size="small" sx={{ mr: 1 }}>
-                            View All
-                          </MDButton>
-                        )}
+                        {apartment.residents?.length > 0}
                         <MDButton
                           variant="contained"
                           color="success"

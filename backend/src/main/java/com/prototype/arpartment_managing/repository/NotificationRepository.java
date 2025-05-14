@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     Optional<Notification> findByType(String type);
-    List<Notification> findByIsReadFalse();
     List<Notification> findByUsersId(Long userId);
 }

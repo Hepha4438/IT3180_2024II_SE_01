@@ -4,20 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update code của minh3_hieu3 vào branch">
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/notificationTableData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/residentSelectData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/residentSelectTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/index.js" afterDir="false" />
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update FE Notification cho Admin">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/NotificationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/dto/NotificationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/dto/NotificationDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/exception/UserNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/exception/UserNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/model/Notification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/security/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/NotificationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserNotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserNotificationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/notificationTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/notificationTableData.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746982139541</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Update FE Notification cho Admin">
+      <option name="closed" value="true" />
+      <created>1747187018768</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747187018768</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -193,6 +195,7 @@
     <MESSAGE value="Merge bổ sung chỉnh sửa fee" />
     <MESSAGE value="Sửa lại tên và icon các trang" />
     <MESSAGE value="Update code của minh3_hieu3 vào branch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update code của minh3_hieu3 vào branch" />
+    <MESSAGE value="Update FE Notification cho Admin" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update FE Notification cho Admin" />
   </component>
 </project>
