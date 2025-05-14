@@ -1,110 +1,138 @@
 package com.prototype.arpartment_managing.service;
 
+import com.prototype.arpartment_managing.dto.NotificationDTO;
 import com.prototype.arpartment_managing.exception.NotificationNotFoundException;
 import com.prototype.arpartment_managing.exception.NotificationNotFoundTypeException;
+import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Notification;
+import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.NotificationRepository;
+import com.prototype.arpartment_managing.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.HashSet;
 
-@Primary
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    public List<Notification> getAllNotifications(){
-        return notificationRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<NotificationDTO> getAllNotifications() {
+        return notificationRepository.findAll()
+                .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> getNotificationById(Long id){
-        if(id != null) {
-            Notification notification = notificationRepository.findById(id)
-                    .orElseThrow(() -> new NotificationNotFoundException(id));
-            return ResponseEntity.ok(notification);
-        } else {
-            return ResponseEntity.badRequest().body("Must provide id");
-        }
+    public NotificationDTO getNotificationById(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new NotificationNotFoundException(id));
+        return toDTO(notification);
     }
 
-    public ResponseEntity<?> getNotificationByType(String type){
+    public NotificationDTO getNotificationByType(String type) {
         Notification notification = notificationRepository.findByType(type)
                 .orElseThrow(() -> new NotificationNotFoundTypeException(type));
-        return ResponseEntity.ok(notification);
+        return toDTO(notification);
     }
 
     @Transactional
-    public Notification createNotification(Notification notification){
-        Notification newNotification = new Notification();
-        newNotification.setTitle(notification.getTitle());
-        newNotification.setContent(notification.getContent());
-        newNotification.setType(notification.getType());
-        newNotification.setCreatedAt(notification.getCreatedAt());
-        return notificationRepository.save(newNotification);
+    public NotificationDTO createNotification(NotificationDTO dto) {
+        Notification notification = new Notification();
+        notification.setTitle(dto.getTitle());
+        notification.setContent(dto.getContent());
+        notification.setType(dto.getType());
+        notification.setCreatedAt(dto.getCreatedAt());
+        notification.setIsRead(false);
+
+        Set<User> users = getUsersByUsernames(dto.getUsernames());
+        notification.setUsers(users);
+
+        Notification saved = notificationRepository.save(notification);
+        return toDTO(saved);
     }
 
     @Transactional
-    public void deleteNotification(Long id){
+    public void deleteNotification(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotificationNotFoundException(id));
 
-        // Handle both sides of the relationship
-        if (notification.getUsers() != null) {
-            // Remove this notification from each user's notification list
-            notification.getUsers().forEach(user -> {
-                if (user.getNotifications() != null) {
-                    user.getNotifications().remove(notification);
-                }
-            });
-            // Clear the users set in the notification
-            notification.getUsers().clear();
-        }
-
-        // Save the notification to update the relationships
+        notification.getUsers().forEach(user -> user.getNotifications().remove(notification));
+        notification.getUsers().clear();
         notificationRepository.save(notification);
-
-        // Now we can safely delete the notification
         notificationRepository.delete(notification);
     }
 
     @Transactional
-    public Notification updateNotification(Long id, Notification updatedNotification) {
+    public NotificationDTO updateNotification(Long id, NotificationDTO dto) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotificationNotFoundException(id));
 
-        notification.setTitle(updatedNotification.getTitle());
-        notification.setContent(updatedNotification.getContent());
-        notification.setType(updatedNotification.getType());
+        notification.setTitle(dto.getTitle());
+        notification.setContent(dto.getContent());
+        notification.setType(dto.getType());
 
-        return notificationRepository.save(notification);
+        Set<User> users = getUsersByUsernames(dto.getUsernames());
+        notification.getUsers().forEach(user -> user.getNotifications().remove(notification));
+        notification.setUsers(users);
+
+        Notification saved = notificationRepository.save(notification);
+        return toDTO(saved);
     }
 
     @Transactional
-    public Notification markNotificationAsRead(Long id) {
+    public NotificationDTO markNotificationAsRead(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotificationNotFoundException(id));
         notification.markAsRead();
-        return notificationRepository.save(notification);
+        return toDTO(notificationRepository.save(notification));
     }
 
     @Transactional
-    public Notification markNotificationAsUnread(Long id) {
+    public NotificationDTO markNotificationAsUnread(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotificationNotFoundException(id));
         notification.markAsUnread();
-        return notificationRepository.save(notification);
+        return toDTO(notificationRepository.save(notification));
     }
 
-    public List<Notification> getUnreadNotifications() {
-        return notificationRepository.findByIsReadFalse();
+    public List<NotificationDTO> getUnreadNotifications() {
+        return notificationRepository.findByIsReadFalse()
+                .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public List<Notification> getNotificationsByUser(Long userId) {
-        return notificationRepository.findByUsersId(userId);
+    public List<NotificationDTO> getNotificationsByUser(Long userId) {
+        return notificationRepository.findByUsersId(userId)
+                .stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    // DTO to Entity mapping helpers
+    private Set<User> getUsersByUsernames(Set<String> usernames) {
+        if (usernames == null) return new HashSet<>();
+        return usernames.stream()
+                .map(username -> userRepository.findByUsername(username)
+                        .orElseThrow(() -> new UserNotFoundException(username)))
+                .collect(Collectors.toSet());
+    }
+
+    private NotificationDTO toDTO(Notification notification) {
+//        List<String> usernames = notification.getUsers()
+////                .stream().map(User::getUsername).collect(Collectors.toList());
+////
+////        return new NotificationDTO(
+////                notification.getId(),
+////                notification.getTitle(),
+////                notification.getContent(),
+////                notification.getType(),
+////                notification.getCreatedAt(),
+////                notification.isRead(),
+////                usernames
+////        );
+        return new NotificationDTO(notification);
     }
 }

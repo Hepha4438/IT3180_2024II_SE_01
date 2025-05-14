@@ -31,6 +31,7 @@ public class Notification {
     )
     @JsonManagedReference
     private Set<User> users;
+//    private Set<User> users = new HashSet<>();
 
     public Notification() {
         this.createdAt = LocalDateTime.now();
@@ -85,6 +86,10 @@ public class Notification {
 
     public boolean isRead() {
         return isRead;
+    }
+
+    public void setIsRead(boolean b){
+        this.isRead = b;
     }
 
     public void setRead(boolean read) {

@@ -1,117 +1,79 @@
 package com.prototype.arpartment_managing.controller;
 
-import com.prototype.arpartment_managing.model.Notification;
+import com.prototype.arpartment_managing.dto.NotificationDTO;
 import com.prototype.arpartment_managing.service.NotificationService;
-import com.prototype.arpartment_managing.service.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Set;
 
 @RestController
-@CrossOrigin("http://localhost:5000")
-@RequestMapping("/notification")
+@RequestMapping("/notifications")
+@CrossOrigin("http://localhost:3000")
 public class NotificationController {
 
     @Autowired
     private NotificationService notificationService;
 
-    @Autowired
-    private UserNotificationService userNotificationService;
-
-    // Get all notifications - Admin only
-    @GetMapping("/all")
+    @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Notification> getAllNotifications() {
+    public List<NotificationDTO> getAll() {
         return notificationService.getAllNotifications();
     }
 
-    // Get notification by ID - Admin only
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getNotificationById(@PathVariable Long id) {
+    public NotificationDTO getById(@PathVariable Long id) {
         return notificationService.getNotificationById(id);
     }
 
-    // Get notification by type - Admin only
     @GetMapping("/type/{type}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getNotificationByType(@PathVariable String type) {
+    public NotificationDTO getByType(@PathVariable String type) {
         return notificationService.getNotificationByType(type);
     }
 
-    // Create new notification - Admin only
-    @PostMapping("/create")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Notification createNotification(@RequestBody Notification notification) {
-        return notificationService.createNotification(notification);
+    public NotificationDTO create(@RequestBody NotificationDTO dto) {
+        return notificationService.createNotification(dto);
     }
 
-    // Update notification - Admin only
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Notification updateNotification(@PathVariable Long id, @RequestBody Notification notification) {
-        return notificationService.updateNotification(id, notification);
+    public NotificationDTO update(@PathVariable Long id, @RequestBody NotificationDTO dto) {
+        return notificationService.updateNotification(id, dto);
     }
 
-    // Delete notification - Admin only
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         notificationService.deleteNotification(id);
+        return ResponseEntity.ok("Notification deleted");
     }
 
-    // User-Notification relationship endpoints
-
-    // Add notification to a user - Admin only
-    @PostMapping("/user/{userId}/notification/{notificationId}")
+    @PutMapping("/{id}/read")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addNotificationToUser(@PathVariable Long userId, @PathVariable Long notificationId) {
-        return userNotificationService.addNotificationToUser(userId, notificationId);
+    public NotificationDTO markAsRead(@PathVariable Long id) {
+        return notificationService.markNotificationAsRead(id);
     }
 
-    // Remove notification from a user - Admin only
-    @DeleteMapping("/user/{userId}/notification/{notificationId}")
+    @PutMapping("/{id}/unread")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> removeNotificationFromUser(@PathVariable Long userId, @PathVariable Long notificationId) {
-        return userNotificationService.removeNotificationFromUser(userId, notificationId);
+    public NotificationDTO markAsUnread(@PathVariable Long id) {
+        return notificationService.markNotificationAsUnread(id);
     }
 
-    // Add notification to multiple users - Admin only
-    @PostMapping("/notification/{notificationId}/users")
+    @GetMapping("/unread")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addNotificationToUsers(@PathVariable Long notificationId, @RequestBody List<Long> userIds) {
-        return userNotificationService.addNotificationToUsers(notificationId, userIds);
+    public List<NotificationDTO> getUnread() {
+        return notificationService.getUnreadNotifications();
     }
 
-    // Remove notification from multiple users - Admin only
-    @DeleteMapping("/notification/{notificationId}/users")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> removeNotificationFromUsers(@PathVariable Long notificationId, @RequestBody List<Long> userIds) {
-        return userNotificationService.removeNotificationFromUsers(notificationId, userIds);
-    }
-
-    // Get all notifications for a user - Admin or own notifications
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#userId)")
-    public Set<Notification> getUserNotifications(@PathVariable Long userId) {
-        return userNotificationService.getUserNotifications(userId);
-    }
-
-    // Get unread notifications for a user - Admin or own notifications
-    @GetMapping("/user/{userId}/unread")
-    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#userId)")
-    public Set<Notification> getUserUnreadNotifications(@PathVariable Long userId) {
-        return userNotificationService.getUserUnreadNotifications(userId);
-    }
-
-    // Add notification to all users with specific role - Admin only
-    @PostMapping("/notification/{notificationId}/role/{role}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addNotificationToUsersByRole(@PathVariable Long notificationId, @PathVariable String role) {
-        return userNotificationService.addNotificationToUsersByRole(notificationId, role);
+    public List<NotificationDTO> getByUser(@PathVariable Long userId) {
+        return notificationService.getNotificationsByUser(userId);
     }
 }
