@@ -10,6 +10,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
 
+//ApartmentSelectTable
+import ApartmentSelectTable from "layouts/revenue/data/apartmentSelectTable";
+
 export default function revenueData() {
   const [revenues, setRevenues] = useState([]);
   const [rows, setRows] = useState([]);
@@ -21,6 +24,7 @@ export default function revenueData() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [filteredRevenue, setFilteredRevenue] = useState([]);
   const [createError, setCreateError] = useState("");
+  const [selectedApartments, setSelectedApartments] = useState(new Set());
   const formatCurrency = (amount) => new Intl.NumberFormat("vi-VN").format(amount) + " VND";
 
   // const handleSearch = (bills) => {
@@ -38,7 +42,6 @@ export default function revenueData() {
     type: "",
     status: "Unpaid",
     used: "",
-    apartmentId: "",
     createDate: new Date().toISOString(),
     endDate: "",
     paymentToken: "",
@@ -124,7 +127,6 @@ export default function revenueData() {
       type: "",
       status: "",
       used: "",
-      apartmentId: "",
       endDate: "",
     });
   };
@@ -132,10 +134,17 @@ export default function revenueData() {
   const handleCreateSubmit = async () => {
     try {
       newRevenue.endDate = new Date(newRevenue.endDate).toISOString();
-      console.log("newRevenue:", newRevenue);
-      await axios.post("http://localhost:7070/revenue/create-with-qr", newRevenue, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      //Đoạn sửa
+      for (const id of selectedApartments) {
+        const converted = {
+          ...newRevenue,
+          apartmentId: id,
+        };
+        console.log("newconvertedRevenue:", converted);
+        await axios.post("http://localhost:7070/revenue/create-with-qr", converted, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+      }
       loadRevenues();
       handleCreateClose();
     } catch (error) {
@@ -215,14 +224,13 @@ export default function revenueData() {
   };
 
   useEffect(() => {
-    filterRevenues(); // Filter whenever searchTerm or searchType changes
-    console.log("Filtered Revenues:", filteredRevenue);
-    console.log("serachTerm:", searchTerm);
-  }, [searchTerm, searchType]);
-
-  useEffect(() => {
     loadRevenues();
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    filterRevenue();
+  };
 
   useEffect(() => {
     const formattedRows = filteredRevenue.map((bill, index) => ({
@@ -303,13 +311,10 @@ export default function revenueData() {
   };
 
   const searchUI = (
-    <Grid container spacing={2} mb={2}>
+    <Grid>
       <MDBox
         component="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          filterRevenue();
-        }}
+        onSubmit={handleSearch}
         display="flex"
         alignItems="center"
         width="100%"
@@ -339,7 +344,7 @@ export default function revenueData() {
             },
           }}
         >
-          <Icon>add</Icon> Thêm khoản thu
+          <Icon>add</Icon> Thêm phí
         </MDButton>
         <MDBox mr={1}>
           <select
@@ -398,7 +403,7 @@ export default function revenueData() {
           color="dark"
           onClick={() => {
             setSearchTerm("");
-            loadRevenues(); // Reset fees to the original list
+            loadRevenues();
           }}
           sx={{
             ml: 1,
@@ -483,40 +488,53 @@ export default function revenueData() {
       </Dialog>
 
       {/* Create Dialog */}
-      <Dialog open={createDialogOpen} onClose={handleCreateClose}>
-        <DialogTitle>Tạo mới khoản thu</DialogTitle>
+      <Dialog
+        open={createDialogOpen}
+        onClose={handleCreateClose}
+        fullWidth
+        maxWidth="md" // hoặc 'lg', hoặc 'xl'
+        PaperProps={{
+          sx: {
+            width: "90%", // tùy chỉnh tỉ lệ chiều rộng
+            maxWidth: "1500px", // hoặc giá trị bạn muốn
+          },
+        }}
+      >
         <DialogContent>
-          <MDBox display="flex" flexDirection="column" gap={2} mt={1}>
-            <MDInput
-              label="Type"
-              name="type"
-              value={newRevenue.type}
-              onChange={handleInputChange}
-              fullWidth
-            />
-            <MDInput
-              label="Số lượng sử dụng"
-              name="used"
-              value={newRevenue.used}
-              onChange={handleInputChange}
-              fullWidth
-            />
-            <MDInput
-              label="Ngày hết hạn"
-              name="endDate"
-              type="date"
-              value={newRevenue.endDate}
-              onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-            />
-            <MDInput
-              label="ID căn hộ"
-              name="apartmentId"
-              value={newRevenue.apartmentId}
-              onChange={handleInputChange}
-              fullWidth
-            />
+          <MDBox display="flex" flexDirection="row" gap={2}>
+            <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
+              <DialogTitle>Tạo mới khoản thu</DialogTitle>
+              <MDInput
+                label="Type"
+                name="type"
+                value={newRevenue.type}
+                onChange={handleInputChange}
+                fullWidth
+              />
+              <MDInput
+                label="Số lượng sử dụng"
+                name="used"
+                value={newRevenue.used}
+                onChange={handleInputChange}
+                fullWidth
+              />
+              <MDInput
+                label="Ngày hết hạn"
+                name="endDate"
+                type="date"
+                value={newRevenue.endDate}
+                onChange={handleInputChange}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+              />
+            </MDBox>
+
+            <MDBox flex={2}>
+              <ApartmentSelectTable
+                selectedApartments={selectedApartments}
+                setSelectedApartments={setSelectedApartments}
+              />
+            </MDBox>
           </MDBox>
         </DialogContent>
         <DialogActions>

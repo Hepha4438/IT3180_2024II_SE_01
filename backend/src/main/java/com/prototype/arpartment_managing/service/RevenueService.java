@@ -210,7 +210,7 @@ public class RevenueService {
     @Transactional
     public Map<String, Object> createRevenueWithQR(RevenueDTO revenueDTO) {
         Revenue revenue = createRevenue(revenueDTO);
-        
+
         // Generate a unique payment token
         String paymentToken = UUID.randomUUID().toString();
         revenue.setPaymentToken(paymentToken);
@@ -221,7 +221,7 @@ public class RevenueService {
         try {
             qrCodeBase64 = qrCodeService.generateQRCodeImage(paymentToken);
         } catch (Exception e) {
-            throw new RuntimeException("Thất bại khi tạo mã code", e);
+            throw new RuntimeException("Failed to generate QR code", e);
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -231,6 +231,7 @@ public class RevenueService {
 
         return response;
     }
+
     @Transactional
     public Map<String, Object> getQRCode(String paymentToken) {
         Map<String, Object> response = new HashMap<>();

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:5000")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
 
