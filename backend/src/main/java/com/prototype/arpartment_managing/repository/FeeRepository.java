@@ -12,5 +12,5 @@ public interface FeeRepository extends JpaRepository<Fee, Long> {
     Optional<Fee> findByType(String type);
     List<Fee> findByTypeIn(Set<String> types);
     void deleteByType(String type);
-
+    
 }

@@ -1,15 +1,10 @@
 package com.prototype.arpartment_managing.service;
 
 import com.prototype.arpartment_managing.dto.RevenueDTO;
-import com.prototype.arpartment_managing.dto.UserDTO;
-import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
-import com.prototype.arpartment_managing.exception.RevenueNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundExceptionUsername;
+import com.prototype.arpartment_managing.exception.*;
 import com.prototype.arpartment_managing.model.Apartment;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.model.Revenue;
-import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
 import com.prototype.arpartment_managing.repository.FeeRepository;
 import com.prototype.arpartment_managing.repository.RevenueRepository;
@@ -18,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.UUID;
+import java.util.HashMap;
 
 
 @Primary
@@ -33,50 +31,76 @@ public class RevenueService {
     private FeeRepository feeRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private QRCodeService qrCodeService;
 
-    // danh sach full khoan thu cua tat ca can ho
-    public List<Revenue> getAllRevenues() {
-        return revenueRepository.findAll();
+    // Get all revenues
+    public List<RevenueDTO> getAllRevenues() {
+        List<Revenue> revenues = revenueRepository.findAll();
+        return revenues.stream()
+                .map(revenue -> {
+                    Apartment apartment = revenue.getApartment();
+                    return new RevenueDTO(revenue, apartment);
+                })
+                .collect(Collectors.toList());
     }
-
-
-    // Get Revenue Information
+    // Get Revenue Information (by Id for backend testing)
     public ResponseEntity<?> getRevenue(Long id){
-        Revenue revenue;
         if (id != null) {
-            revenue = revenueRepository.findById(id)
+            Revenue revenue = revenueRepository.findById(id)
                     .orElseThrow(() -> new RevenueNotFoundException(id));
+            Apartment apartment = revenue.getApartment();
+            return ResponseEntity.ok(new RevenueDTO(revenue,apartment));
         } else {
             return ResponseEntity.badRequest().body("Must provide id");
         }
-        return ResponseEntity.ok(new RevenueDTO(revenue));
+    }
+
+    // Get Revenue Information (by APid and Type for frontend search)
+    public ResponseEntity<?> getRevenueByApartmentandType(String apartmentId, String type){
+        Revenue revenue = revenueRepository.findByApartment_ApartmentIdAndType(apartmentId,type)
+                .orElseThrow(() -> new RevenueNotFoundExceptionType(type));
+        Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+        return ResponseEntity.ok(new RevenueDTO(revenue,apartment));
+    }
+
+    public List<Revenue> getRevenueByApartmentId(String apartmentId) {
+        return revenueRepository.findByApartment_ApartmentId(apartmentId);
     }
 
     @Transactional
     // Create Revenue
     public Revenue createRevenue(RevenueDTO revenueDTO) {
-        Revenue revenue = new Revenue();
-        revenue.setUsed(revenueDTO.getUsed());
-        revenue.setStatus(revenueDTO.getStatus());
-        revenue.setType(revenueDTO.getType());
-
         // Validate Apartment ID
         if (revenueDTO.getApartmentId() == null) {
             throw new IllegalArgumentException("Apartment ID must not be null");
         }
 
+        Revenue revenue = new Revenue();
+        revenue.setUsed(revenueDTO.getUsed());
+        revenue.setStatus(revenueDTO.getStatus());
+        revenue.setType(revenueDTO.getType());
+        
+        // Set end date if provided
+        if (revenueDTO.getEndDate() != null) {
+            revenue.setEndDate(revenueDTO.getEndDate());
+        }
+
+        // Set apartment (required)
         Apartment apartment = apartmentRepository.findByApartmentId(revenueDTO.getApartmentId())
                 .orElseThrow(() -> new ApartmentNotFoundException(revenueDTO.getApartmentId()));
 
         revenue.setApartment(apartment);
 
+
         Optional<Fee> feeOpt = feeRepository.findByType(revenueDTO.getType());
         double calculatedTotal = feeOpt.map(fee -> revenueDTO.getUsed() * fee.getPricePerUnit()).orElse(0.0);
-
         revenue.setTotal(calculatedTotal);
 
         revenue = revenueRepository.save(revenue);
 
+        // Update âprtment
         apartment.getRevenues().add(revenue);
         apartment.setTotal(calculateTotalPayment(apartment.getApartmentId()));
         apartmentRepository.save(apartment);
@@ -84,52 +108,59 @@ public class RevenueService {
         return revenue;
     }
 
-
-
-    // Delete Revenue
+    @Transactional
     public void deleteRevenue(Long id) {
         Revenue revenue = revenueRepository.findById(id)
                 .orElseThrow(() -> new RevenueNotFoundException(id));
 
         Apartment apartment = revenue.getApartment();
-        if (apartment != null) {
+        if (apartment != null && apartment.getRevenues() != null) {
+            // Remove from list and break relationship
             apartment.getRevenues().removeIf(r -> r.getId().equals(id));
             revenue.setApartment(null);
+            
+            // Update total and save
+            apartment.setTotal(calculateTotalPayment(apartment.getApartmentId()));
             apartmentRepository.save(apartment);
         }
-
+        
         revenueRepository.deleteById(id);
     }
 
 
-
-    // update khoan thu theo id
+    @Transactional
     public Revenue updateRevenueByID(RevenueDTO revenueDTO, Long id) {
         return revenueRepository.findById(id)
                 .map(existingRevenue -> {
-                    // Cập nhật dữ liệu từ request vào bản ghi cũ
+                    // Update status
                     existingRevenue.setStatus(revenueDTO.getStatus());
-                    existingRevenue.setType(revenueDTO.getType());
-                    existingRevenue.setUsed(revenueDTO.getUsed());
-
-                    return revenueRepository.save(existingRevenue);
+                    
+                    // Update used value if provided
+                    if (revenueDTO.getUsed() > 0) {
+                        existingRevenue.setUsed(revenueDTO.getUsed());
+                        
+                        // Recalculate total based on new used value
+                        Fee fee = feeRepository.findByType(existingRevenue.getType())
+                                .orElseThrow(() -> new FeeNotFoundException("Fee not found for type: " + existingRevenue.getType()));
+                        
+                        double newTotal = existingRevenue.getUsed() * fee.getPricePerUnit();
+                        existingRevenue.setTotal(newTotal);
+                    }
+                    
+                    // Save the updated revenue
+                    Revenue savedRevenue = revenueRepository.save(existingRevenue);
+                    
+                    // Update apartment's total
+                    Apartment apartment = savedRevenue.getApartment();
+                    if (apartment != null) {
+                        apartment.setTotal(calculateTotalPayment(apartment.getApartmentId()));
+                        apartmentRepository.save(apartment);
+                    }
+                    
+                    return savedRevenue;
                 })
                 .orElseThrow(() -> new RevenueNotFoundException(id));
     }
-
-
-//    // tinh khoan thu theo loai cua 1 can ho (theo dien tich)
-//    public Double calculateFee(String apartmentId, String feeType) {
-//        List<Revenue> revenues = findAllRevenueByApartmentId(apartmentId);
-//
-//        return revenues.stream()
-//                .filter(revenue -> feeType.equals(revenue.getType()))
-//                .map(revenue -> {
-//                    Optional<Fee> feeOpt = feeRepository.findByType(feeType);
-//                    return feeOpt.map(fee -> revenue.getUsed() * fee.getPricePerUnit()).orElse(0.0);
-//                })
-//                .reduce(0.0, Double::sum);
-//    }
 
     // tinh tong khoan thu cua 1 can ho
     public Double calculateTotalPayment(String apartmentId) {
@@ -140,17 +171,26 @@ public class RevenueService {
         }
 
         double totalPayment = 0.0;
-
         // Duyệt từng loại tiêu thụ để tính tiền
         for (Revenue revenue : revenues) {
-            // Tìm mức giá tương ứng với loại tiêu thụ
+            // Update status based on end date
+            revenue.updateStatus();
+            
+            if("Unpaid".equals(revenue.getStatus()) || "Overdue".equals(revenue.getStatus())) {
+                // Tìm mức giá tương ứng với loại tiêu thụ
+                Fee fee = feeRepository.findByType(revenue.getType())
+                        .orElseThrow(() -> new RuntimeException("Fee not found for type: " + revenue.getType()));
 
-            Fee fee = feeRepository.findByType(revenue.getType())
-                    .orElseThrow(() -> new RuntimeException("Fee not found for type: " + revenue.getType()));
-
-            // Tính tiền của mục tiêu thụ này
-            double cost = revenue.getUsed() * fee.getPricePerUnit();
-            totalPayment += cost;
+                // Tính tiền của mục tiêu thụ này
+                double cost = revenue.getUsed() * fee.getPricePerUnit();
+                
+                // // Add penalty for overdue payments (e.g., 10% extra)
+                // if ("Overdue".equals(revenue.getStatus())) {
+                //     cost *= 1.1; // 10% penalty for overdue payments
+                // }
+                
+                totalPayment += cost;
+            }
         }
         return totalPayment;
     }
@@ -161,7 +201,58 @@ public class RevenueService {
         return apartment.map(Apartment::getRevenues).orElse(null);
     }
 
+    @Transactional
+    public Map<String, Object> createRevenueWithQR(RevenueDTO revenueDTO) {
+        Revenue revenue = createRevenue(revenueDTO);
+        
+        // Generate a unique payment token
+        String paymentToken = UUID.randomUUID().toString();
+        revenue.setPaymentToken(paymentToken);
+        revenue = revenueRepository.save(revenue);
 
+        // Generate QR code
+        String qrCodeBase64;
+        try {
+            qrCodeBase64 = qrCodeService.generateQRCodeImage(paymentToken);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate QR code", e);
+        }
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("revenue", new RevenueDTO(revenue, revenue.getApartment()));
+        response.put("qrCode", qrCodeBase64);
+        response.put("paymentToken", paymentToken);
+
+        return response;
+    }
+
+    @Transactional
+    public Revenue completePayment(String paymentToken) {
+        Revenue revenue = revenueRepository.findByPaymentToken(paymentToken)
+                .orElseThrow(() -> new RevenueNotFoundException("Payment not found"));
+
+        if ("Paid".equals(revenue.getStatus())) {
+            throw new RuntimeException("Payment already completed");
+        }
+
+        if (revenue.isOverdue()) {
+            throw new RuntimeException("Payment is overdue");
+        }
+
+        revenue.setStatus("Paid");
+        return revenueRepository.save(revenue);
+    }
+
+//    public double calculateUsedValue(Revenue revenue, Apartment apartment) {
+//        if ("Service".equals(revenue.getType()) && apartment != null) {
+//            return apartment.getArea();
+//        }
+//        return revenue.getUsed();
+//    }
+//
+//    public double calculateTotal(Revenue revenue, Fee fee) {
+//        double usedValue = calculateUsedValue(revenue, revenue.getApartment());
+//        return usedValue * fee.getPricePerUnit();
+//    }
 }
 
