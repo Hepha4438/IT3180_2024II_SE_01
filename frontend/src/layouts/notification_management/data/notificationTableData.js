@@ -11,7 +11,6 @@ import ResidentSelectTable from "layouts/notification_management/data/residentSe
 
 export default function data() {
   const [notifications, setNotifications] = useState([]);
-  const [filteredNotifications, setFilteredNotifications] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -49,17 +48,23 @@ export default function data() {
         usernames: new Set(notification.usernames),
       }));
       setNotifications(converted);
-      setFilteredNotifications(converted);
     } catch (error) {
       console.error("Failed to load notifications", error);
     }
   };
 
-  const filterNotifications = () => {
-    const filtered = notifications.filter((notification) => {
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) {
+      loadNotifications();
+      return;
+    }
+
+    const filteredNotifications = notifications.filter((notification) => {
       return notification[searchType]?.toString().toLowerCase().includes(searchTerm.toLowerCase());
     });
-    setFilteredNotifications(filtered);
+
+    setNotifications(filteredNotifications);
   };
 
   useEffect(() => {
@@ -86,10 +91,6 @@ export default function data() {
     loadNotifications();
   }, []);
 
-  useEffect(() => {
-    filterNotifications();
-  }, [searchTerm, searchType]);
-
   const handleDeleteClick = (noti) => {
     setSelectedNotification(noti);
     setDeleteDialogOpen(true);
@@ -113,6 +114,13 @@ export default function data() {
   };
 
   const handleCreateClick = () => {
+    setNewNotification({
+      title: "",
+      type: "default", // hoặc "" nếu bạn yêu cầu chọn thủ công
+      content: "",
+      usernames: new Set(),
+    });
+
     setCreateDialogOpen(true);
   };
 
@@ -181,7 +189,7 @@ export default function data() {
   };
 
   const generateRows = () => {
-    return filteredNotifications.map((notification) => ({
+    return notifications.map((notification) => ({
       title: (
         <MDTypography
           variant="text"
@@ -275,10 +283,7 @@ export default function data() {
       <MDBox>
         <MDBox
           component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            filterNotifications();
-          }}
+          onSubmit={handleSearch}
           display="flex"
           alignItems="center"
           width="100%"
@@ -333,7 +338,6 @@ export default function data() {
               <option value="content">Content</option>
               <option value="type">Type</option>
               <option value="createdAt">createdAt</option>
-              <option value="usernames">User List</option>
             </select>
           </MDBox>
           <MDInput
@@ -369,7 +373,7 @@ export default function data() {
             color="dark"
             onClick={() => {
               setSearchTerm("");
-              loadFees(); // Reset fees to the original list
+              loadNotifications(); // Reset notifications to the original list
             }}
             sx={{
               ml: 1,
@@ -433,6 +437,15 @@ export default function data() {
                   value={newNotification.content}
                   onChange={handleInputChange}
                   fullWidth
+                  multiline
+                  minRows={4}
+                  maxRows={10}
+                  InputProps={{
+                    sx: {
+                      paddingTop: "5px", // tránh label bị đè
+                      paddingBottom: "5px",
+                    },
+                  }}
                 />
                 <MDBox fullWidth label="Type">
                   <select
@@ -516,6 +529,9 @@ export default function data() {
                   value={editNotification.content}
                   onChange={handleEditInputChange}
                   fullWidth
+                  multiline
+                  minRows={4}
+                  maxRows={10}
                 />
                 <MDBox fullWidth label="Type">
                   <select

@@ -46,6 +46,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import FeeTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
+import UserNotificationPage from "layouts/notification";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -64,7 +65,7 @@ const routes = [
     name: "Resident Management",
     key: "tables",
     icon: <Icon fontSize="small">people</Icon>,
-    route: "/tables",
+    route: "/manage/resident",
     component: <Tables />,
   },
   {
@@ -72,7 +73,7 @@ const routes = [
     name: "Billing Management",
     key: "fee",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/fee",
+    route: "/manage/billing",
     component: <FeeTable />, // Sử dụng component mới cho bảng Fee
   },
   {
@@ -80,7 +81,7 @@ const routes = [
     name: "Notification Management",
     key: "notification",
     icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notification",
+    route: "/manage/notification",
     component: <NotificationTable />, // Sử dụng component mới cho bảng Fee
   },
   {
@@ -102,11 +103,12 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Notifications",
-    key: "notifications",
+    name: "Notification",
+    key: "usernotification",
     icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
+    route: "/notification/:id",
+    // The route is dynamic and will be replaced with the user id
+    component: <UserNotificationPage />,
   },
   {
     type: "collapse",

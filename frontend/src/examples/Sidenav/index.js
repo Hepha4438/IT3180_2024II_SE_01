@@ -121,6 +121,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         const userApartmentId = localStorage.getItem("apartmentId");
         routePath = route.replace(":apartmentId", userApartmentId || "");
       }
+      if (key === "usernotification" && route.includes(":id")) {
+        const userId = localStorage.getItem("id");
+        routePath = route.replace(":id", userId || "");
+      }
       returnValue = href ? (
         <Link
           href={href}
@@ -132,13 +136,17 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           <SidenavCollapse
             name={name}
             icon={icon}
-            active={key === collapseName}
+            active={location.pathname.startsWith(routePath)}
             noCollapse={noCollapse}
           />
         </Link>
       ) : (
         <NavLink key={key} to={routePath}>
-          <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
+          <SidenavCollapse
+            name={name}
+            icon={icon}
+            active={location.pathname.startsWith(routePath)}
+          />
         </NavLink>
       );
     } else if (type === "title") {
