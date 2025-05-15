@@ -16,6 +16,7 @@ export const getRevenue = async (id = null) => {
     const response = await axios.get(`${API_URL}/revenue/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
+    console.log("response la: ---------------------", response.data);
     return response.data;
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);

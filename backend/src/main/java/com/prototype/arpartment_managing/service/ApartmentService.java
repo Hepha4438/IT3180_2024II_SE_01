@@ -192,7 +192,7 @@ public class ApartmentService {
             // Get current month and year for the bill
             Calendar calendar = Calendar.getInstance();
             String currentMonth = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
-            
+
             // Add bill details
             addTableRow(infoTable, "Bill Number:", "BILL-" + apartmentId + "-" + System.currentTimeMillis());
             addTableRow(infoTable, "Issue Date:", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
@@ -250,7 +250,7 @@ public class ApartmentService {
             for (Revenue revenue : revenues) {
                 Fee fee = feeRepository.findByType(revenue.getType())
                         .orElseThrow(() -> new FeeNotFoundException("Fee not found for type: " + revenue.getType()));
-                
+
                 double amount = revenue.getUsed() * fee.getPricePerUnit();
                 totalAmount += amount;
 
@@ -291,7 +291,7 @@ public class ApartmentService {
             document.add(revenueTable);
 
             // Add total amount with right alignment
-            Paragraph total = new Paragraph(String.format("Total Amount Due: %.2f VND", totalAmount), 
+            Paragraph total = new Paragraph(String.format("Total Amount Due: %.2f VND", totalAmount),
                 new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
             total.setAlignment(Element.ALIGN_RIGHT);
             total.setSpacingBefore(20);
@@ -336,18 +336,19 @@ public class ApartmentService {
         }
     }
 
+
     private void addTableRow(PdfPTable table, String label, String value) {
         Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
         Font valueFont = new Font(Font.FontFamily.HELVETICA, 10);
-        
+
         PdfPCell labelCell = new PdfPCell(new Phrase(label, labelFont));
         labelCell.setBorder(Rectangle.NO_BORDER);
         labelCell.setPadding(5);
-        
+
         PdfPCell valueCell = new PdfPCell(new Phrase(value, valueFont));
         valueCell.setBorder(Rectangle.NO_BORDER);
         valueCell.setPadding(5);
-        
+
         table.addCell(labelCell);
         table.addCell(valueCell);
     }

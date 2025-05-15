@@ -8,7 +8,6 @@ import MDInput from "components/MDInput";
 
 export default function data() {
   const [fees, setFees] = useState([]);
-  const [filteredFees, setFilteredFees] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedFee, setSelectedFee] = useState(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -33,29 +32,33 @@ export default function data() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setFees(response.data);
-      setFilteredFees(response.data); // Set initial fees as filtered
     } catch (error) {
       console.error("Failed to load fees", error);
     }
   };
 
-  // Filter fees based on search term
-  const filterFees = () => {
-    const filtered = fees.filter((fee) => {
-      return fee[searchType]?.toString().toLowerCase().includes(searchTerm.toLowerCase());
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) {
+      loadFees();
+      return;
+    }
+
+    const filteredFees = fees.filter((fee) => {
+      if (searchType === "type") {
+        return fee.type?.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      } else if (searchType === "pricePerUnit") {
+        return fee.pricePerUnit?.toString() === searchTerm.trim();
+      }
+      return false;
     });
-    setFilteredFees(filtered);
+
+    setFees(filteredFees);
   };
 
   useEffect(() => {
     loadFees();
   }, []);
-
-  useEffect(() => {
-    filterFees(); // Filter whenever searchTerm or searchType changes
-    console.log("Filtered Revenues:", filteredFees);
-    console.log("serachTerm:", searchTerm);
-  }, [searchTerm, searchType]);
 
   const handleDeleteClick = (fee) => {
     setSelectedFee(fee);
@@ -133,7 +136,7 @@ export default function data() {
   };
 
   const generateRows = () => {
-    return filteredFees.map((fee) => ({
+    return fees.map((fee) => ({
       type: (
         <MDTypography variant="button" fontWeight="medium">
           {fee.type}
@@ -170,10 +173,7 @@ export default function data() {
       <MDBox>
         <MDBox
           component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            filterFees();
-          }}
+          onSubmit={handleSearch}
           display="flex"
           alignItems="center"
           width="100%"
