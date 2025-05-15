@@ -206,10 +206,15 @@ export default function data() {
       ),
       type: (
         <MDBox display="flex" alignItems="center" gap={1}>
-          <Icon sx={{ color: typeColorMap[notification.type]?.color || "inherit" }}>
-            {typeColorMap[notification.type]?.icon || "info"}
+          <Icon color={typeColorMap[notification.type]?.color || "inherit"}>
+            {typeColorMap[notification.type]?.icon || "e"}
           </Icon>
-          <MDTypography variant="button">{notification.type}</MDTypography>
+          <MDTypography
+            variant="button"
+            sx={{ color: `${typeColorMap[notification.type]?.color || "inherit"}.main` }}
+          >
+            {notification.type}
+          </MDTypography>
         </MDBox>
       ),
       content: (
@@ -423,16 +428,16 @@ export default function data() {
             <MDBox display="flex" flexDirection="row" gap={2}>
               {/* LEFT: FORM INPUTS */}
               <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
-                <DialogTitle>Create New Notification</DialogTitle>
+                <DialogTitle>Tạo mới thông báo</DialogTitle>
                 <MDInput
-                  label="Title"
+                  label="Tiêu đề"
                   name="title"
                   value={newNotification.title}
                   onChange={handleInputChange}
                   fullWidth
                 />
                 <MDInput
-                  label="Content"
+                  label="Nội dung thông báo"
                   name="content"
                   value={newNotification.content}
                   onChange={handleInputChange}
