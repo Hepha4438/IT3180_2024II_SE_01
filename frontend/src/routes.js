@@ -45,7 +45,8 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import FeeTable from "layouts/fee"; // Đảm bảo đường dẫn đúng với vị trí thực tế của tệp FeeTable.js
-
+import PaymentComplete from "layouts/payment";
+import RevenueTable from "layouts/revenue";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -84,6 +85,14 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Revenue",
+    key: "revenue",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/revenue",
+    component: <RevenueTable />,
+  },
+  {
+    type: "collapse",
     name: "Apartment",
     key: "apartment",
     icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
@@ -115,6 +124,11 @@ const routes = [
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+  },
+  {
+    key: "payment-complete",
+    route: "/payment/complete/:paymentToken",
+    component: <PaymentComplete />,
   },
   // {
   //   type: "collapse",

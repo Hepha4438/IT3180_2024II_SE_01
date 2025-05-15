@@ -53,6 +53,8 @@ export default function data() {
 
   useEffect(() => {
     filterFees(); // Filter whenever searchTerm or searchType changes
+    console.log("Filtered Revenues:", filteredFees);
+    console.log("serachTerm:", searchTerm);
   }, [searchTerm, searchType]);
 
   const handleDeleteClick = (fee) => {

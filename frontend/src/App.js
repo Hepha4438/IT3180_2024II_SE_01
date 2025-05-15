@@ -57,6 +57,8 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 // Forget Password
 import ForgetPassword from "layouts/authentication/forget-password";
 
+import PaymentComplete from "layouts/payment";
+
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -172,6 +174,7 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
+          <Route path="/payment/complete/:paymentToken" element={<PaymentComplete />} />
           {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>

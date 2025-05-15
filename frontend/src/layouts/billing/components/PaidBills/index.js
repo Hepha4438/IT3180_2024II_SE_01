@@ -4,13 +4,13 @@ import TextField from "@mui/material/TextField";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import { FormControl, InputLabel, Select, MenuItem, OutlinedInput, Box } from "@mui/material";
-import Bill from "layouts/billing/components/Bill";
+import Bill from "layouts/billing/components/Paid";
 import { getRevenue, getFeeByType } from "../../api";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import QRModal from "../QR/QRModal";
 // import FeeSearchBar from "./search";
-function BillingInformation() {
+function PaidBills() {
   const [bills, setBills] = useState([]); // Danh sách khoản thu
   const [fees, setFees] = useState({}); // Dữ liệu phí tương ứng
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,7 +73,7 @@ function BillingInformation() {
   //     (bill.type && bill.type.toLowerCase().includes(searchTerm.toLowerCase()))
   // );
   const filteredBills = bills
-    .filter((bill) => bill.status === "Unpaid") // chỉ lấy bill chưa thanh toán
+    .filter((bill) => bill.status === "Paid") // chỉ lấy bill chưa thanh toán
     .filter((bill) => {
       const value = bill[searchField]?.toLowerCase() || "";
       return value.includes(searchKeyword.toLowerCase());
@@ -104,93 +104,52 @@ function BillingInformation() {
     // Ghép các thành phần thành chuỗi kết quả
     return `${formattedDay} tháng ${formattedMonth} năm ${year}`;
   };
-
   return (
-    <Card id="billing-information">
-      <MDBox pt={3} px={2}>
-        <MDTypography variant="h6" fontWeight="medium">
-          Thông tin chi tiết từng khoản thu
-        </MDTypography>
-      </MDBox>
-
-      {/* Ô tìm kiếm */}
-      <MDBox display="flex" gap={2} alignItems="center" mb={2}>
-        {/* Select tiêu chí tìm kiếm */}
-        <FormControl sx={{ minWidth: 160 }} size="small">
-          <InputLabel id="search-field-label">Tìm theo</InputLabel>
-          <Select
-            labelId="search-field-label"
-            value={searchField}
-            label="Tìm theo"
-            onChange={(e) => setSearchField(e.target.value)}
-          >
-            <MenuItem value="type">Tên khoản thu</MenuItem>
-            {/* <MenuItem value="status">Trạng thái</MenuItem> */}
-            <MenuItem value="endDate">Hạn thanh toán</MenuItem>
-          </Select>
-        </FormControl>
-
-        {/* Input tìm kiếm */}
-        <FormControl fullWidth variant="outlined" size="small">
-          <OutlinedInput
-            placeholder={`Nhập ${
-              searchField === "type"
-                ? "tên khoản thu"
-                : searchField === "status"
-                ? "trạng thái"
-                : "hạn thanh toán"
-            }...`}
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-        </FormControl>
-      </MDBox>
-      <MDBox pt={1} px={2}>
-        <MDTypography variant="subtitle2" color="black" mb={1}>
-          Số lượng khoản thu chưa thanh toán: <strong>{totalUnpaid}</strong> khoản
-        </MDTypography>
-      </MDBox>
+    <MDBox mt={3}>
+      <MDTypography variant="h6" gutterBottom color="success" mb={1}>
+        Các khoản đã thanh toán: <strong>{totalUnpaid}</strong> khoản
+      </MDTypography>
       <MDBox
+        component="ul"
+        display="flex"
+        flexDirection="column"
+        p={0}
+        m={0}
         sx={{
-          maxHeight: "500px", // Giới hạn chiều cao
-          overflowY: "auto", // Thêm thanh cuộn
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "8px",
+          maxHeight: "400px", // Chiều cao tối đa, bạn có thể điều chỉnh
+          overflowY: "auto", // Cho phép cuộn dọc khi tràn
+          pr: 1, // Padding phải để tránh che nội dung bởi thanh cuộn
         }}
       >
-        <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
-          {filteredBills.length > 0 ? (
-            filteredBills.map((bill, index) => {
-              const fee = fees[bill.type];
-              return (
-                <Bill
-                  key={bill.id}
-                  name={bill.type}
-                  total={`${formatCurrency(bill.total)} VND`}
-                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
-                  used={`${formatCurrency(bill.used)} đơn vị`}
-                  endDate={`${formatDeadline(bill.endDate)}`}
-                  pay={`${bill.status == "Unpaid" ? "Chưa thanh toán" : "Đã thanh toán"}`}
-                  noGutter={index === filteredBills.length - 1}
-                  bill={bill} // truyền cả bill để dùng khi gửi về backend
-                  apartmentId={localStorage.getItem("apartmentId")}
-                  setQrCodeData={setQrCodeData}
-                  setOpenQRModal={setOpenQRModal}
-                  index={index + 1}
-                />
-              );
-            })
-          ) : (
-            <MDTypography variant="body2" color="textSecondary">
-              Không có kết quả phù hợp.
-            </MDTypography>
-          )}
-        </MDBox>
+        {filteredBills.length > 0 ? (
+          filteredBills.map((bill, index) => {
+            const fee = fees[bill.type];
+            return (
+              <Bill
+                key={bill.id}
+                name={bill.type}
+                total={`${formatCurrency(bill.total)} VND`}
+                fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
+                used={`${formatCurrency(bill.used)} đơn vị`}
+                paidDate={`${formatDeadline(bill.paidDate)}`}
+                pay={`${bill.status == "Unpaid" ? "Chưa thanh toán" : "Đã thanh toán"}`}
+                noGutter={index === filteredBills.length - 1}
+                bill={bill} // truyền cả bill để dùng khi gửi về backend
+                apartmentId={localStorage.getItem("apartmentId")}
+                setQrCodeData={setQrCodeData}
+                setOpenQRModal={setOpenQRModal}
+                index={index + 1}
+              />
+            );
+          })
+        ) : (
+          <MDTypography variant="body2" color="textSecondary">
+            Không có kết quả phù hợp.
+          </MDTypography>
+        )}
       </MDBox>
-      <QRModal open={openQRModal} onClose={() => setOpenQRModal(false)} qrCodeData={qrCodeData} />
-    </Card>
+    </MDBox>
   );
 }
 
-export default BillingInformation;
+export default PaidBills;

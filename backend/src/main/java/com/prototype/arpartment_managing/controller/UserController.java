@@ -83,7 +83,7 @@ public class UserController {
     }
 
     // Get user profile - Admin or own profile
-    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#username)")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     @GetMapping("/profile/{id}")
     ResponseEntity<?> getUser(@PathVariable Long id) {
         return userService.getUser(id);

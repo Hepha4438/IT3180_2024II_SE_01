@@ -31,7 +31,11 @@ import AddRevenue from "layouts/billing/components/add-bill";
 import Invoices from "layouts/billing/components/Invoices";
 import BillingInformation from "layouts/billing/components/BillingInformation";
 import Calendar from "layouts/billing/components/calendar";
-
+import Icon from "@mui/material/Icon";
+import MDTypography from "components/MDTypography";
+import DataTable from "examples/Tables/DataTable";
+import Card from "@mui/material/Card";
+import PaidBills from "layouts/billing/components/PaidBills";
 function Billing() {
   return (
     <DashboardLayout>
@@ -53,7 +57,7 @@ function Billing() {
                   />
                 </Grid>
                  */}
-                <Grid container spacing={3} justifyContent="center" alignItems="center">
+                {/* <Grid container spacing={3} justifyContent="center" alignItems="center">
                   <Grid item xs={12} md={6} xl={3}>
                     <DefaultInfoCard
                       icon="payment"
@@ -61,24 +65,49 @@ function Billing() {
                       description="ấn vào để thanh toán"
                     />
                   </Grid>
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+                {/* <Grid item xs={12}>
                   <AddRevenue />
+                </Grid> */}
+                <Grid item xs={12}>
+                  <Card>
+                    <MDBox
+                      mx={2}
+                      mt={-3}
+                      py={3}
+                      px={2}
+                      variant="gradient"
+                      bgColor="dark"
+                      borderRadius="lg"
+                      coloredShadow="dark"
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <MDBox>
+                        <MDTypography
+                          variant="h6"
+                          color="white"
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Icon sx={{ mr: 1 }}>receipt_long</Icon>
+                          Bảng quản lý hóa đơn
+                        </MDTypography>
+                        {/* <MDTypography variant="button" color="white" opacity={0.8}>
+                          Manage all fees
+                        </MDTypography> */}
+                      </MDBox>
+                    </MDBox>
+                    <MDBox px={2} py={3}>
+                      <BillingInformation />
+                    </MDBox>
+                  </Card>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12} lg={4}>
-              <Invoices />
-            </Grid>
-          </Grid>
-        </MDBox>
-        <MDBox mb={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={7}>
-              <BillingInformation />
-            </Grid>
-            <Grid item xs={12} md={5}>
               <Calendar />
+              <PaidBills />
             </Grid>
           </Grid>
         </MDBox>

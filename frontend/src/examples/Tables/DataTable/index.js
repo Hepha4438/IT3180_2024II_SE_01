@@ -205,7 +205,11 @@ function DataTable({
           {page.map((row, key) => {
             prepareRow(row);
             return (
-              <TableRow key={key} {...row.getRowProps()}>
+              <TableRow
+                key={key}
+                {...row.getRowProps()}
+                // onClick={() => onRowClick && onRowClick(row)}
+              >
                 {row.cells.map((cell, idx) => (
                   <DataTableBodyCell
                     key={idx}

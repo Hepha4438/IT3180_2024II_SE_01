@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,6 +89,9 @@ public class RevenueService {
         if (revenueDTO.getEndDate() != null) {
             revenue.setEndDate(revenueDTO.getEndDate());
         }
+//        else{
+//            revenue.setEndDate(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).atStartOfDay());
+//        }
 
         // Set apartment (required)
         Apartment apartment = apartmentRepository.findByApartmentId(revenueDTO.getApartmentId())
@@ -215,7 +221,7 @@ public class RevenueService {
         try {
             qrCodeBase64 = qrCodeService.generateQRCodeImage(paymentToken);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generate QR code", e);
+            throw new RuntimeException("Thất bại khi tạo mã code", e);
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -225,22 +231,44 @@ public class RevenueService {
 
         return response;
     }
+    @Transactional
+    public Map<String, Object> getQRCode(String paymentToken) {
+        Map<String, Object> response = new HashMap<>();
+        Revenue revenue = revenueRepository.findByPaymentToken(paymentToken)
+                .orElseThrow(() -> new RevenueNotFoundException("Payment not found"));
+        response.put("revenue", new RevenueDTO(revenue, revenue.getApartment()));
+        String qrCodeBase64;
+        try {
+            qrCodeBase64 = qrCodeService.generateQRCodeImage(paymentToken);
+        } catch (Exception e) {
+            throw new RuntimeException("Thất bại khi tạo mã code", e);
+        }
+        response.put("qrCode", qrCodeBase64);
+        response.put("paymentToken", paymentToken);
+        return response;
+    }
 
     @Transactional
     public Revenue completePayment(String paymentToken) {
         Revenue revenue = revenueRepository.findByPaymentToken(paymentToken)
-                .orElseThrow(() -> new RevenueNotFoundException("Payment not found"));
+                .orElseThrow(() -> new RevenueNotFoundException("Không tìm thấy khoản thanh toán"));
 
         if ("Paid".equals(revenue.getStatus())) {
-            throw new RuntimeException("Payment already completed");
+            throw new RuntimeException("Khoản thanh toán đã tồn tại");
         }
 
         if (revenue.isOverdue()) {
-            throw new RuntimeException("Payment is overdue");
+            throw new RuntimeException("Khoản thanh toán đã quá hạn");
         }
 
         revenue.setStatus("Paid");
+        revenue.setPaidDate(LocalDateTime.now());
         return revenueRepository.save(revenue);
+    }
+    @Transactional
+    public Revenue getRevenueByPaymentToken(String paymentToken){
+        return revenueRepository.findByPaymentToken(paymentToken)
+                .orElseThrow(() -> new RevenueNotFoundException("Payment not found"));
     }
 
 //    public double calculateUsedValue(Revenue revenue, Apartment apartment) {
@@ -254,5 +282,12 @@ public class RevenueService {
 //        double usedValue = calculateUsedValue(revenue, revenue.getApartment());
 //        return usedValue * fee.getPricePerUnit();
 //    }
+    @Transactional
+    public void updateAllRevenue() {
+        List<Revenue> revenues = revenueRepository.findAll();
+        for(Revenue revenue : revenues) {
+            revenue.updateStatus();
+        }
+    }
 }
 

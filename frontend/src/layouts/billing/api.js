@@ -13,7 +13,7 @@ export const getAllInvoices = async () => {
 // lấy hóa đơn theo apartmentId
 export const getRevenue = async (id = null) => {
   try {
-    const response = await axios.get(`${API_URL}/revenue/test?id=${id}`, {
+    const response = await axios.get(`${API_URL}/revenue/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data;
@@ -129,6 +129,36 @@ export const deleteRevenue = async (id) => {
     return response.data; // Dữ liệu trả về là thông điệp thành công
   } catch (error) {
     console.error("Lỗi khi xóa doanh thu:", error);
+    return null;
+  }
+};
+
+//Tao ma QR
+export const QRcode = async (paymentToken) => {
+  console.log("paymentToken trong api.js la : ---------------------", paymentToken);
+  try {
+    // Gửi yêu cầu PUT đến server với id trong URL
+    const response = await axios.get(`http://localhost:7070/revenue/getQRCode/${paymentToken}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    console.log("response la: ---------------------", response.data);
+    return response.data; // Dữ liệu trả về là đối tượng Revenue đã được cập nhật
+    // console.log("Dữ liệu thanh toán:", data);
+  } catch (error) {
+    console.error("Lỗi khi thanh toán:", error);
+    return null;
+  }
+};
+
+// Thanh toán hóa đơn
+export const payBill = async (paymentToken) => {
+  try {
+    // Gửi yêu cầu PUT đến server với id trong URL
+    const response = await axios.put(`${API_URL}/revenue/complete-payment/${paymentToken}`);
+    return response.data; // Dữ liệu trả về là đối tượng Revenue đã được cập nhật
+    // console.log("Dữ liệu thanh toán:", data);
+  } catch (error) {
+    console.error("Lỗi khi thanh toán:", error);
     return null;
   }
 };
