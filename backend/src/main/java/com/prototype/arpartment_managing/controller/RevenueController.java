@@ -106,11 +106,41 @@ public class RevenueController {
         }
     }
 
+    @GetMapping("/getQRCode/{paymentToken}")
+    public  ResponseEntity<?> getQRCode(@PathVariable String paymentToken){
+        try{
+            Map<String, Object> response = revenueService.getQRCode(paymentToken);
+            return  ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
     @GetMapping("/complete-payment/{paymentToken}")
     public ResponseEntity<?> completePayment(@PathVariable String paymentToken) {
         try {
             Revenue revenue = revenueService.completePayment(paymentToken);
             return ResponseEntity.ok(new RevenueDTO(revenue, revenue.getApartment()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getPayment/{paymentToken}")
+    public ResponseEntity<?> getPayment(@PathVariable String paymentToken) {
+        try {
+            Revenue revenue = revenueService.getRevenueByPaymentToken(paymentToken);
+            return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/updateAll")
+    public ResponseEntity<?> updateAllRevenues() {
+        try{
+            revenueService.updateAllRevenue();
+            return ResponseEntity.ok("Revenue update successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
