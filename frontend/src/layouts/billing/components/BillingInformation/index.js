@@ -106,7 +106,7 @@ function BillingInformation() {
   };
 
   return (
-    <Card id="billing-information">
+    <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
       <MDBox pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium">
           Thông tin chi tiết từng khoản thu
@@ -116,19 +116,29 @@ function BillingInformation() {
       {/* Ô tìm kiếm */}
       <MDBox display="flex" gap={2} alignItems="center" mb={2}>
         {/* Select tiêu chí tìm kiếm */}
-        <FormControl sx={{ minWidth: 160 }} size="small">
-          <InputLabel id="search-field-label">Tìm theo</InputLabel>
-          <Select
-            labelId="search-field-label"
+        <MDBox mr={1}>
+          <select
             value={searchField}
-            label="Tìm theo"
             onChange={(e) => setSearchField(e.target.value)}
+            style={{
+              height: "42px",
+              padding: "0 15px",
+              borderRadius: "8px",
+              borderColor: "#d2d6da",
+              marginRight: "10px",
+              width: "150px",
+              fontSize: "14px",
+              cursor: "pointer",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                borderColor: "#1A73E8",
+              },
+            }}
           >
-            <MenuItem value="type">Tên khoản thu</MenuItem>
-            {/* <MenuItem value="status">Trạng thái</MenuItem> */}
-            <MenuItem value="endDate">Hạn thanh toán</MenuItem>
-          </Select>
-        </FormControl>
+            <option value="type">Tên khoản thu</option>
+            <option value="endDate">Hạn thanh toán</option>
+          </select>
+        </MDBox>
 
         {/* Input tìm kiếm */}
         <FormControl fullWidth variant="outlined" size="small">
