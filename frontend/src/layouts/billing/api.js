@@ -151,6 +151,29 @@ export const QRcode = async (paymentToken) => {
   }
 };
 
+// Tao pdf
+export const createPDF = async (apartmentId, id) => {
+  console.log("paymentToken trong api.js la : ---------------------", id);
+  try {
+    // Gửi yêu cầu PUT đến server với id trong URL
+    const response = await axios.get(
+      `http://localhost:7070/apartment/${apartmentId}/bill?id=${id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        responseType: "blob", // Đặt responseType là blob để nhận dữ liệu nhị phân
+      }
+    );
+    console.log("response la: ---------------------", response.data);
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    return fileURL; // Dữ liệu trả về là đối tượng Revenue đã được cập nhật
+    // console.log("Dữ liệu thanh toán:", data);
+  } catch (error) {
+    console.error("Lỗi khi tạo PDF:", error);
+    return null;
+  }
+};
+
 // Thanh toán hóa đơn
 export const payBill = async (paymentToken) => {
   try {

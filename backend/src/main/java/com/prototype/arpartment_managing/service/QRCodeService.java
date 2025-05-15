@@ -15,7 +15,7 @@ import java.util.Base64;
 @Service
 public class QRCodeService {
 
-    @Value("${app.frontend-url:http://localhost:3000}")
+    @Value("${app.frontend-url:http://localhost:5000}")
     private String baseUrl;
 
     public String generateQRCodeImage(String paymentToken) throws WriterException, IOException {

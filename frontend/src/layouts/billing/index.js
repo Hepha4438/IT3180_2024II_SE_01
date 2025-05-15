@@ -100,6 +100,7 @@ function Billing() {
                     </MDBox>
                     <MDBox px={2} py={3}>
                       <BillingInformation />
+                      {/* <PaidBills /> */}
                     </MDBox>
                   </Card>
                 </Grid>

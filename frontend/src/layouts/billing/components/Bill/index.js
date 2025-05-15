@@ -23,7 +23,7 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-import { QRcode } from "../../api";
+import { QRcode, createPDF } from "../../api";
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
 
@@ -59,13 +59,23 @@ function Bill({
       //   createDate: bill.createDate,
       // };
       // console.log("revenueDTO is: ---------------------", revenueDTO);
-      const data = await QRcode(bill.paymentToken);
+      const pdfUrl = await createPDF(localStorage.getItem("apartmentId"), bill.id);
       // console.log("data is: ---------------------", data);
-      setQrCodeData(data.qrCode);
-      setOpenQRModal(true);
+      // setQrCodeData(data.qrCode);
+      // setOpenQRModal(true);
+      if (pdfUrl) {
+        // Mở PDF trong tab mới
+        window.location.href = pdfUrl;
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        alert("Không thể tải file PDF.");
+      }
       console.log("bill is: ---------------------", bill);
     } catch (err) {
-      alert("Không thể tạo QR. Vui lòng thử lại.");
+      // alert("Không thể tạo QR. Vui lòng thử lại.");
+      alert("Có lỗi khi tạo hóa đơn PDF.");
     }
   };
 

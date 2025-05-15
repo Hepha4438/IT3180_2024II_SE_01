@@ -8,6 +8,14 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import MDButton from "components/MDButton";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 // Bản đồ màu & icon theo type
 const typeColorMap = {
@@ -18,8 +26,33 @@ const typeColorMap = {
 };
 
 const UserNotificationPage = () => {
+  //State xoa
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [selectedNotification, setSelectedNotification] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const { id } = useParams();
+  //mo popup xac nhan
+  const handleDeleteClick = (notification) => {
+    console.log("Clicked delete for notification:", notification.id);
+    setSelectedNotification(notification);
+    setDeleteConfirmOpen(true);
+  };
+
+  //xac nhan xoa
+  const handleConfirmDelete = async () => {
+    if (!selectedNotification) return;
+    try {
+      await axios.delete(`http://localhost:7070/notifications/${selectedNotification.id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setNotifications((prev) => prev.filter((noti) => noti.id !== selectedNotification.id));
+    } catch (error) {
+      console.error("Failed to delete notification", error);
+    } finally {
+      setDeleteConfirmOpen(false);
+      setSelectedNotification(null);
+    }
+  };
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -114,6 +147,24 @@ const UserNotificationPage = () => {
                         Loại: {noti.type}
                       </MDTypography>
                     </MDBox>
+                    <MDBox ml="auto">
+                      {/* <MDButton
+                        variant="outlined"
+                        color="success"
+                        size="small"
+                        onClick={() => handleMarkAsRead(noti.id)}
+                      >
+                        Đã đọc
+                      </MDButton> */}
+                      <MDButton
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteClick(noti)}
+                      >
+                        Xóa
+                      </MDButton>
+                    </MDBox>
                   </Paper>
                 </Grid>
               );
@@ -128,6 +179,20 @@ const UserNotificationPage = () => {
         )}
       </MDBox>
       <Footer />
+      <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Bạn có chắc chắn muốn xóa thông báo này không?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <MDButton onClick={() => setDeleteConfirmOpen(false)} color="info">
+            Hủy
+          </MDButton>
+          <MDButton onClick={handleConfirmDelete} color="error">
+            Xóa
+          </MDButton>
+        </DialogActions>
+      </Dialog>
     </DashboardLayout>
   );
 };

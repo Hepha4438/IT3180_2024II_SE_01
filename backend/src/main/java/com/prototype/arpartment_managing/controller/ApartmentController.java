@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:5000")
 @RequestMapping("/apartment")
 public class ApartmentController {
     @Autowired
@@ -153,9 +153,11 @@ public class ApartmentController {
     // Generate bill for apartment - Admin or resident of the apartment
     @GetMapping("/{apartmentId}/bill")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
-    public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId) {
+    public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId,
+                                                   @RequestParam(required = false) String status,
+                                                   @RequestParam(required = false) String id) {
         try {
-            return apartmentService.generateBill(apartmentId);
+            return apartmentService.generateBill(apartmentId, status, id);
         } catch (ApartmentNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -163,6 +165,19 @@ public class ApartmentController {
                     .body("Error generating bill: " + e.getMessage());
         }
     }
+
+//    @GetMapping("/{apartmentId}/bill/{id}")
+//    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+//    public ResponseEntity<?> generateBill(@PathVariable String apartmentId, @PathVariable String id) {
+//        try{
+//            return apartmentService.generateOnlyBill(apartmentId, id);
+//        } catch (ApartmentNotFoundException e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Error generating bill: " + e.getMessage());
+//        }
+//    }
 
 //    @PostMapping("/apartment/{apartmentId}/{feeType}")
 //    public ResponseEntity<?> totalRevenueOfApartmentByType(@PathVariable String apartmentId ,@PathVariable String feeType) {

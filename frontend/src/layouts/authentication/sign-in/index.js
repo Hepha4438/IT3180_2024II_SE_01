@@ -21,7 +21,6 @@ function Login() {
   let navigate = useNavigate();
   const [user, setUser] = useState({ username: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
-
   const { username, password } = user;
 
   const onInputChange = (e) => {

@@ -1,10 +1,7 @@
 package com.prototype.arpartment_managing.service;
 
-import com.prototype.arpartment_managing.dto.UserDTO;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.FeeNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundException;
-import com.prototype.arpartment_managing.exception.UserNotFoundExceptionUsername;
 import com.prototype.arpartment_managing.model.Fee;
 import com.prototype.arpartment_managing.model.Revenue;
 import com.prototype.arpartment_managing.model.User;
@@ -20,21 +17,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -47,7 +37,8 @@ public class ApartmentService {
     private RevenueRepository revenueRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private QRCodeService qrCodeService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<Apartment> getAllApartments() {
@@ -70,7 +61,7 @@ public class ApartmentService {
         }
         if (apartment.getFloor() <= 0) {
             throw new IllegalArgumentException("Floor must be greater than 0");
-        }        
+        }
         return apartmentRepository.save(apartment);
     }
 
@@ -139,7 +130,7 @@ public class ApartmentService {
                 .sum();
     }
 
-    public ResponseEntity<?> generateBill(String apartmentId) {
+    public ResponseEntity<?> generateBill(String apartmentId, String status, String id) {
         try {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
                     .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
@@ -226,13 +217,13 @@ public class ApartmentService {
             document.add(revenueInfo);
 
             // Add revenue table with better formatting
-            PdfPTable revenueTable = new PdfPTable(6);
+            PdfPTable revenueTable = new PdfPTable(5);
             revenueTable.setWidthPercentage(100);
             revenueTable.setSpacingBefore(10);
             revenueTable.setSpacingAfter(10);
 
             // Set column widths
-            float[] columnWidths = {2f, 2f, 2f, 2f, 2f, 2f};
+            float[] columnWidths = {2f, 2f, 2f, 2f, 2f};
             revenueTable.setWidths(columnWidths);
 
             // Add table headers
@@ -241,11 +232,15 @@ public class ApartmentService {
             addTableHeader(revenueTable, "Usage", tableHeaderFont);
             addTableHeader(revenueTable, "Unit", tableHeaderFont);
             addTableHeader(revenueTable, "Unit Price", tableHeaderFont);
-            addTableHeader(revenueTable, "Status", tableHeaderFont);
+//            addTableHeader(revenueTable, "Status", tableHeaderFont);
             addTableHeader(revenueTable, "Total", tableHeaderFont);
 
             // Add revenue rows
-            List<Revenue> revenues = apartment.getRevenues();
+            List<Revenue> revenues = apartment.getRevenueWithStatusOrId(status, id);
+            if(revenues == null || revenues.isEmpty()){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error generating bill because revenues are empty");
+            }
             double totalAmount = 0.0;
             for (Revenue revenue : revenues) {
                 Fee fee = feeRepository.findByType(revenue.getType())
@@ -278,10 +273,10 @@ public class ApartmentService {
                 priceCell.setPadding(5);
                 revenueTable.addCell(priceCell);
 
-                PdfPCell statusCell = new PdfPCell(new Phrase(revenue.getStatus(), new Font(Font.FontFamily.HELVETICA, 10)));
-                statusCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                statusCell.setPadding(5);
-                revenueTable.addCell(statusCell);
+//                PdfPCell statusCell = new PdfPCell(new Phrase(revenue.getStatus(), new Font(Font.FontFamily.HELVETICA, 10)));
+//                statusCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                statusCell.setPadding(5);
+//                revenueTable.addCell(statusCell);
 
                 PdfPCell totalCell = new PdfPCell(new Phrase(String.format("%.2f VND", amount), new Font(Font.FontFamily.HELVETICA, 10)));
                 totalCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -296,6 +291,25 @@ public class ApartmentService {
             total.setAlignment(Element.ALIGN_RIGHT);
             total.setSpacingBefore(20);
             document.add(total);
+            // QR code
+            if(id != null){
+                try {
+                    String qrBase64 = qrCodeService.generateQRCodeImage(apartment.getRevenueById(id).getPaymentToken()); // Replace with real token
+                    byte[] qrBytes = Base64.getDecoder().decode(qrBase64);
+                    Image qrImage = Image.getInstance(qrBytes);
+                    qrImage.scaleToFit(100, 100); // Kích thước mong muốn
+                    qrImage.setAlignment(Element.ALIGN_CENTER);
+
+                    Paragraph qrLabel = new Paragraph("Scan to Pay", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
+                    qrLabel.setAlignment(Element.ALIGN_CENTER);
+                    qrLabel.setSpacingBefore(20);
+
+                    document.add(qrLabel);
+                    document.add(qrImage);
+                } catch (Exception e) {
+                    System.out.println("Failed to add QR Code: " + e.getMessage());
+                }
+            }
 
             // Add payment instructions
             Paragraph paymentInfo = new Paragraph("Payment Instructions", sectionFont);
@@ -326,7 +340,7 @@ public class ApartmentService {
             // Prepare response
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("attachment", "bill_" + apartmentId + ".pdf");
+            headers.setContentDisposition(ContentDisposition.inline().filename("bill_" + apartmentId + ".pdf").build());
 
             return new ResponseEntity<>(out.toByteArray(), headers, HttpStatus.OK);
 

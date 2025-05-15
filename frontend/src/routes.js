@@ -98,7 +98,7 @@ const routes = [
     type: "collapse",
     name: "Revenue",
     key: "revenue",
-    icon: <Icon fontSize="small">login</Icon>,
+    icon: <Icon fontSize="small">monetization_on</Icon>,
     route: "/revenue",
     component: <RevenueTable />,
   },

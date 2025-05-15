@@ -2,6 +2,8 @@ package com.prototype.arpartment_managing.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -124,6 +126,15 @@ public class Apartment {
         return revenues;
     }
 
+    public Revenue getRevenueById(String id){
+        for(Revenue rev : revenues){
+            if(rev.getId().toString().equals(id)){
+                return rev;
+            }
+        }
+        return null;
+    }
+
     public void setRevenues(List<Revenue> revenues) {
         this.revenues = revenues;
     }
@@ -134,5 +145,31 @@ public class Apartment {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public List<Revenue> getRevenueWithStatusOrId(String status, String id) {
+        List<Revenue> revenues = new ArrayList<Revenue>();
+        if(status != null){
+            for(Revenue revenue : this.getRevenues()){
+                if(revenue.getStatus().equals(status)){
+                    revenues.add(revenue);
+                }
+            }
+        }
+        else {
+            List<Revenue> re = this.getRevenues();
+            Revenue revenue = null;
+            for(Revenue rev : re){
+                if(rev.getId().toString().equals(id)){
+                    revenue = rev;
+                }
+            }
+            if(revenue == null){
+                return null;
+            }
+            revenues.add(revenue);
+        }
+
+        return revenues;
     }
 }
