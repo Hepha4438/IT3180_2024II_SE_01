@@ -29,9 +29,6 @@ public class Revenue {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(nullable = true, name = "paid_date")
-    private LocalDateTime paidDate;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id")
     @JsonBackReference
@@ -120,13 +117,6 @@ public class Revenue {
         this.endDate = endDate;
     }
 
-    public LocalDateTime getPaidDate() {
-        return paidDate;
-    }
-    public void setPaidDate(LocalDateTime paidDate) {
-        this.paidDate = paidDate;
-    }
-
     public String getPaymentToken() {
         return paymentToken;
     }
@@ -148,7 +138,7 @@ public class Revenue {
         if ("Paid".equals(status)) {
             return;
         }
-
+        
         // If unpaid and past end date, mark as overdue
         if (endDate != null && LocalDateTime.now().isAfter(endDate)) {
             status = "Overdue";

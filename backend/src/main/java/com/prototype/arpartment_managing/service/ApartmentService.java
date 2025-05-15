@@ -336,7 +336,6 @@ public class ApartmentService {
         }
     }
 
-
     private void addTableRow(PdfPTable table, String label, String value) {
         Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
         Font valueFont = new Font(Font.FontFamily.HELVETICA, 10);
