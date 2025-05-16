@@ -74,7 +74,7 @@ export default function revenueData() {
       status: (
         <MDBox color={bill.status === "Paid" ? "success" : "error"}>
           <Icon>{bill.status === "Paid" ? "check_circle" : "error"}</Icon>
-          {bill.status === "Paid" ? " Đã thanh toán" : " Chưa thanh toán"}
+          {bill.status === "Paid" ? " Paid" : "Unpaid"}
         </MDBox>
       ),
       apartmentId: bill.apartmentId,
@@ -200,11 +200,11 @@ export default function revenueData() {
 
   const columns = [
     { Header: "ID", accessor: "id", width: "5%" },
-    { Header: "Loại khoản thu", accessor: "type", width: "20%" },
-    { Header: "Tổng tiền", accessor: "total", width: "15%", align: "center" },
-    { Header: "Trạng thái", accessor: "status", width: "15%", align: "center" },
-    { Header: "ID căn hộ", accessor: "apartmentId", width: "15%", align: "center" },
-    { Header: "Hành động", accessor: "action", width: "20%", align: "center" },
+    { Header: "Fee Type", accessor: "type", width: "20%" },
+    { Header: "Total Amount", accessor: "total", width: "15%", align: "center" },
+    { Header: "Status", accessor: "status", width: "15%", align: "center" },
+    { Header: "Apartment ID", accessor: "apartmentId", width: "15%", align: "center" },
+    { Header: "Action", accessor: "action", width: "20%", align: "center" },
   ];
 
   // ham chuyen dinh dang ngay VD 2025-05-30T23:59:00 sang dd/MM/yyyy
@@ -244,7 +244,7 @@ export default function revenueData() {
       status: (
         <MDBox color={bill.status === "Paid" ? "success" : "error"}>
           <Icon>{bill.status === "Paid" ? "check_circle" : "error"}</Icon>
-          {bill.status === "Paid" ? " Đã thanh toán" : " Chưa thanh toán"}
+          {bill.status === "Paid" ? " Paid" : " Unpaid"}
         </MDBox>
       ),
       apartmentId: bill.apartmentId,
@@ -268,6 +268,8 @@ export default function revenueData() {
     const statusMap = {
       "chưa thanh toán": "unpaid",
       "đã thanh toán": "paid",
+      unpaid: "unpaid",
+      paid: "paid",
     };
 
     const mappedTerm =
@@ -291,7 +293,7 @@ export default function revenueData() {
       status: (
         <MDBox color={bill.status === "Paid" ? "success" : "error"}>
           <Icon>{bill.status === "Paid" ? "check_circle" : "error"}</Icon>
-          {bill.status === "Paid" ? " Đã thanh toán" : " Chưa thanh toán"}
+          {bill.status === "Paid" ? " Paid" : " Unpaid"}
         </MDBox>
       ),
       apartmentId: bill.apartmentId,
@@ -344,7 +346,7 @@ export default function revenueData() {
             },
           }}
         >
-          <Icon>add</Icon> Thêm phí
+          <Icon>add</Icon> Add Fee
         </MDButton>
         <MDBox mr={1}>
           <select
@@ -365,9 +367,9 @@ export default function revenueData() {
               },
             }}
           >
-            <option value="type">Loại</option>
-            <option value="apartmentId">ID căn hộ</option>
-            <option value="status">Trạng thái</option>
+            <option value="type">Type</option>
+            <option value="apartmentId">Apartment ID</option>
+            <option value="status">Status</option>
           </select>
         </MDBox>
         <MDInput
@@ -419,11 +421,11 @@ export default function revenueData() {
       </MDBox>
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onClose={handleEditClose}>
-        <DialogTitle>Chỉnh sửa thông tin khoản thu</DialogTitle>
+        <DialogTitle>Edit Fee Information</DialogTitle>
         <DialogContent>
           <MDBox display="flex" flexDirection="column" gap={2} mt={1}>
             <MDInput
-              label="Type"
+              label="Fee Type"
               name="type"
               value={editRevenue.type}
               onChange={handleEditInputChange}
@@ -437,14 +439,14 @@ export default function revenueData() {
               fullWidth
             /> */}
             <MDInput
-              label="Số lượng sử dụng"
+              label="Number of Units Used"
               name="used"
               value={editRevenue.used}
               onChange={handleEditInputChange}
               fullWidth
             />
             <MDInput
-              label="Ngày hết hạn"
+              label="Due Date"
               name="endDate"
               value={formatDate(editRevenue.endDate)}
               onChange={handleEditInputChange}
@@ -452,7 +454,7 @@ export default function revenueData() {
               fullWidth
             />
             <MDInput
-              label="ID căn hộ"
+              label="Apartment ID"
               name="apartmentId"
               value={editRevenue.apartmentId}
               disabled
@@ -471,10 +473,10 @@ export default function revenueData() {
       </Dialog>
       {/* Delete Dialog */}
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Xóa khoản phí</DialogTitle>
+        <DialogTitle>Delete Fee</DialogTitle>
         <DialogContent>
           <MDTypography>
-            Bạn có muốn chắc xóa khoản phí &quot;{selectedRevenue?.type}&quot; này không?
+            Are you sure you want to delete the fee &quot;{selectedRevenue?.type}&quot;?
           </MDTypography>
         </DialogContent>
         <DialogActions>
@@ -503,23 +505,23 @@ export default function revenueData() {
         <DialogContent>
           <MDBox display="flex" flexDirection="row" gap={2}>
             <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
-              <DialogTitle>Tạo mới khoản thu</DialogTitle>
+              <DialogTitle>Create Fee</DialogTitle>
               <MDInput
-                label="Type"
+                label="Fee Type"
                 name="type"
                 value={newRevenue.type}
                 onChange={handleInputChange}
                 fullWidth
               />
               <MDInput
-                label="Số lượng sử dụng"
+                label="Number of Units Used"
                 name="used"
                 value={newRevenue.used}
                 onChange={handleInputChange}
                 fullWidth
               />
               <MDInput
-                label="Ngày hết hạn"
+                label="Due Date"
                 name="endDate"
                 type="date"
                 value={newRevenue.endDate}

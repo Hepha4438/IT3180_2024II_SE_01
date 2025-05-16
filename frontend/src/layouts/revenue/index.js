@@ -49,10 +49,10 @@ function RevenueTable() {
                     sx={{ display: "flex", alignItems: "center" }}
                   >
                     <Icon sx={{ mr: 1 }}>receipt_long</Icon>
-                    Bảng khoản thu (Revenue)
+                    Revenue Table
                   </MDTypography>
                   <MDTypography variant="button" color="white" opacity={0.8}>
-                    Quản lý tất cả khoản thu của cư dân
+                    Manage all resident fees
                   </MDTypography>
                 </MDBox>
               </MDBox>

@@ -387,7 +387,7 @@ public class ApartmentService {
             case "parking":
                 return "slot";
             default:
-                return "peace";
+                return "piece";
         }
     }
 }

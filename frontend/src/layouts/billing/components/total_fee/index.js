@@ -4,16 +4,16 @@ import TextField from "@mui/material/TextField";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import Bill from "layouts/billing/components/Bill";
-import { getRevenue, getFeeByType } from "../../api"; // Cần đảm bảo có getFeeByType
+import { getRevenue, getFeeByType } from "../../api"; // Ensure getFeeByType is available
 
 function BillingInformation() {
-  const [bills, setBills] = useState([]); // Danh sách khoản thu
-  const [fees, setFees] = useState({}); // Dữ liệu phí tương ứng
+  const [bills, setBills] = useState([]); // List of fees
+  const [fees, setFees] = useState({}); // Fee data by type
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("apartmentId") || 3333;
 
-  // Lấy danh sách hóa đơn theo userId
+  // Fetch list of bills by userId
   useEffect(() => {
     const fetchBills = async () => {
       setLoading(true);
@@ -23,7 +23,7 @@ function BillingInformation() {
           setBills(data);
         }
       } catch (error) {
-        console.error("Lỗi khi lấy hóa đơn:", error);
+        console.error("Error fetching bills:", error);
       }
       setLoading(false);
     };
@@ -31,19 +31,19 @@ function BillingInformation() {
     fetchBills();
   }, [userId]);
 
-  // Lấy phí theo từng loại hóa đơn
+  // Fetch fee by each bill type
   useEffect(() => {
     const fetchFees = async () => {
-      if (bills.length === 0) return; // Chỉ chạy khi có bills
+      if (bills.length === 0) return; // Only run when there are bills
 
       const feeData = {};
       for (const bill of bills) {
         if (bill.type && !feeData[bill.type]) {
           try {
             const fee = await getFeeByType(bill.type);
-            feeData[bill.type] = fee; // Lưu phí theo loại
+            feeData[bill.type] = fee; // Store fee by type
           } catch (error) {
-            console.error(`Lỗi khi lấy phí cho loại ${bill.type}:`, error);
+            console.error(`Error fetching fee for type ${bill.type}:`, error);
           }
         }
       }
@@ -53,13 +53,11 @@ function BillingInformation() {
     fetchFees();
   }, [bills]);
 
-  // Lọc danh sách theo ID hóa đơn hoặc tên khoản thu
+  // Filter list by bill ID or fee type name
   const filteredBills = bills.filter(
-    (bill) =>
-      bill.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (bill.type && bill.type.toLowerCase().includes(searchTerm.toLowerCase()))
+    (bill) => bill.type && bill.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  // hàm chuyển tiền sang số
+  // Currency formatting function
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN").format(amount);
   };
@@ -67,14 +65,14 @@ function BillingInformation() {
     <Card id="billing-information">
       <MDBox pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium">
-          Thông tin chi tiết từng khoản thu
+          Fee Details
         </MDTypography>
       </MDBox>
 
-      {/* Ô tìm kiếm */}
+      {/* Search box */}
       <MDBox p={2}>
         <TextField
-          label="Tìm kiếm khoản thu"
+          label="Search fee type"
           variant="outlined"
           fullWidth
           size="small"
@@ -85,8 +83,8 @@ function BillingInformation() {
 
       <MDBox
         sx={{
-          maxHeight: "500px", // Giới hạn chiều cao
-          overflowY: "auto", // Thêm thanh cuộn
+          maxHeight: "500px", // Limit height
+          overflowY: "auto", // Add scroll bar
           border: "1px solid #ddd",
           borderRadius: "8px",
           padding: "8px",
@@ -101,15 +99,15 @@ function BillingInformation() {
                   key={bill.id}
                   name={bill.type}
                   total={`${formatCurrency(bill.total)} VND`}
-                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
-                  used={`${formatCurrency(bill.used)} đơn vị`}
+                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
+                  used={`${formatCurrency(bill.used)} units`}
                   noGutter={index === filteredBills.length - 1}
                 />
               );
             })
           ) : (
             <MDTypography variant="body2" color="textSecondary">
-              Không có kết quả phù hợp.
+              No matching results.
             </MDTypography>
           )}
         </MDBox>

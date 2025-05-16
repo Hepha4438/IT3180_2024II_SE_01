@@ -59,6 +59,9 @@ import ForgetPassword from "layouts/authentication/forget-password";
 
 import PaymentComplete from "layouts/payment";
 
+// Public Route
+import PublicRoute from "components/PublicRoute";
+
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const {
@@ -120,11 +123,20 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
-
       if (route.route) {
+        // Protect Sign In route with PublicRoute
+        if (route.route === "/authentication/sign-in") {
+          return (
+            <Route
+              exact
+              path={route.route}
+              element={<PublicRoute>{route.component}</PublicRoute>}
+              key={route.key}
+            />
+          );
+        }
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
-
       return null;
     });
 

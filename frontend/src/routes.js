@@ -49,9 +49,21 @@ import RevenueTable from "layouts/revenue";
 import FeeTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
+import { jwtDecode } from "jwt-decode";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+
+const token = localStorage.getItem("token");
+let userRole = null;
+if (token) {
+  try {
+    const decoded = jwtDecode(token);
+    userRole = decoded.role || null;
+  } catch {
+    userRole = null;
+  }
+}
 
 const routes = [
   {
@@ -68,7 +80,17 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">people</Icon>,
     route: "/manage/resident",
-    component: <Tables />,
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <Tables />
+      ),
+    hidden: userRole === "USER",
   },
   {
     type: "collapse",
@@ -76,7 +98,17 @@ const routes = [
     key: "fee",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/manage/billing",
-    component: <FeeTable />, // Sử dụng component mới cho bảng Fee
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <FeeTable />
+      ), // Sử dụng component mới cho bảng Fee
+    hidden: userRole === "USER",
   },
   {
     type: "collapse",
@@ -84,7 +116,17 @@ const routes = [
     key: "notification",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/manage/notification",
-    component: <NotificationTable />, // Sử dụng component mới cho bảng Fee
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <NotificationTable />
+      ), // Sử dụng component mới cho bảng Fee
+    hidden: userRole === "USER",
   },
   {
     type: "collapse",
@@ -100,7 +142,17 @@ const routes = [
     key: "revenue",
     icon: <Icon fontSize="small">monetization_on</Icon>,
     route: "/revenue",
-    component: <RevenueTable />,
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <RevenueTable />
+      ),
+    hidden: userRole === "USER",
   },
   {
     type: "collapse",
@@ -136,6 +188,8 @@ const routes = [
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+    // Hide from sidebar if logged in
+    hidden: !!token,
   },
   {
     key: "payment-complete",

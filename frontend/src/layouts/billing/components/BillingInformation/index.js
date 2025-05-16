@@ -11,18 +11,18 @@ import DialogContent from "@mui/material/DialogContent";
 import QRModal from "../QR/QRModal";
 // import FeeSearchBar from "./search";
 function BillingInformation() {
-  const [bills, setBills] = useState([]); // Danh sách khoản thu
-  const [fees, setFees] = useState({}); // Dữ liệu phí tương ứng
+  const [bills, setBills] = useState([]); // List of fees
+  const [fees, setFees] = useState({}); // Fee data by type
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchField, setSearchField] = useState("type"); // Mặc định tìm theo tên khoản thu
-  const [searchKeyword, setSearchKeyword] = useState(""); // Nội dung tìm kiếm
+  const [searchField, setSearchField] = useState("type"); // Default: search by fee type
+  const [searchKeyword, setSearchKeyword] = useState(""); // Search content
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("apartmentId");
-  const [searchFilter, setSearchFilter] = useState("type"); // default: tên khoản thu
-  const [searchValue, setSearchValue] = useState(""); // giá trị tìm kiếm
+  const [searchFilter, setSearchFilter] = useState("type"); // default: fee type
+  const [searchValue, setSearchValue] = useState(""); // search value
   const [qrCodeData, setQrCodeData] = useState(null);
   const [openQRModal, setOpenQRModal] = useState(false);
-  // Lấy danh sách hóa đơn theo userId
+  // Fetch list of bills by userId
   useEffect(() => {
     const fetchBills = async () => {
       setLoading(true);
@@ -30,10 +30,10 @@ function BillingInformation() {
         const data = await getRevenue(userId);
         if (data) {
           setBills(data);
-          console.log("setbill la : --------------", data);
+          console.log("setbill is : --------------", data);
         }
       } catch (error) {
-        console.error("Lỗi khi lấy hóa đơn:", error);
+        console.error("Error fetching bills:", error);
       }
       setLoading(false);
     };
@@ -41,22 +41,20 @@ function BillingInformation() {
     fetchBills();
   }, [userId]);
 
-  // Lấy phí theo từng loại hóa đơn
+  // Fetch fee by each bill type
   useEffect(() => {
     const fetchFees = async () => {
-      if (bills.length === 0) return; // Chỉ chạy khi có bills
+      if (bills.length === 0) return; // Only run when there are bills
       console.log("in bill");
       console.log(bills);
-      console.log("in day");
-      console.log(bills[0].endDate);
       const feeData = {};
       for (const bill of bills) {
         if (bill.type && !feeData[bill.type]) {
           try {
             const fee = await getFeeByType(bill.type);
-            feeData[bill.type] = fee; // Lưu phí theo loại
+            feeData[bill.type] = fee; // Store fee by type
           } catch (error) {
-            console.error(`Lỗi khi lấy phí cho loại ${bill.type}:`, error);
+            console.error(`Error fetching fee for type ${bill.type}:`, error);
           }
         }
       }
@@ -66,56 +64,56 @@ function BillingInformation() {
     fetchFees();
   }, [bills]);
 
-  // Lọc danh sách theo ID hóa đơn hoặc tên khoản thu
+  // Filter list by bill ID or fee name
   // const filteredBills = bills.filter(
   //   (bill) =>
   //     bill.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
   //     (bill.type && bill.type.toLowerCase().includes(searchTerm.toLowerCase()))
   // );
   const filteredBills = bills
-    .filter((bill) => bill.status === "Unpaid") // chỉ lấy bill chưa thanh toán
+    .filter((bill) => bill.status === "Unpaid") // Only get unpaid bills
     .filter((bill) => {
       const value = bill[searchField]?.toLowerCase() || "";
       return value.includes(searchKeyword.toLowerCase());
     });
   const totalUnpaid = filteredBills.length;
-  // hàm chuyển tiền sang số
+  // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN").format(amount);
   };
   const formatDeadline = (dateString) => {
-    // Kiểm tra xem chuỗi đầu vào có hợp lệ không
+    // Check if input string is valid
     if (!dateString || typeof dateString !== "string") {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
-    // Tách phần ngày tháng năm (bỏ phần thời gian sau 'T')
+    // Split date part (remove time after 'T')
     const datePart = dateString.split("T")[0];
     if (!datePart) {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
-    // Tách năm, tháng, ngày từ chuỗi
+    // Split year, month, day from string
     const [year, month, day] = datePart.split("-");
     if (!year || !month || !day) {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
-    // Loại bỏ số 0 đứng đầu ở tháng và ngày
+    // Remove leading zeros from month and day
     const formattedMonth = parseInt(month, 10).toString();
     const formattedDay = parseInt(day, 10).toString();
-    // Ghép các thành phần thành chuỗi kết quả
-    return `${formattedDay} tháng ${formattedMonth} năm ${year}`;
+    // Join parts into result string
+    return `${formattedDay}/${formattedMonth}/${year}`;
   };
 
   return (
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
       <MDBox pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium">
-          Thông tin chi tiết từng khoản thu
+          Fee Details
         </MDTypography>
       </MDBox>
 
-      {/* Ô tìm kiếm */}
+      {/* Search box */}
       <MDBox display="flex" gap={2} alignItems="center" mb={2}>
-        {/* Select tiêu chí tìm kiếm */}
+        {/* Select search criteria */}
         <MDBox mr={1}>
           <select
             value={searchField}
@@ -135,20 +133,16 @@ function BillingInformation() {
               },
             }}
           >
-            <option value="type">Tên khoản thu</option>
-            <option value="endDate">Hạn thanh toán</option>
+            <option value="type">Fee Name</option>
+            <option value="endDate">Due Date</option>
           </select>
         </MDBox>
 
-        {/* Input tìm kiếm */}
+        {/* Search input */}
         <FormControl fullWidth variant="outlined" size="small">
           <OutlinedInput
-            placeholder={`Nhập ${
-              searchField === "type"
-                ? "tên khoản thu"
-                : searchField === "status"
-                ? "trạng thái"
-                : "hạn thanh toán"
+            placeholder={`Enter ${
+              searchField === "type" ? "fee name" : searchField === "status" ? "status" : "due date"
             }...`}
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
@@ -157,13 +151,13 @@ function BillingInformation() {
       </MDBox>
       <MDBox pt={1} px={2}>
         <MDTypography variant="subtitle2" color="black" mb={1}>
-          Số lượng khoản thu chưa thanh toán: <strong>{totalUnpaid}</strong> khoản
+          Number of unpaid fees: <strong>{totalUnpaid}</strong>
         </MDTypography>
       </MDBox>
       <MDBox
         sx={{
-          maxHeight: "500px", // Giới hạn chiều cao
-          overflowY: "auto", // Thêm thanh cuộn
+          maxHeight: "500px", // Limit height
+          overflowY: "auto", // Add scroll bar
           border: "1px solid #ddd",
           borderRadius: "8px",
           padding: "8px",
@@ -178,10 +172,10 @@ function BillingInformation() {
                   key={bill.id}
                   name={bill.type}
                   total={`${formatCurrency(bill.total)} VND`}
-                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
-                  used={`${formatCurrency(bill.used)} đơn vị`}
+                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
+                  used={`${formatCurrency(bill.used)} units`}
                   endDate={`${formatDeadline(bill.endDate)}`}
-                  pay={`${bill.status == "Unpaid" ? "Chưa thanh toán" : "Đã thanh toán"}`}
+                  pay={`${bill.status == "Unpaid" ? "Unpaid" : "Paid"}`}
                   noGutter={index === filteredBills.length - 1}
                   bill={bill} // truyền cả bill để dùng khi gửi về backend
                   apartmentId={localStorage.getItem("apartmentId")}
@@ -193,7 +187,7 @@ function BillingInformation() {
             })
           ) : (
             <MDTypography variant="body2" color="textSecondary">
-              Không có kết quả phù hợp.
+              No matching results.
             </MDTypography>
           )}
         </MDBox>
