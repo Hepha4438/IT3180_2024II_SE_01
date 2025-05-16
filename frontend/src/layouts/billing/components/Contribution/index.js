@@ -27,7 +27,7 @@ import { QRcode, createPDF } from "../../api";
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
 
-function Bill({
+function Contribution({
   name,
   company,
   total,
@@ -133,36 +133,36 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Tổng số tiền phải đóng:&nbsp;&nbsp;&nbsp;
+            Tổng số tiền quyên góp:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {total}
             </MDTypography>
           </MDTypography>
         </MDBox>
-        <MDBox mb={1} lineHeight={0}>
+        {/* <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
             Giá trên một đơn vị:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {fee}
             </MDTypography>
           </MDTypography>
-        </MDBox>
-        <MDBox mb={1} lineHeight={0}>
+        </MDBox> */}
+        {/* <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
             Số đơn vị đã dùng:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {used}
             </MDTypography>
           </MDTypography>
-        </MDBox>
-        <MDBox mb={1} lineHeight={0}>
+        </MDBox> */}
+        {/* <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
             Ngày cuối cùng phải nộp:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {endDate}
             </MDTypography>
           </MDTypography>
-        </MDBox>
+        </MDBox> */}
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
             :&nbsp;&nbsp;&nbsp;
@@ -177,12 +177,12 @@ function Bill({
 }
 
 // Setting default values for the props of Bill
-Bill.defaultProps = {
+Contribution.defaultProps = {
   noGutter: false,
 };
 
 // Typechecking props for the Bill
-Bill.propTypes = {
+Contribution.propTypes = {
   name: PropTypes.string.isRequired,
   company: PropTypes.string.isRequired,
   total: PropTypes.string.isRequired,
@@ -199,4 +199,4 @@ Bill.propTypes = {
   paidDate: PropTypes.string,
 };
 
-export default Bill;
+export default Contribution;

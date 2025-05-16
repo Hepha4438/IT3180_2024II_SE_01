@@ -130,7 +130,7 @@ public class ApartmentService {
                 .sum();
     }
 
-    public ResponseEntity<?> generateBill(String apartmentId, String status, String id) {
+    public ResponseEntity<?> generateBill(String apartmentId, String status, String id, String isQR) {
         try {
             Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
                     .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
@@ -239,7 +239,7 @@ public class ApartmentService {
             List<Revenue> revenues = apartment.getRevenueWithStatusOrId(status, id);
             if(revenues == null || revenues.isEmpty()){
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Error generating bill because revenues are empty");
+                        .body("Error generating bill because revenues are empty in generateBill");
             }
             double totalAmount = 0.0;
             for (Revenue revenue : revenues) {
@@ -292,7 +292,7 @@ public class ApartmentService {
             total.setSpacingBefore(20);
             document.add(total);
             // QR code
-            if(id != null){
+            if(id != null && Objects.equals(isQR, "True")){
                 try {
                     String qrBase64 = qrCodeService.generateQRCodeImage(apartment.getRevenueById(id).getPaymentToken()); // Replace with real token
                     byte[] qrBytes = Base64.getDecoder().decode(qrBase64);

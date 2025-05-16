@@ -4,13 +4,13 @@ import TextField from "@mui/material/TextField";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import { FormControl, InputLabel, Select, MenuItem, OutlinedInput, Box } from "@mui/material";
-import Bill from "layouts/billing/components/Bill";
-import { getRevenueNotContribution, getFeeByType } from "../../api";
+import Contribution from "layouts/billing/components/Contribution";
+import { getContribution, getFeeByType } from "../../api";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import QRModal from "../QR/QRModal";
 // import FeeSearchBar from "./search";
-function BillingInformation() {
+function ContributionInformation() {
   const [bills, setBills] = useState([]); // Danh sách khoản thu
   const [fees, setFees] = useState({}); // Dữ liệu phí tương ứng
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +27,7 @@ function BillingInformation() {
     const fetchBills = async () => {
       setLoading(true);
       try {
-        const data = await getRevenueNotContribution(userId);
+        const data = await getContribution(userId);
         if (data) {
           setBills(data);
           console.log("setbill la : --------------", data);
@@ -109,7 +109,7 @@ function BillingInformation() {
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
       <MDBox pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium">
-          Thông tin chi tiết từng khoản thu
+          Thông tin chi tiết từng khoản thanh toán
         </MDTypography>
       </MDBox>
 
@@ -135,8 +135,8 @@ function BillingInformation() {
               },
             }}
           >
-            <option value="type">Tên khoản thu</option>
-            <option value="endDate">Hạn thanh toán</option>
+            <option value="type">Tên khoản thanh toán</option>
+            {/* <option value="endDate">Hạn thanh toán</option> */}
           </select>
         </MDBox>
 
@@ -157,7 +157,7 @@ function BillingInformation() {
       </MDBox>
       <MDBox pt={1} px={2}>
         <MDTypography variant="subtitle2" color="black" mb={1}>
-          Số lượng khoản thu chưa thanh toán: <strong>{totalUnpaid}</strong> khoản
+          Số lượng khoản đóng góp chưa thanh toán: <strong>{totalUnpaid}</strong> khoản
         </MDTypography>
       </MDBox>
       <MDBox
@@ -174,7 +174,7 @@ function BillingInformation() {
             filteredBills.map((bill, index) => {
               const fee = fees[bill.type];
               return (
-                <Bill
+                <Contribution
                   key={bill.id}
                   name={bill.type}
                   total={`${formatCurrency(bill.total)} VND`}
@@ -203,4 +203,4 @@ function BillingInformation() {
   );
 }
 
-export default BillingInformation;
+export default ContributionInformation;

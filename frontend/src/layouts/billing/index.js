@@ -36,6 +36,7 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 import Card from "@mui/material/Card";
 import PaidBills from "layouts/billing/components/PaidBills";
+import ContributionInformation from "./components/ContributionInformation";
 function Billing() {
   return (
     <DashboardLayout>
@@ -100,6 +101,7 @@ function Billing() {
                     </MDBox>
                     <MDBox px={2} py={3}>
                       <BillingInformation />
+                      <ContributionInformation />
                       {/* <PaidBills /> */}
                     </MDBox>
                   </Card>

@@ -36,6 +36,8 @@ public class RevenueService {
     private ApartmentRepository apartmentRepository;
     @Autowired
     private QRCodeService qrCodeService;
+    @Autowired
+    private FeeService feeService;
 
     // Get all revenues
     public List<RevenueDTO> getAllRevenues() {
@@ -289,6 +291,46 @@ public class RevenueService {
         for(Revenue revenue : revenues) {
             revenue.updateStatus();
         }
+    }
+
+    public List<RevenueDTO> getAllContributions(String apartmentId) {
+        List<Revenue> revenues = revenueRepository.findByApartment_ApartmentId(apartmentId);
+
+        List<Revenue> contributions = new java.util.ArrayList<>(List.of());
+        for(Revenue re : revenues){
+            String type = re.getType();
+            if(feeService.getFeeByType(type).isPresent()) {
+                if(feeService.getFeeByType(type).get().getPricePerUnit() == 1){
+                    contributions.add(re);
+                }
+            }
+
+        }
+        return contributions.stream()
+                .map(revenue -> {
+                    Apartment apartment = revenue.getApartment();
+                    return new RevenueDTO(revenue, apartment);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<RevenueDTO> getRevenuesNotContribution(String apartmentId) {
+        List<Revenue> revenues = revenueRepository.findByApartment_ApartmentId(apartmentId);
+        List<Revenue> contributions = new java.util.ArrayList<>(List.of());
+        for(Revenue re : revenues){
+            String type = re.getType();
+            if(feeService.getFeeByType(type).isPresent()) {
+                if(feeService.getFeeByType(type).get().getPricePerUnit() != 1){
+                    contributions.add(re);
+                }
+            }
+        }
+        return contributions.stream()
+                .map(revenue -> {
+                    Apartment apartment = revenue.getApartment();
+                    return new RevenueDTO(revenue, apartment);
+                })
+                .collect(Collectors.toList());
     }
 }
 

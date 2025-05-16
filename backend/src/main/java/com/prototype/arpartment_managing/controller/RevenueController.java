@@ -145,4 +145,18 @@ public class RevenueController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/contribution/{apartmentId}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public List<RevenueDTO> getContribution(@PathVariable String apartmentId) {
+        return revenueService.getAllContributions(apartmentId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    @GetMapping("/not-contribution/{apartmentId}")
+    public List<RevenueDTO> getRevenueNotContribution(@PathVariable String apartmentId) {
+        return revenueService.getRevenuesNotContribution(apartmentId);
+    }
+
+
 }

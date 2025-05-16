@@ -152,12 +152,12 @@ export const QRcode = async (paymentToken) => {
 };
 
 // Tao pdf
-export const createPDF = async (apartmentId, id) => {
+export const createPDF = async (apartmentId, id, isQR) => {
   console.log("paymentToken trong api.js la : ---------------------", id);
   try {
     // Gửi yêu cầu PUT đến server với id trong URL
     const response = await axios.get(
-      `http://localhost:7070/apartment/${apartmentId}/bill?id=${id}`,
+      `http://localhost:7070/apartment/${apartmentId}/bill?id=${id}&isQR=${isQR}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         responseType: "blob", // Đặt responseType là blob để nhận dữ liệu nhị phân
@@ -183,6 +183,31 @@ export const payBill = async (paymentToken) => {
     // console.log("Dữ liệu thanh toán:", data);
   } catch (error) {
     console.error("Lỗi khi thanh toán:", error);
+    return null;
+  }
+};
+
+//lay contribution qua apartmentId
+export const getContribution = async (apartmentId) => {
+  try {
+    const response = await axios.get(`${API_URL}/revenue/contribution/${apartmentId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
+    return null;
+  }
+};
+
+export const getRevenueNotContribution = async (apartmentId) => {
+  try {
+    const response = await axios.get(`${API_URL}/revenue/not-contribution/${apartmentId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
     return null;
   }
 };

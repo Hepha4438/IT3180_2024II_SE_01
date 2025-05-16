@@ -148,6 +148,8 @@ public class Apartment {
     }
 
     public List<Revenue> getRevenueWithStatusOrId(String status, String id) {
+        System.out.println("status is " + status);
+        System.out.println("id is " + id);
         List<Revenue> revenues = new ArrayList<Revenue>();
         if(status != null){
             for(Revenue revenue : this.getRevenues()){
@@ -162,9 +164,11 @@ public class Apartment {
             for(Revenue rev : re){
                 if(rev.getId().toString().equals(id)){
                     revenue = rev;
+                    break;
                 }
             }
             if(revenue == null){
+                System.out.print("NULL ROI CHAY LAM GI NUA: ");
                 return null;
             }
             revenues.add(revenue);

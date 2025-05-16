@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
+import MDInput from "components/MDInput";
 
 export default function PaymentComplete() {
   const { paymentToken } = useParams(); // Lấy paymentToken từ URL
@@ -65,6 +66,7 @@ export default function PaymentComplete() {
           </Typography>
           <Typography variant="body1" gutterBottom>
             Số tiền cần thanh toán: <strong>{paymentData.total.toLocaleString()} VND</strong>
+            <MDInput></MDInput>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             Trạng thái: {paymentData.status}

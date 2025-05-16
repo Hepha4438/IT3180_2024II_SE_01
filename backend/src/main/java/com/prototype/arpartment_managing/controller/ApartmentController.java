@@ -155,9 +155,10 @@ public class ApartmentController {
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     public ResponseEntity<?> generateApartmentBill(@PathVariable String apartmentId,
                                                    @RequestParam(required = false) String status,
-                                                   @RequestParam(required = false) String id) {
+                                                   @RequestParam(required = false) String id,
+                                                   @RequestParam(required = false) String isQR) {
         try {
-            return apartmentService.generateBill(apartmentId, status, id);
+            return apartmentService.generateBill(apartmentId, status, id, isQR);
         } catch (ApartmentNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {

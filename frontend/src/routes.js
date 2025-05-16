@@ -49,7 +49,7 @@ import RevenueTable from "layouts/revenue";
 import FeeTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
-
+import UserContributionTable from "layouts/contribution/UserContributionTable";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -141,6 +141,14 @@ const routes = [
     key: "payment-complete",
     route: "/payment/complete/:paymentToken",
     component: <PaymentComplete />,
+  },
+  {
+    type: "collapse",
+    name: "Contribution",
+    key: "contribution",
+    icon: <Icon fontSize="small">monetization_on</Icon>,
+    route: "/contribution",
+    component: <UserContributionTable />,
   },
   // {
   //   type: "collapse",

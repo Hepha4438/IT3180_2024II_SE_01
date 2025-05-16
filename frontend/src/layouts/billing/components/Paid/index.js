@@ -23,7 +23,7 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-import { QRcode } from "../../api";
+import { QRcode, createPDF } from "../../api";
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
 
@@ -44,6 +44,21 @@ function Bill({
 }) {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
+  const handleViewPDF = async (bill) => {
+    try {
+      console.log("bill in xem hoa don is: ---------------------", bill);
+      const pdfUrl = await createPDF(localStorage.getItem("apartmentId"), bill.id, "False");
+      // console.log("pdfBlob: ", pdfBlob);
+      if (pdfUrl) {
+        window.location.href = pdfUrl;
+        // window.open(url, "_self"); // mở trong cùng tab
+      } else {
+        alert("Không thể tải hóa đơn.");
+      }
+    } catch (error) {
+      alert("Lỗi khi tải hóa đơn.");
+    }
+  };
 
   //   const handlePayment = async (bill) => {
   //     console.log("dang truyen vao data ------------------", bill);
@@ -82,6 +97,13 @@ function Bill({
       mt={2}
     >
       <MDBox width="100%" display="flex" flexDirection="column">
+        <MDButton
+          variant="text"
+          color={darkMode ? "white" : "dark"}
+          onClick={() => handleViewPDF(bill)}
+        >
+          <Icon>description</Icon>&nbsp;Xem hóa đơn
+        </MDButton>
         <MDBox
           display="flex"
           justifyContent="space-between"
