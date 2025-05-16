@@ -34,6 +34,7 @@ import revenueTableData from "layouts/billing_management/data/revenueTableData";
 
 function BillingTable() {
   const { columns, rows, searchUI } = feeTableData();
+  const { columns: mColumns, rows: mRows, searchUI: mSearchUI } = revenueTableData();
 
   return (
     <DashboardLayout>
@@ -127,7 +128,7 @@ function BillingTable() {
                 </MDBox>
               </MDBox>
               <MDBox px={2} py={3}>
-                {searchUI}
+                {mSearchUI}
                 <MDBox
                   sx={{
                     overflowX: "auto",
@@ -140,7 +141,7 @@ function BillingTable() {
                   }}
                 >
                   <DataTable
-                    table={{ columns, rows }}
+                    table={{ columns: mColumns, rows: mRows }}
                     isSorted={false}
                     entriesPerPage={{
                       defaultValue: 10,
