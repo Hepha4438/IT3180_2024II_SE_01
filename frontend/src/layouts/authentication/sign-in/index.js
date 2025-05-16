@@ -56,6 +56,9 @@ function Login() {
           return;
         }
         alert("Login successful!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 50); // bạn có thể chỉnh 300–1000ms tùy hiệu năng
         navigate("/dashboard");
       } else {
         alert(data?.error || "Login failed!");

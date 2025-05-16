@@ -116,7 +116,7 @@ const UserNotificationPage = () => {
                         fontWeight="medium"
                         sx={{ color: typeInfo.color }}
                       >
-                        {noti.title || "Không tiêu đề"}
+                        {noti.title || "No title"}
                       </MDTypography>
 
                       <MDTypography
@@ -128,7 +128,7 @@ const UserNotificationPage = () => {
                           wordBreak: "break-word",
                         }}
                       >
-                        {noti.content || "Không có nội dung"}
+                        {noti.content || "No content"}
                       </MDTypography>
 
                       <MDTypography
@@ -136,7 +136,7 @@ const UserNotificationPage = () => {
                         color="text"
                         sx={{ display: "block", mt: 0.5 }}
                       >
-                        Thời gian: {new Date(noti.createdAt).toLocaleString("vi-VN")}
+                        Date: {new Date(noti.createdAt).toLocaleString("vi-VN")}
                       </MDTypography>
 
                       <MDTypography
@@ -144,7 +144,7 @@ const UserNotificationPage = () => {
                         color="text"
                         sx={{ display: "block", mt: 0.5 }}
                       >
-                        Loại: {noti.type}
+                        Type: {noti.type}
                       </MDTypography>
                     </MDBox>
                     <MDBox ml="auto">
@@ -173,23 +173,23 @@ const UserNotificationPage = () => {
         ) : (
           <MDBox textAlign="center" py={3}>
             <MDTypography variant="body2" color="text">
-              Bạn chưa có thông báo nào.
+              You have no notifications yet.
             </MDTypography>
           </MDBox>
         )}
       </MDBox>
       <Footer />
       <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
-        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogTitle>Delete</DialogTitle>
         <DialogContent>
-          <DialogContentText>Bạn có chắc chắn muốn xóa thông báo này không?</DialogContentText>
+          <DialogContentText>Are you sure you want to delete this message?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <MDButton onClick={() => setDeleteConfirmOpen(false)} color="info">
-            Hủy
+            Cancel
           </MDButton>
           <MDButton onClick={handleConfirmDelete} color="error">
-            Xóa
+            Delete
           </MDButton>
         </DialogActions>
       </Dialog>

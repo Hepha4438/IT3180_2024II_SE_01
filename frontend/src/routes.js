@@ -89,6 +89,7 @@ const routes = [
         <Tables />
       ),
     hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -107,6 +108,7 @@ const routes = [
         <BillingTable />
       ), // Sử dụng component mới cho bảng Fee
     hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -125,6 +127,7 @@ const routes = [
         <NotificationTable />
       ), // Sử dụng component mới cho bảng Fee
     hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -133,6 +136,7 @@ const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
     component: <Billing />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -142,6 +146,7 @@ const routes = [
     route: "/apartment/:apartmentId",
     // The route is dynamic and will be replaced with the apartment id
     component: <Apartment />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -151,6 +156,7 @@ const routes = [
     route: "/notification/:id",
     // The route is dynamic and will be replaced with the user id
     component: <UserNotificationPage />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -160,6 +166,7 @@ const routes = [
     route: "/profile/:id",
     // The route is dynamic and will be replaced with the user id
     component: <Profile />,
+    hidden: !token,
   },
   {
     type: "collapse",
