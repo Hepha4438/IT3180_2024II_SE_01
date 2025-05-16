@@ -40,13 +40,11 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/resident_management";
 import Billing from "layouts/billing";
 import Apartment from "layouts/apartment";
-import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import PaymentComplete from "layouts/payment";
-import RevenueTable from "layouts/revenue";
-import FeeTable from "layouts/billing_management";
+import BillingTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
 import { jwtDecode } from "jwt-decode";
@@ -171,7 +169,7 @@ const routes = [
     route: "/authentication/sign-in",
     component: <SignIn />,
     // Hide from sidebar if logged in
-    hidden: !!token,
+    hidden: token,
   },
   {
     key: "payment-complete",

@@ -119,7 +119,7 @@ function BillingInformation() {
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
             style={{
-              height: "42px",
+              height: "38px",
               padding: "0 15px",
               borderRadius: "8px",
               borderColor: "#d2d6da",
@@ -156,11 +156,11 @@ function BillingInformation() {
       </MDBox>
       <MDBox
         sx={{
-          maxHeight: "500px", // Limit height
-          overflowY: "auto", // Add scroll bar
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "8px",
+          maxHeight: "510px",
+          overflowY: "auto",
+          border: "0px solid #ddd",
+          borderRadius: "2px",
+          padding: "0 0px",
         }}
       >
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
