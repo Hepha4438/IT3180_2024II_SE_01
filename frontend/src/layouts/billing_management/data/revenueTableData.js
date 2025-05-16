@@ -14,6 +14,8 @@ import MDInput from "components/MDInput";
 import ApartmentSelectTable from "layouts/billing_management/data/apartmentSelectTable";
 
 export default function revenueData() {
+  const [fees, setFees] = useState([]);
+  const [feeTypes, setFeeTypes] = useState([]);
   const [revenues, setRevenues] = useState([]);
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,6 +59,23 @@ export default function revenueData() {
   });
 
   const [searchType, setSearchType] = useState("type"); // Default search by 'type'
+
+  const loadFees = async () => {
+    try {
+      const response = await axios.get("http://localhost:7070/fees", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const filteredFees = response.data.filter((fee) => {
+        return fee.pricePerUnit?.toString() !== "1";
+      });
+      setFees(filteredFees);
+      // Lấy danh sách các type duy nhất
+      const uniqueTypes = [...new Set(filteredFees.map((fee) => fee.type))];
+      setFeeTypes(uniqueTypes);
+    } catch (error) {
+      console.error("Failed to load fees", error);
+    }
+  };
 
   const loadRevenues = async () => {
     const data = await getAllInvoices();
@@ -118,6 +137,7 @@ export default function revenueData() {
   };
 
   const handleCreateClick = () => {
+    loadFees();
     setCreateDialogOpen(true);
   };
 
@@ -504,13 +524,29 @@ export default function revenueData() {
           <MDBox display="flex" flexDirection="row" gap={2}>
             <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
               <DialogTitle>Create Fee</DialogTitle>
-              <MDInput
-                label="Type"
-                name="type"
-                value={newRevenue.type}
-                onChange={handleInputChange}
-                fullWidth
-              />
+              <MDBox fullWidth label="Type">
+                <select
+                  name="type"
+                  value={newRevenue.type}
+                  onChange={handleInputChange}
+                  style={{
+                    height: "42px",
+                    padding: "0 10px",
+                    borderRadius: "8px",
+                    borderColor: "#d2d6da",
+                    width: "100%",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease-in-out",
+                  }}
+                >
+                  {feeTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </MDBox>
               <MDInput
                 label="Units used"
                 name="used"
