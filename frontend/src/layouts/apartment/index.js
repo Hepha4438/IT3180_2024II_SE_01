@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -224,6 +225,18 @@ function Apartment() {
     }
   };
 
+  // Get user role from JWT token
+  let userRole = "USER";
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      userRole = decoded.role || "USER";
+    } catch (e) {
+      userRole = "USER";
+    }
+  }
+
   return (
     <DashboardLayout>
       <CustomNavbar />
@@ -294,9 +307,25 @@ function Apartment() {
                       </MDBox>
                     </MDBox>
                   </MDBox>
-                  <MDButton variant="gradient" color="info" onClick={handleOpenEditForm} fullWidth>
-                    <EditIcon sx={{ mr: 1 }} /> Edit Apartment
-                  </MDButton>
+                  {userRole === "ADMIN" ? (
+                    <MDButton
+                      variant="gradient"
+                      color="info"
+                      onClick={handleOpenEditForm}
+                      fullWidth
+                    >
+                      <EditIcon sx={{ mr: 1 }} /> Edit Apartment
+                    </MDButton>
+                  ) : (
+                    <MDButton
+                      variant="gradient"
+                      color="info"
+                      fullWidth
+                      onClick={handleOpenEditForm} // Allow USER to open the view modal
+                    >
+                      <EditIcon sx={{ mr: 1 }} /> View Apartment
+                    </MDButton>
+                  )}
                 </MDBox>
               </Card>
             </Grid>

@@ -74,7 +74,7 @@ export default function revenueData() {
       status: (
         <MDBox color={bill.status === "Paid" ? "success" : "error"}>
           <Icon>{bill.status === "Paid" ? "check_circle" : "error"}</Icon>
-          {bill.status === "Paid" ? " Paid" : " Unpaid"}
+          {bill.status === "Paid" ? " Paid" : "Unpaid"}
         </MDBox>
       ),
       apartmentId: bill.apartmentId,
@@ -437,14 +437,14 @@ export default function revenueData() {
               fullWidth
             /> */}
             <MDInput
-              label="Số lượng sử dụng"
+              label="Units Used"
               name="used"
               value={editRevenue.used}
               onChange={handleEditInputChange}
               fullWidth
             />
             <MDInput
-              label="Ngày hết hạn"
+              label="Due Date"
               name="endDate"
               value={formatDate(editRevenue.endDate)}
               onChange={handleEditInputChange}
@@ -452,7 +452,7 @@ export default function revenueData() {
               fullWidth
             />
             <MDInput
-              label="ID căn hộ"
+              label="Apartment ID"
               name="apartmentId"
               value={editRevenue.apartmentId}
               disabled
@@ -473,7 +473,9 @@ export default function revenueData() {
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
         <DialogTitle>Delete Revenue</DialogTitle>
         <DialogContent>
-          <MDTypography>Delete &quot;{selectedRevenue?.type}&quot; ?</MDTypography>
+          <MDTypography>
+            Are you sure you want to delete the fee &quot;{selectedRevenue?.type}&quot;?
+          </MDTypography>
         </DialogContent>
         <DialogActions>
           <MDButton onClick={handleDeleteCancel} color="dark">
@@ -501,7 +503,7 @@ export default function revenueData() {
         <DialogContent>
           <MDBox display="flex" flexDirection="row" gap={2}>
             <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
-              <DialogTitle>Tạo mới khoản thu</DialogTitle>
+              <DialogTitle>Create Fee</DialogTitle>
               <MDInput
                 label="Type"
                 name="type"

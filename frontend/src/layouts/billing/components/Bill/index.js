@@ -1,3 +1,18 @@
+/**
+=========================================================
+* Material Dashboard 2 React - v2.2.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/material-dashboard-react
+* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+
+Coded by www.creative-tim.com
+
+ =========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+*/
+
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
@@ -31,19 +46,36 @@ function Bill({
   const { darkMode } = controller;
 
   const handlePayment = async (bill) => {
+    console.log("sending data ------------------", bill);
     try {
+      // const revenueDTO = {
+      //   id: bill.id,
+      //   apartmentId: localStorage.getItem("apartmentId").toString(),
+      //   type: bill.type.toString(),
+      //   total: bill.total,
+      //   used: bill.used,
+      //   status: bill.status.toString(),
+      //   endDate: bill.endDate,
+      //   createDate: bill.createDate,
+      // };
+      // console.log("revenueDTO is: ---------------------", revenueDTO);
       const pdfUrl = await createPDF(localStorage.getItem("apartmentId"), bill.id);
+      // console.log("data is: ---------------------", data);
+      // setQrCodeData(data.qrCode);
+      // setOpenQRModal(true);
       if (pdfUrl) {
-        // Open PDF in a new tab
+        // Mở PDF trong tab mới
         window.location.href = pdfUrl;
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        alert("Unable to download the PDF file.");
+        alert("Cannot download PDF file.");
       }
+      console.log("bill is: ---------------------", bill);
     } catch (err) {
-      alert("An error occurred while generating the PDF bill.");
+      // alert("Could not create QR. Please try again.");
+      alert("Error creating PDF invoice.");
     }
   };
 
@@ -72,6 +104,11 @@ function Bill({
           </MDTypography>
 
           <MDBox display="flex" alignItems="center" mt={{ xs: 2, sm: 0 }} ml={{ xs: -1.5, sm: 0 }}>
+            {/* <MDBox mr={1}>
+              <MDButton variant="text" color="error">
+                <Icon>delete</Icon>&nbsp;delete
+              </MDButton>
+            </MDBox> */}
             <MDButton
               variant="text"
               color={darkMode ? "white" : "dark"}
@@ -81,10 +118,9 @@ function Bill({
             </MDButton>
           </MDBox>
         </MDBox>
-
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Collected by:&nbsp;&nbsp;&nbsp;
+            {/* Collection place:&nbsp;&nbsp;&nbsp; */}
             <MDTypography
               variant="caption"
               fontWeight="medium"
@@ -95,16 +131,14 @@ function Bill({
             </MDTypography>
           </MDTypography>
         </MDBox>
-
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Total amount:&nbsp;&nbsp;&nbsp;
+            Total amount due:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {total}
             </MDTypography>
           </MDTypography>
         </MDBox>
-
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
             Price per unit:&nbsp;&nbsp;&nbsp;
@@ -113,28 +147,33 @@ function Bill({
             </MDTypography>
           </MDTypography>
         </MDBox>
-
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Units used:&nbsp;&nbsp;&nbsp;
+            Number of units used:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {used}
             </MDTypography>
           </MDTypography>
         </MDBox>
-
+        {/* <MDBox mb={1} lineHeight={0}>
+          <MDTypography variant="caption" color="text">
+            Last payment date:&nbsp;&nbsp;&nbsp;
+            <MDTypography variant="caption" fontWeight="medium" color="error">
+              {paidDate}
+            </MDTypography>
+          </MDTypography>
+        </MDBox> */}
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Due date:&nbsp;&nbsp;&nbsp;
+            Last due date:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {endDate}
             </MDTypography>
           </MDTypography>
         </MDBox>
-
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Payment status:&nbsp;&nbsp;&nbsp;
+            Status:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {pay}
             </MDTypography>

@@ -24,14 +24,14 @@ public class FeeController {
 
     // Lấy tất cả các phí
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public Iterable<Fee> getAllFees() {
         return feeService.getAllFees();
     }
 
     // Lấy phí theo type
     @GetMapping("/{type}")
-//    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#id)")
+    //@PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#id)")
     public ResponseEntity<?> getFee(@PathVariable String type) {
         Optional<Fee> fee = feeService.getFeeByType(type);
         // Nếu Fee tồn tại, trả về 200 OK cùng với dữ liệu Fee

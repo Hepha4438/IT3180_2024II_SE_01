@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useProSidebar } from "react-pro-sidebar";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -107,79 +108,101 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     return () => window.removeEventListener("resize", handleMiniSidenav);
   }, [dispatch, location]);
 
-  // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
-    let returnValue;
-
-    if (type === "collapse") {
-      let routePath = route;
-      if (key === "profile" && route.includes(":id")) {
-        const userId = localStorage.getItem("id");
-        routePath = route.replace(":id", userId || "");
-      }
-      if (key === "apartment" && route.includes(":apartmentId")) {
-        const userApartmentId = localStorage.getItem("apartmentId");
-        routePath = route.replace(":apartmentId", userApartmentId || "");
-      }
-      if (key === "usernotification" && route.includes(":id")) {
-        const userId = localStorage.getItem("id");
-        routePath = route.replace(":id", userId || "");
-      }
-      returnValue = href ? (
-        <Link
-          href={href}
-          key={key}
-          target="_blank"
-          rel="noreferrer"
-          sx={{ textDecoration: "none" }}
-        >
-          <SidenavCollapse
-            name={name}
-            icon={icon}
-            active={location.pathname.startsWith(routePath)}
-            noCollapse={noCollapse}
-          />
-        </Link>
-      ) : (
-        <NavLink key={key} to={routePath}>
-          <SidenavCollapse
-            name={name}
-            icon={icon}
-            active={location.pathname.startsWith(routePath)}
-          />
-        </NavLink>
-      );
-    } else if (type === "title") {
-      returnValue = (
-        <MDTypography
-          key={key}
-          color={textColor}
-          display="block"
-          variant="caption"
-          fontWeight="bold"
-          textTransform="uppercase"
-          pl={3}
-          mt={2}
-          mb={1}
-          ml={1}
-        >
-          {title}
-        </MDTypography>
-      );
-    } else if (type === "divider") {
-      returnValue = (
-        <Divider
-          key={key}
-          light={
-            (!darkMode && !whiteSidenav && !transparentSidenav) ||
-            (darkMode && !transparentSidenav && whiteSidenav)
-          }
-        />
-      );
+  const getUserRole = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.role || null;
+    } catch {
+      return null;
     }
+  };
+  const userRole = getUserRole();
 
-    return returnValue;
+  // Render all the routes from the routes.js (All the visible items on the Sidenav)
+  const filteredRoutes = routes.filter((route) => {
+    // Hide certain buttons for USER role
+    if (userRole === "USER" && ["tables", "fee", "notification", "revenue"].includes(route.key)) {
+      return false;
+    }
+    return !route.hidden;
   });
+
+  const renderRoutes = filteredRoutes.map(
+    ({ type, name, icon, title, noCollapse, key, href, route }) => {
+      let returnValue;
+
+      if (type === "collapse") {
+        let routePath = route;
+        if (key === "profile" && route.includes(":id")) {
+          const userId = localStorage.getItem("id");
+          routePath = route.replace(":id", userId || "");
+        }
+        if (key === "apartment" && route.includes(":apartmentId")) {
+          const userApartmentId = localStorage.getItem("apartmentId");
+          routePath = route.replace(":apartmentId", userApartmentId || "");
+        }
+        if (key === "usernotification" && route.includes(":id")) {
+          const userId = localStorage.getItem("id");
+          routePath = route.replace(":id", userId || "");
+        }
+        returnValue = href ? (
+          <Link
+            href={href}
+            key={key}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ textDecoration: "none" }}
+          >
+            <SidenavCollapse
+              name={name}
+              icon={icon}
+              active={location.pathname.startsWith(routePath)}
+              noCollapse={noCollapse}
+            />
+          </Link>
+        ) : (
+          <NavLink key={key} to={routePath}>
+            <SidenavCollapse
+              name={name}
+              icon={icon}
+              active={location.pathname.startsWith(routePath)}
+            />
+          </NavLink>
+        );
+      } else if (type === "title") {
+        returnValue = (
+          <MDTypography
+            key={key}
+            color={textColor}
+            display="block"
+            variant="caption"
+            fontWeight="bold"
+            textTransform="uppercase"
+            pl={3}
+            mt={2}
+            mb={1}
+            ml={1}
+          >
+            {title}
+          </MDTypography>
+        );
+      } else if (type === "divider") {
+        returnValue = (
+          <Divider
+            key={key}
+            light={
+              (!darkMode && !whiteSidenav && !transparentSidenav) ||
+              (darkMode && !transparentSidenav && whiteSidenav)
+            }
+          />
+        );
+      }
+
+      return returnValue;
+    }
+  );
 
   return (
     <SidenavRoot

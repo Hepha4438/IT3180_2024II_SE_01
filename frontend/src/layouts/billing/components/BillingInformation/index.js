@@ -9,20 +9,19 @@ import { getRevenue, getFeeByType } from "../../api";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import QRModal from "../QR/QRModal";
-
+// import FeeSearchBar from "./search";
 function BillingInformation() {
-  const [bills, setBills] = useState([]); // List of bills
-  const [fees, setFees] = useState({}); // Fee data per type
+  const [bills, setBills] = useState([]); // List of fees
+  const [fees, setFees] = useState({}); // Fee data by type
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchField, setSearchField] = useState("type"); // Default: search by type
+  const [searchField, setSearchField] = useState("type"); // Default: search by fee type
   const [searchKeyword, setSearchKeyword] = useState(""); // Search content
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("apartmentId");
-  const [searchFilter, setSearchFilter] = useState("type"); // default: type
+  const [searchFilter, setSearchFilter] = useState("type"); // default: fee type
   const [searchValue, setSearchValue] = useState(""); // search value
   const [qrCodeData, setQrCodeData] = useState(null);
   const [openQRModal, setOpenQRModal] = useState(false);
-
   // Fetch list of bills by userId
   useEffect(() => {
     const fetchBills = async () => {
@@ -31,7 +30,7 @@ function BillingInformation() {
         const data = await getRevenue(userId);
         if (data) {
           setBills(data);
-          console.log("Fetched bills: ", data);
+          console.log("setbill is : --------------", data);
         }
       } catch (error) {
         console.error("Error fetching bills:", error);
@@ -42,16 +41,18 @@ function BillingInformation() {
     fetchBills();
   }, [userId]);
 
-  // Fetch fee by bill type
+  // Fetch fee by each bill type
   useEffect(() => {
     const fetchFees = async () => {
-      if (bills.length === 0) return;
+      if (bills.length === 0) return; // Only run when there are bills
+      console.log("in bill");
+      console.log(bills);
       const feeData = {};
       for (const bill of bills) {
         if (bill.type && !feeData[bill.type]) {
           try {
             const fee = await getFeeByType(bill.type);
-            feeData[bill.type] = fee;
+            feeData[bill.type] = fee; // Store fee by type
           } catch (error) {
             console.error(`Error fetching fee for type ${bill.type}:`, error);
           }
@@ -63,50 +64,62 @@ function BillingInformation() {
     fetchFees();
   }, [bills]);
 
-  // Filter bills: unpaid only
+  // Filter list by bill ID or fee name
+  // const filteredBills = bills.filter(
+  //   (bill) =>
+  //     bill.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     (bill.type && bill.type.toLowerCase().includes(searchTerm.toLowerCase()))
+  // );
   const filteredBills = bills
-    .filter((bill) => bill.status === "Unpaid")
+    .filter((bill) => bill.status === "Unpaid") // Only get unpaid bills
     .filter((bill) => {
       const value = bill[searchField]?.toLowerCase() || "";
       return value.includes(searchKeyword.toLowerCase());
     });
-
   const totalUnpaid = filteredBills.length;
-
   // Format currency
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US").format(amount);
+    return new Intl.NumberFormat("vi-VN").format(amount);
   };
-
-  // Format date
   const formatDeadline = (dateString) => {
+    // Check if input string is valid
     if (!dateString || typeof dateString !== "string") {
-      return "No deadline";
+      return "Unlimited";
     }
+    // Split date part (remove time after 'T')
     const datePart = dateString.split("T")[0];
     if (!datePart) {
-      return "No deadline";
+      return "Unlimited";
     }
+    // Split year, month, day from string
     const [year, month, day] = datePart.split("-");
     if (!year || !month || !day) {
-      return "No deadline";
+      return "Unlimited";
     }
+    // Remove leading zeros from month and day
     const formattedMonth = parseInt(month, 10).toString();
     const formattedDay = parseInt(day, 10).toString();
+    // Join parts into result string
     return `${formattedDay}/${formattedMonth}/${year}`;
   };
 
   return (
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
-      {/* Search bar */}
-      <MDBox display="flex" alignItems="center" mb={1}>
-        {/* Select search field */}
-        <MDBox>
+      <MDBox pt={3} px={2}>
+        <MDTypography variant="h6" fontWeight="medium">
+          Fee Details
+        </MDTypography>
+      </MDBox>
+
+      {/* Search box */}
+      <MDBox display="flex" gap={2} alignItems="center" mb={2}>
+        {/* Select search criteria */}
+        <MDBox mr={1}>
           <select
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
             style={{
-              height: "38px",
+              height: "42px",
               padding: "0 15px",
               borderRadius: "8px",
               borderColor: "#d2d6da",
@@ -115,42 +128,39 @@ function BillingInformation() {
               fontSize: "14px",
               cursor: "pointer",
               transition: "all 0.2s ease-in-out",
+              "&:hover": {
+                borderColor: "#1A73E8",
+              },
             }}
           >
-            <option value="type">Revenue Type</option>
-            <option value="endDate">Payment Deadline</option>
+            <option value="type">Fee Name</option>
+            <option value="endDate">Due Date</option>
           </select>
         </MDBox>
 
-        {/* Input search */}
+        {/* Search input */}
         <FormControl fullWidth variant="outlined" size="small">
           <OutlinedInput
             placeholder={`Enter ${
-              searchField === "type"
-                ? "revenue type"
-                : searchField === "status"
-                ? "status"
-                : "payment deadline"
+              searchField === "type" ? "fee name" : searchField === "status" ? "status" : "due date"
             }...`}
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
         </FormControl>
       </MDBox>
-
       <MDBox pt={1} px={2}>
         <MDTypography variant="subtitle2" color="black" mb={1}>
-          Total unpaid revenue(s): <strong>{totalUnpaid}</strong>
+          Number of unpaid fees: <strong>{totalUnpaid}</strong>
         </MDTypography>
       </MDBox>
-
       <MDBox
         sx={{
-          maxHeight: "510px",
-          overflowY: "auto",
-          border: "0px solid #ddd",
-          borderRadius: "2px",
-          padding: "0 4px",
+          maxHeight: "500px", // Limit height
+          overflowY: "auto", // Add scroll bar
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          padding: "8px",
         }}
       >
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
@@ -165,9 +175,9 @@ function BillingInformation() {
                   fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
                   used={`${formatCurrency(bill.used)} units`}
                   endDate={`${formatDeadline(bill.endDate)}`}
-                  pay={bill.status === "Unpaid" ? "Unpaid" : "Paid"}
+                  pay={`${bill.status == "Unpaid" ? "Unpaid" : "Paid"}`}
                   noGutter={index === filteredBills.length - 1}
-                  bill={bill}
+                  bill={bill} // truyền cả bill để dùng khi gửi về backend
                   apartmentId={localStorage.getItem("apartmentId")}
                   setQrCodeData={setQrCodeData}
                   setOpenQRModal={setOpenQRModal}
@@ -182,7 +192,6 @@ function BillingInformation() {
           )}
         </MDBox>
       </MDBox>
-
       <QRModal open={openQRModal} onClose={() => setOpenQRModal(false)} qrCodeData={qrCodeData} />
     </Card>
   );
