@@ -46,9 +46,21 @@ public class FeeController {
     // Create fee - Admin only
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createFee(@RequestBody Fee fee) {
-        feeService.createFee(fee);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Fee created successfully");
+    public ResponseEntity<String> createFee(@RequestBody Fee fee) {
+        try {
+            feeService.createFee(fee);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Fee created successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Fee creation failed: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Fee creation failed due to server error.");
+        }
     }
 
     // Cập nhật phí theo type (chỉ cần sửa pricePerUnit, nhưng vẫn gửi toàn bộ Fee)

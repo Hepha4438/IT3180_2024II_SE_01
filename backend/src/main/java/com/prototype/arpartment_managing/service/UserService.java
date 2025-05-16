@@ -85,11 +85,35 @@ public class UserService {
     }
 
     @Transactional
-    // Create new user
-    public User createUser(UserDTO userDTO){
+    public User createUser(UserDTO userDTO) {
         // Validate required fields
         if (userDTO.getApartmentId() == null || userDTO.getApartmentId().isEmpty()) {
             throw new IllegalArgumentException("Apartment ID is required");
+        }
+
+        // Validate email format
+        if (!isValidEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        // Validate phone number format
+        if (!isValidPhoneNumber(userDTO.getPhoneNumber())) {
+            throw new IllegalArgumentException("Invalid phone number format");
+        }
+
+        // Validate citizen identification (CCCD)
+        if (!isValidCCCD(userDTO.getCitizenIdentification())) {
+            throw new IllegalArgumentException("Invalid citizen identification number (CCCD) format");
+        }
+
+        Optional<User> existingUsername = userRepository.findByUsername(userDTO.getUsername());
+        if (existingUsername.isPresent()) {
+            throw new IllegalArgumentException("User with username '" + userDTO.getUsername() + "' already exists");
+        }
+
+        Optional<User> existingCI = userRepository.findByCitizenIdentification(userDTO.getCitizenIdentification());
+        if (existingCI.isPresent()) {
+            throw new IllegalArgumentException("User with citizen identification '" + userDTO.getCitizenIdentification() + "' already exists");
         }
 
         User user = new User();
@@ -101,20 +125,38 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setCitizenIdentification(userDTO.getCitizenIdentification());
 
-        if (userDTO.getApartmentId() != null) {
-            Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
-                    .orElseThrow(() -> new ApartmentNotFoundException(userDTO.getApartmentId()));
-            user.setApartment(apartment);
-        }
+        // Assign apartment
+        Apartment apartment = apartmentRepository.findByApartmentId(userDTO.getApartmentId())
+                .orElseThrow(() -> new ApartmentNotFoundException(userDTO.getApartmentId()));
+        user.setApartment(apartment);
+
         userRepository.save(user);
-        if (user.getApartment() != null) {
-            Apartment apartment = user.getApartment();
-            apartment.getResidents().add(user);
-            apartment.setOccupants(apartment.getResidents().size());
-            apartment.setIsOccupied(!apartment.getResidents().isEmpty());
-            apartmentRepository.save(apartment);
-        }
+
+        // Update apartment state
+        apartment.getResidents().add(user);
+        apartment.setOccupants(apartment.getResidents().size());
+        apartment.setIsOccupied(!apartment.getResidents().isEmpty());
+        apartmentRepository.save(apartment);
+
         return user;
+    }
+
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        return email != null && email.matches(emailRegex);
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Vietnamese mobile number: 10 digits, starts with 0
+        String phoneRegex = "^0\\d{9}$";
+        return phoneNumber != null && phoneNumber.matches(phoneRegex);
+    }
+
+    private boolean isValidCCCD(String cccd) {
+        // CCCD: 12 digits
+        String cccdRegex = "^\\d{12}$";
+        return cccd != null && cccd.matches(cccdRegex);
     }
 
     // Delete user
