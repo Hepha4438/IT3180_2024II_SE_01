@@ -11,8 +11,6 @@ import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
 
 //ApartmentSelectTable
-import ApartmentSelectTable from "layouts/revenue/data/apartmentSelectTable";
-
 export default function userContributionData({ apartmentId }) {
   const [revenues, setRevenues] = useState([]);
   const [rows, setRows] = useState([]);

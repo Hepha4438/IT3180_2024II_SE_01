@@ -10,14 +10,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
-
+import { useMaterialUIController, setLayout } from "context";
 export default function PaymentComplete() {
   const { paymentToken } = useParams(); // Lấy paymentToken từ URL
   const [loading, setLoading] = useState(true);
   const [paymentData, setPaymentData] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [controller, dispatch] = useMaterialUIController();
 
+  useEffect(() => {
+    setLayout(dispatch, "page");
+  }, [dispatch]);
   useEffect(() => {
     const API_URL = "http://localhost:7070";
     const fetchPaymentDetails = async () => {
@@ -58,43 +62,44 @@ export default function PaymentComplete() {
   }
 
   return (
-    <MDBox display="flex" justifyContent="center" mt={10}>
-      <Card sx={{ maxWidth: 400, p: 3 }}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Giao dịch #{paymentToken.slice(0, 8)}...
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Số tiền cần thanh toán: <strong>{paymentData.total.toLocaleString()} VND</strong>
-            <MDInput></MDInput>
-          </Typography>
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            Trạng thái: {paymentData.status}
-          </Typography>
-          <MDBox mt={3}>
-            <MDButton
-              color="success"
-              fullWidth
-              onClick={async () => {
-                try {
-                  const response = await axios.get(
-                    `http://localhost:7070/revenue/complete-payment/${paymentToken}`,
-                    {
-                      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                    }
-                  );
-                  alert("Giao dịch thành công!");
-                  navigate("/billing"); // Chuyển hướng sau khi thanh toán thành công
-                } catch (err) {
-                  alert("Có lỗi trong quá trình thanh toán.");
-                }
-              }}
-            >
-              Thanh toán
-            </MDButton>
-          </MDBox>
-        </CardContent>
-      </Card>
+    <MDBox pt={10} px={1}>
+      <MDBox display="flex" justifyContent="center" mt={10}>
+        <Card sx={{ maxWidth: 400, p: 3, boxShadow: 6 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              Giao dịch #{paymentToken.slice(0, 8)}...
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Số tiền cần thanh toán: <strong>{paymentData.total.toLocaleString()} VND</strong>
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Trạng thái: {paymentData.status}
+            </Typography>
+            <MDBox mt={3}>
+              <MDButton
+                color="success"
+                fullWidth
+                onClick={async () => {
+                  try {
+                    const response = await axios.get(
+                      `http://localhost:7070/revenue/complete-payment/${paymentToken}`,
+                      {
+                        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                      }
+                    );
+                    alert("Giao dịch thành công!");
+                    navigate("/billing"); // Chuyển hướng sau khi thanh toán thành công
+                  } catch (err) {
+                    alert("Có lỗi trong quá trình thanh toán.");
+                  }
+                }}
+              >
+                Thanh toán
+              </MDButton>
+            </MDBox>
+          </CardContent>
+        </Card>
+      </MDBox>
     </MDBox>
   );
 }

@@ -190,7 +190,18 @@ const routes = [
     key: "contribution",
     icon: <Icon fontSize="small">monetization_on</Icon>,
     route: "/contribution",
-    component: <UserContributionTable />,
+    component:
+      userRole === "ADMIN" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <UserContributionTable />
+      ), // Sử dụng component mới cho bảng Fee
+    hidden: userRole === "ADMIN",
+    hidden: !token,
   },
   // {
   //   type: "collapse",
