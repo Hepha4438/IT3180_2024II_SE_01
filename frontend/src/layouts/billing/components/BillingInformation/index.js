@@ -105,14 +105,8 @@ function BillingInformation() {
 
   return (
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
-      <MDBox pt={3} px={2}>
-        <MDTypography variant="h6" fontWeight="medium">
-          Fee Details
-        </MDTypography>
-      </MDBox>
-
       {/* Search box */}
-      <MDBox display="flex" gap={2} alignItems="center" mb={2}>
+      <MDBox display="flex" alignItems="center" mb={2}>
         {/* Select search criteria */}
         <MDBox mr={1}>
           <select

@@ -162,6 +162,8 @@ export default function data() {
         return user.username?.toLowerCase().includes(searchTerm.toLowerCase());
       } else if (searchType === "apartmentId") {
         return user.apartmentId?.toString() === searchTerm.trim();
+      } else if (searchType === "apartmentId") {
+        return user.role?.toString().toLowerCase() === searchTerm.trim();
       }
       return false;
     });
@@ -467,6 +469,7 @@ export default function data() {
             >
               <option value="username">Username</option>
               <option value="apartmentId">Apartment ID</option>
+              <option value="role">Role</option>
             </select>
           </MDBox>
           <MDInput

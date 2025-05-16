@@ -236,13 +236,6 @@ export default function revenueData() {
     return `${day}/${month}/${year}`;
   };
 
-  const filterRevenue = () => {
-    const filtered = revenues.filter((revenue) => {
-      return revenue[searchType]?.toString().toLowerCase().includes(searchTerm.toLowerCase());
-    });
-    setFilteredRevenue(filtered);
-  };
-
   useEffect(() => {
     loadRevenues();
   }, []);
@@ -282,21 +275,17 @@ export default function revenueData() {
     setRows(formattedRows);
   }, [filteredRevenue]);
 
-  const filterRevenues = () => {
-    const normalizedSearchTerm = searchTerm.toLowerCase().trim();
-
-    const statusMap = {
-      "chưa thanh toán": "unpaid",
-      "đã thanh toán": "paid",
-    };
-
-    const mappedTerm =
-      searchType === "status"
-        ? statusMap[normalizedSearchTerm] || normalizedSearchTerm
-        : normalizedSearchTerm;
+  const filterRevenue = () => {
+    const normalizedSearchTerm = searchTerm.toString().toLowerCase().trim();
 
     const filtered = revenues.filter((rev) => {
-      return rev[searchType]?.toString().toLowerCase().includes(mappedTerm);
+      if (searchType === "status") {
+        return rev.status?.toString().toLowerCase() === normalizedSearchTerm;
+      } else if (searchType === "apartmentId") {
+        return rev.apartmentId?.toString().toLowerCase() === normalizedSearchTerm;
+      } else {
+        return rev[searchType]?.toString().toLowerCase().includes(normalizedSearchTerm);
+      }
     });
 
     setFilteredRevenue(filtered);
