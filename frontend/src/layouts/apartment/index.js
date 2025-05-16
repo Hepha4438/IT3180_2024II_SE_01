@@ -16,6 +16,7 @@ Coded by www.creative-tim.com
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -44,7 +45,7 @@ import MDAvatar from "components/MDAvatar";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import CustomNavbar from "./components/CustomNavbar";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import ProfilesList from "examples/Lists/ProfilesList";
@@ -224,9 +225,21 @@ function Apartment() {
     }
   };
 
+  // Get user role from JWT token
+  let userRole = "USER";
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      userRole = decoded.role || "USER";
+    } catch (e) {
+      userRole = "USER";
+    }
+  }
+
   return (
     <DashboardLayout>
-      <CustomNavbar />
+      <DashboardNavbar />
       <MDBox mb={2} />
       <Header>
         <MDBox mt={5} mb={3}>
@@ -294,9 +307,25 @@ function Apartment() {
                       </MDBox>
                     </MDBox>
                   </MDBox>
-                  <MDButton variant="gradient" color="info" onClick={handleOpenEditForm} fullWidth>
-                    <EditIcon sx={{ mr: 1 }} /> Edit Apartment
-                  </MDButton>
+                  {userRole === "ADMIN" ? (
+                    <MDButton
+                      variant="gradient"
+                      color="info"
+                      onClick={handleOpenEditForm}
+                      fullWidth
+                    >
+                      <EditIcon sx={{ mr: 1 }} /> Edit Apartment
+                    </MDButton>
+                  ) : (
+                    <MDButton
+                      variant="gradient"
+                      color="info"
+                      fullWidth
+                      onClick={handleOpenEditForm} // Allow USER to open the view modal
+                    >
+                      <EditIcon sx={{ mr: 1 }} /> View Apartment
+                    </MDButton>
+                  )}
                 </MDBox>
               </Card>
             </Grid>

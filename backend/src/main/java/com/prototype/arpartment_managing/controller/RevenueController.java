@@ -35,8 +35,21 @@ public class RevenueController {
     // Create revenue - Admin only
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Revenue createRevenue(@RequestBody RevenueDTO revenueDTO) {
-        return revenueService.createRevenue(revenueDTO);
+    public ResponseEntity<String> createRevenue(@RequestBody RevenueDTO revenueDTO) {
+        try {
+            revenueService.createRevenue(revenueDTO);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Revenue created successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Revenue creation failed: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Revenue creation failed due to server error.");
+        }
     }
 
     // Get Revenue for testing - Admin only
@@ -99,10 +112,18 @@ public class RevenueController {
     @PostMapping("/create-with-qr")
     public ResponseEntity<?> createRevenueWithQR(@RequestBody RevenueDTO revenueDTO) {
         try {
-            Map<String, Object> response = revenueService.createRevenueWithQR(revenueDTO);
-            return ResponseEntity.ok(response);
+            revenueService.createRevenueWithQR(revenueDTO);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Revenue created successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Revenue creation failed: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Revenue creation failed due to server error.");
         }
     }
 

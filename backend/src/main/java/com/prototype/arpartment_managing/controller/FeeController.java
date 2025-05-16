@@ -24,14 +24,14 @@ public class FeeController {
 
     // Lấy tất cả các phí
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public Iterable<Fee> getAllFees() {
         return feeService.getAllFees();
     }
 
     // Lấy phí theo type
     @GetMapping("/{type}")
-//    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#id)")
+    //@PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#id)")
     public ResponseEntity<?> getFee(@PathVariable String type) {
         Optional<Fee> fee = feeService.getFeeByType(type);
         // Nếu Fee tồn tại, trả về 200 OK cùng với dữ liệu Fee
@@ -46,9 +46,21 @@ public class FeeController {
     // Create fee - Admin only
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createFee(@RequestBody Fee fee) {
-        feeService.createFee(fee);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Fee created successfully");
+    public ResponseEntity<String> createFee(@RequestBody Fee fee) {
+        try {
+            feeService.createFee(fee);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Fee created successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Fee creation failed: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Fee creation failed due to server error.");
+        }
     }
 
     // Cập nhật phí theo type (chỉ cần sửa pricePerUnit, nhưng vẫn gửi toàn bộ Fee)

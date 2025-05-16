@@ -38,10 +38,10 @@ function AddRevenue() {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
   const feeRates = {
-    water: 5000, // Giá mỗi đơn vị nước
-    electricity: 1230, // Giá mỗi đơn vị điện
-    service: 8000, // Phí dịch vụ cố định
-    donate: 0, // Quyên góp
+    water: 5000, // Price per unit of water
+    electricity: 1230, // Price per unit of electricity
+    service: 8000, // Fixed service fee
+    donate: 0, // Donation
   };
   const [newRevenue, setNewRevenue] = useState({
     type: "",
@@ -50,23 +50,23 @@ function AddRevenue() {
     fee: "",
     used: "",
   });
-  // Xử lý thay đổi thông tin khi người dùng nhập
+  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Cập nhật giá trị nhập vào
+    // Update entered value
     setNewRevenue((prevState) => {
       const updatedState = { ...prevState, [name]: value };
-      // Nếu thay đổi `fee` hoặc `used`, tính lại `total`
+      // If `fee` or `used` changes, recalculate `total`
       if (name === "fee" || name === "used") {
         updatedState.total = (updatedState.fee || 0) * (updatedState.used || 0);
       }
       return updatedState;
     });
   };
-  // xử lý khi chọn khoản thu
+  // Handle type selection
   const handleTypeChange = (event) => {
     const selectedType = event.target.value;
-    const fee = feeRates[selectedType] || 0; // Giá cố định theo loại
+    const fee = feeRates[selectedType] || 0; // Fixed price by type
     setNewRevenue((prevState) => ({
       ...prevState,
       type: selectedType,
@@ -79,34 +79,33 @@ function AddRevenue() {
     setNewRevenue((prevState) => ({
       ...prevState,
       used,
-      total: prevState.fee * used, // Cập nhật tổng tiền tự động
+      total: prevState.fee * used, // Automatically update total
     }));
   };
 
-  // Thêm khoản thu vào danh sách (hoặc gửi dữ liệu đi)
+  // Add revenue to the list (or send data)
   const handleAddRevenue = async () => {
     if (!newRevenue.type || !newRevenue.used) {
-      alert("Vui lòng chọn khoản thu và nhập số đơn vị đã dùng!");
+      alert("Please select a fee type and enter the number of units used!");
       return;
     }
     const payload = {
       type: newRevenue.type,
-      apartmentId: localStorage.getItem("apartmentId").toString(), // Lấy từ localStorage
-      // fee: newRevenue.fee,
+      apartmentId: localStorage.getItem("apartmentId").toString(), // Get from localStorage
       used: newRevenue.used,
-      total: newRevenue.used * newRevenue.fee, // Tính tổng tiền
+      total: newRevenue.used * newRevenue.fee, // Calculate total
       status: "false",
     };
     try {
       console.log(payload);
       const result = await createRevenue(payload);
-      console.log("Thêm khoản thu thành công:", result);
-      alert("Khoản thu đã được thêm!");
-      // Reset form sau khi gửi thành công
+      console.log("Fee added successfully:", result);
+      alert("Fee has been added!");
+      // Reset form after successful submission
       setNewRevenue({ type: "", fee: "", used: "", total: "" });
     } catch (error) {
-      console.error("Lỗi khi thêm khoản thu:", error);
-      alert("Có lỗi xảy ra khi tạo khoản thu. Vui lòng thử lại!");
+      console.error("Error adding fee:", error);
+      alert("An error occurred while creating the fee. Please try again!");
     }
   };
   return (
@@ -115,18 +114,18 @@ function AddRevenue() {
         <MDTypography variant="h6" fontWeight="medium"></MDTypography>
         <MDButton variant="gradient" color="dark" onClick={handleAddRevenue}>
           <Icon sx={{ fontWeight: "bold" }}>add</Icon>
-          &nbsp;Thêm khoản thu
+          &nbsp;Add Fee
         </MDButton>
       </MDBox>
       <MDBox p={2}>
         <Grid container spacing={3}>
-          {/* Trường Nhập Tên Khoản Thu */}
+          {/* Fee Type Selection */}
           <Grid item xs={12} md={12}>
             <TextField
               select
               fullWidth
               name="type"
-              label="Chọn khoản thu"
+              label="Select fee type"
               value={newRevenue.type}
               onChange={handleTypeChange}
               SelectProps={{
@@ -134,17 +133,17 @@ function AddRevenue() {
               }}
             >
               <option value="" disabled></option>
-              <option value="water">Nước</option>
-              <option value="electricity">Điện</option>
-              <option value="service">Dịch vụ</option>
-              <option value="donate">Quyên góp</option>
+              <option value="water">Water</option>
+              <option value="electricity">Electricity</option>
+              <option value="service">Service</option>
+              <option value="donate">Donation</option>
             </TextField>
           </Grid>
-          {/* Trường Nhập căn hộ */}
+          {/* Apartment ID Field */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label={`ID căn hộ: ${localStorage.getItem("apartmentId") || 3333}`}
+              label={`Apartment ID: ${localStorage.getItem("apartmentId") || 3333}`}
               name="apartmentID"
               value={newRevenue.apartmentID}
               onChange={handleInputChange}
@@ -153,11 +152,11 @@ function AddRevenue() {
               disabled
             />
           </Grid>
-          {/* Trường Nhập Tổng Tiền */}
+          {/* Total Amount Field */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Tổng Tiền"
+              label="Total Amount"
               name="total"
               value={newRevenue.total}
               onChange={handleInputChange}
@@ -167,11 +166,11 @@ function AddRevenue() {
               disabled
             />
           </Grid>
-          {/* Trường Nhập Giá Trên Một Đơn Vị */}
+          {/* Price Per Unit Field */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Giá Trên Một Đơn Vị"
+              label="Price Per Unit"
               name="fee"
               value={newRevenue.fee}
               onChange={handleInputChange}
@@ -180,11 +179,11 @@ function AddRevenue() {
               type="number"
             />
           </Grid>
-          {/* Trường Nhập Số Đơn Vị Đã Dùng */}
+          {/* Number of Units Used Field */}
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Số Đơn Vị Đã Dùng"
+              label="Number of Units Used"
               name="used"
               value={newRevenue.used}
               onChange={handleUsedChange}

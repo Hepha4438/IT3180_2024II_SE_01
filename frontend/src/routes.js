@@ -40,18 +40,29 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/resident_management";
 import Billing from "layouts/billing";
 import Apartment from "layouts/apartment";
-import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import PaymentComplete from "layouts/payment";
-import RevenueTable from "layouts/revenue";
-import FeeTable from "layouts/billing_management";
+import BillingTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
 import UserContributionTable from "layouts/contribution/UserContributionTable";
+import { jwtDecode } from "jwt-decode";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
+
+const token = localStorage.getItem("token");
+let userRole = null;
+if (token) {
+  try {
+    const decoded = jwtDecode(token);
+    userRole = decoded.role || null;
+  } catch {
+    userRole = null;
+  }
+}
 
 const routes = [
   {
@@ -68,7 +79,18 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">people</Icon>,
     route: "/manage/resident",
-    component: <Tables />,
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <Tables />
+      ),
+    hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -76,7 +98,18 @@ const routes = [
     key: "fee",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/manage/billing",
-    component: <FeeTable />, // Sử dụng component mới cho bảng Fee
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <BillingTable />
+      ), // Sử dụng component mới cho bảng Fee
+    hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -84,7 +117,18 @@ const routes = [
     key: "notification",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/manage/notification",
-    component: <NotificationTable />, // Sử dụng component mới cho bảng Fee
+    component:
+      userRole === "USER" ? (
+        () => (
+          <div style={{ padding: 32, fontSize: 24 }}>
+            You don&apos;t have permission to access this
+          </div>
+        )
+      ) : (
+        <NotificationTable />
+      ), // Sử dụng component mới cho bảng Fee
+    hidden: userRole === "USER",
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -93,14 +137,7 @@ const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
     component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "Revenue",
-    key: "revenue",
-    icon: <Icon fontSize="small">monetization_on</Icon>,
-    route: "/revenue",
-    component: <RevenueTable />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -110,6 +147,7 @@ const routes = [
     route: "/apartment/:apartmentId",
     // The route is dynamic and will be replaced with the apartment id
     component: <Apartment />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -119,6 +157,7 @@ const routes = [
     route: "/notification/:id",
     // The route is dynamic and will be replaced with the user id
     component: <UserNotificationPage />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -128,6 +167,7 @@ const routes = [
     route: "/profile/:id",
     // The route is dynamic and will be replaced with the user id
     component: <Profile />,
+    hidden: !token,
   },
   {
     type: "collapse",
@@ -136,6 +176,8 @@ const routes = [
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+    // Hide from sidebar if logged in
+    hidden: token,
   },
   {
     key: "payment-complete",

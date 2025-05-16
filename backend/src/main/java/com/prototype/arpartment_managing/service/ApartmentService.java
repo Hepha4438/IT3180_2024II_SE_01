@@ -62,6 +62,10 @@ public class ApartmentService {
         if (apartment.getFloor() <= 0) {
             throw new IllegalArgumentException("Floor must be greater than 0");
         }
+        Optional<Apartment> existingApartmentId = apartmentRepository.findByApartmentId(apartment.getApartmentId());
+        if (existingApartmentId.isPresent()) {
+            throw new IllegalArgumentException("Apartment with number '" + apartment.getApartmentId() + "' already exists");
+        }
         return apartmentRepository.save(apartment);
     }
 
@@ -387,7 +391,7 @@ public class ApartmentService {
             case "parking":
                 return "slot";
             default:
-                return "peace";
+                return "piece";
         }
     }
 }

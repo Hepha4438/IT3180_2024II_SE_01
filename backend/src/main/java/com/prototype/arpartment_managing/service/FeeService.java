@@ -27,6 +27,13 @@ public class FeeService {
         if (fee.getPricePerUnit() <= 0) {
             throw new IllegalArgumentException("Price per unit must be greater than 0");
         }
+
+        // Check if a fee with the same type already exists
+        Optional<Fee> existingFee = feeRepository.findByType(fee.getType());
+        if (existingFee.isPresent()) {
+            throw new IllegalArgumentException("Fee with type '" + fee.getType() + "' already exists");
+        }
+
         return feeRepository.save(fee);
     }
 

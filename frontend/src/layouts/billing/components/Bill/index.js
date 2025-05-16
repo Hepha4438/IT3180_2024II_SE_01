@@ -46,7 +46,7 @@ function Bill({
   const { darkMode } = controller;
 
   const handlePayment = async (bill) => {
-    console.log("dang truyen vao data ------------------", bill);
+    console.log("sending data ------------------", bill);
     try {
       // const revenueDTO = {
       //   id: bill.id,
@@ -54,7 +54,7 @@ function Bill({
       //   type: bill.type.toString(),
       //   total: bill.total,
       //   used: bill.used,
-      //   status: bill.status.toString(), // hoặc bill.status nếu cần
+      //   status: bill.status.toString(),
       //   endDate: bill.endDate,
       //   createDate: bill.createDate,
       // };
@@ -70,12 +70,12 @@ function Bill({
           window.location.reload();
         }, 2000);
       } else {
-        alert("Không thể tải file PDF.");
+        alert("Cannot download PDF file.");
       }
       console.log("bill is: ---------------------", bill);
     } catch (err) {
-      // alert("Không thể tạo QR. Vui lòng thử lại.");
-      alert("Có lỗi khi tạo hóa đơn PDF.");
+      // alert("Could not create QR. Please try again.");
+      alert("Error creating PDF invoice.");
     }
   };
 
@@ -114,13 +114,13 @@ function Bill({
               color={darkMode ? "white" : "dark"}
               onClick={() => handlePayment(bill)}
             >
-              <Icon>payment</Icon>&nbsp;Thanh toán
+              <Icon>payment</Icon>&nbsp;Pay
             </MDButton>
           </MDBox>
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            {/* Nơi thu:&nbsp;&nbsp;&nbsp; */}
+            {/* Collection place:&nbsp;&nbsp;&nbsp; */}
             <MDTypography
               variant="caption"
               fontWeight="medium"
@@ -133,7 +133,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Tổng số tiền phải đóng:&nbsp;&nbsp;&nbsp;
+            Total amount due:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {total}
             </MDTypography>
@@ -141,7 +141,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Giá trên một đơn vị:&nbsp;&nbsp;&nbsp;
+            Price per unit:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {fee}
             </MDTypography>
@@ -149,15 +149,23 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Số đơn vị đã dùng:&nbsp;&nbsp;&nbsp;
+            Number of units used:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {used}
             </MDTypography>
           </MDTypography>
         </MDBox>
+        {/* <MDBox mb={1} lineHeight={0}>
+          <MDTypography variant="caption" color="text">
+            Last payment date:&nbsp;&nbsp;&nbsp;
+            <MDTypography variant="caption" fontWeight="medium" color="error">
+              {paidDate}
+            </MDTypography>
+          </MDTypography>
+        </MDBox> */}
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Ngày cuối cùng phải nộp:&nbsp;&nbsp;&nbsp;
+            Last due date:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {endDate}
             </MDTypography>
@@ -165,7 +173,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            :&nbsp;&nbsp;&nbsp;
+            Status:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {pay}
             </MDTypography>

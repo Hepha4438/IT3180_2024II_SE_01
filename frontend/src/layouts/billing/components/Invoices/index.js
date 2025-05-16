@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
-import TextField from "@mui/material/TextField"; // Thêm ô nhập
+import TextField from "@mui/material/TextField"; // Add input field
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
@@ -11,7 +11,7 @@ import Invoice from "layouts/billing/components/Invoice";
 import { getAllInvoices, getRevenue } from "../../api"; // Import API
 function Invoices() {
   const [invoices, setInvoices] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // State lưu giá trị nhập
+  const [searchTerm, setSearchTerm] = useState(""); // State for input value
   const navigate = useNavigate();
   const userId = localStorage.getItem("apartmentId") || 3333;
   useEffect(() => {
@@ -25,7 +25,7 @@ function Invoices() {
     }
   }, [userId]);
   const filteredInvoices = invoices.filter(
-    (invoice) => invoice.type.toLowerCase().includes(searchTerm.toLowerCase()) // Lọc không phân biệt hoa thường
+    (invoice) => invoice.type.toLowerCase().includes(searchTerm.toLowerCase()) // Case-insensitive filter
   );
 
   const formatCurrency = (amount) => {
@@ -35,14 +35,14 @@ function Invoices() {
     <Card sx={{ height: "100%" }}>
       <MDBox pt={2} px={2} display="flex" justifyContent="space-between" alignItems="center">
         <MDTypography variant="h6" fontWeight="medium">
-          Hóa đơn
+          Invoice
         </MDTypography>
       </MDBox>
 
-      {/* Ô nhập để tìm kiếm */}
+      {/* Input for searching */}
       <MDBox p={2}>
         <TextField
-          label="Tìm kiếm khoản thu"
+          label="Search fee type"
           variant="outlined"
           fullWidth
           size="small"
@@ -64,7 +64,7 @@ function Invoices() {
             ))
           ) : (
             <MDTypography variant="body2" color="textSecondary">
-              Không có hóa đơn nào.
+              No invoices found.
             </MDTypography>
           )}
         </MDBox>

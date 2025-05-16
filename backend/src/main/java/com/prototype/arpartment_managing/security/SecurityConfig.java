@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/apartments", "/apartment/**").hasRole("ADMIN")
 
                         // Admin endpoints
-                        .requestMatchers("/user/register", "/user/create").hasRole("ADMIN")
+                        .requestMatchers("/user/register", "/user/create", "/fees").hasRole("ADMIN")
 
                         // Manager/admin endpoints
                         .requestMatchers("/revenues/**", "/notifications/**").hasAnyRole("ADMIN", "MANAGER")

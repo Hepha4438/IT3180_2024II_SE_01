@@ -140,7 +140,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Tổng số tiền phải đóng:&nbsp;&nbsp;&nbsp;
+            Total amount due :&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {total}
             </MDTypography>
@@ -148,7 +148,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Giá trên một đơn vị:&nbsp;&nbsp;&nbsp;
+            Price per unit :&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {fee}
             </MDTypography>
@@ -156,7 +156,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Số đơn vị đã dùng:&nbsp;&nbsp;&nbsp;
+            Number of units used :&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {used}
             </MDTypography>
@@ -164,7 +164,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Ngày đã nộp:&nbsp;&nbsp;&nbsp;
+            Paid date:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {paidDate}
             </MDTypography>
