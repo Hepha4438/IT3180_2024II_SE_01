@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// prop-types is a library for typechecking of props
+// prop-types is a library for typechecking props
 import PropTypes from "prop-types";
 
 // @mui material components
@@ -24,6 +24,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import { QRcode } from "../../api";
+
 // Material Dashboard 2 React context
 import { useMaterialUIController } from "context";
 
@@ -45,29 +46,17 @@ function Bill({
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
 
-  //   const handlePayment = async (bill) => {
-  //     console.log("dang truyen vao data ------------------", bill);
-  //     try {
-  //       // const revenueDTO = {
-  //       //   id: bill.id,
-  //       //   apartmentId: localStorage.getItem("apartmentId").toString(),
-  //       //   type: bill.type.toString(),
-  //       //   total: bill.total,
-  //       //   used: bill.used,
-  //       //   status: bill.status.toString(), // hoặc bill.status nếu cần
-  //       //   endDate: bill.endDate,
-  //       //   createDate: bill.createDate,
-  //       // };
-  //       // console.log("revenueDTO is: ---------------------", revenueDTO);
-  //       const data = await QRcode(bill.paymentToken);
-  //       // console.log("data is: ---------------------", data);
-  //       setQrCodeData(data.qrCode);
-  //       setOpenQRModal(true);
-  //       console.log("bill is: ---------------------", bill);
-  //     } catch (err) {
-  //       alert("Không thể tạo QR. Vui lòng thử lại.");
-  //     }
-  //   };
+  // const handlePayment = async (bill) => {
+  //   console.log("Sending bill data ------------------", bill);
+  //   try {
+  //     const data = await QRcode(bill.paymentToken);
+  //     setQrCodeData(data.qrCode);
+  //     setOpenQRModal(true);
+  //     console.log("Bill info: ---------------------", bill);
+  //   } catch (err) {
+  //     alert("Failed to generate QR code. Please try again.");
+  //   }
+  // };
 
   return (
     <MDBox
@@ -96,7 +85,7 @@ function Bill({
           <MDBox display="flex" alignItems="center" mt={{ xs: 2, sm: 0 }} ml={{ xs: -1.5, sm: 0 }}>
             {/* <MDBox mr={1}>
               <MDButton variant="text" color="error">
-                <Icon>delete</Icon>&nbsp;delete
+                <Icon>delete</Icon>&nbsp;Delete
               </MDButton>
             </MDBox> */}
             {/* <MDButton
@@ -104,13 +93,12 @@ function Bill({
               color={darkMode ? "white" : "dark"}
               onClick={() => handlePayment(bill)}
             >
-              <Icon>payment</Icon>&nbsp;Thanh toán
+              <Icon>payment</Icon>&nbsp;Pay
             </MDButton> */}
           </MDBox>
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            {/* Nơi thu:&nbsp;&nbsp;&nbsp; */}
             <MDTypography variant="caption" fontWeight="medium" textTransform="capitalize">
               {company}
             </MDTypography>
@@ -118,7 +106,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Tổng số tiền phải đóng:&nbsp;&nbsp;&nbsp;
+            Total amount due:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {total}
             </MDTypography>
@@ -126,7 +114,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Giá trên một đơn vị:&nbsp;&nbsp;&nbsp;
+            Price per unit:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {fee}
             </MDTypography>
@@ -134,7 +122,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Số đơn vị đã dùng:&nbsp;&nbsp;&nbsp;
+            Units used:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {used}
             </MDTypography>
@@ -142,7 +130,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Ngày đã nộp:&nbsp;&nbsp;&nbsp;
+            Paid date:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {paidDate}
             </MDTypography>
@@ -150,7 +138,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            :&nbsp;&nbsp;&nbsp;
+            Status:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {pay}
             </MDTypography>

@@ -107,7 +107,7 @@ function PaidBills() {
   return (
     <MDBox mt={3}>
       <MDTypography variant="h6" gutterBottom color="success" mb={1}>
-        Các khoản đã thanh toán: <strong>{totalUnpaid}</strong> khoản
+        Total paid revenue(s): <strong>{totalUnpaid}</strong>
       </MDTypography>
       <MDBox
         component="ul"
@@ -129,10 +129,10 @@ function PaidBills() {
                 key={bill.id}
                 name={bill.type}
                 total={`${formatCurrency(bill.total)} VND`}
-                fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
+                fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
                 used={`${formatCurrency(bill.used)} đơn vị`}
                 paidDate={`${formatDeadline(bill.paidDate)}`}
-                pay={`${bill.status == "Unpaid" ? "Chưa thanh toán" : "Đã thanh toán"}`}
+                pay={`${bill.status == "Unpaid" ? "Unpaid" : "Paid"}`}
                 noGutter={index === filteredBills.length - 1}
                 bill={bill} // truyền cả bill để dùng khi gửi về backend
                 apartmentId={localStorage.getItem("apartmentId")}

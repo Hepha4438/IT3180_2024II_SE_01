@@ -45,8 +45,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import PaymentComplete from "layouts/payment";
-import RevenueTable from "layouts/revenue";
-import FeeTable from "layouts/billing_management";
+import BillingTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
 
@@ -76,7 +75,7 @@ const routes = [
     key: "fee",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/manage/billing",
-    component: <FeeTable />, // Sử dụng component mới cho bảng Fee
+    component: <BillingTable />, // Sử dụng component mới cho bảng Fee
   },
   {
     type: "collapse",
@@ -93,14 +92,6 @@ const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
     component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "Revenue",
-    key: "revenue",
-    icon: <Icon fontSize="small">monetization_on</Icon>,
-    route: "/revenue",
-    component: <RevenueTable />,
   },
   {
     type: "collapse",

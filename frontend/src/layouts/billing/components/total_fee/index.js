@@ -101,7 +101,7 @@ function BillingInformation() {
                   key={bill.id}
                   name={bill.type}
                   total={`${formatCurrency(bill.total)} VND`}
-                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
+                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
                   used={`${formatCurrency(bill.used)} đơn vị`}
                   noGutter={index === filteredBills.length - 1}
                 />

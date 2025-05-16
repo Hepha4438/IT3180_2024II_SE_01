@@ -39,7 +39,7 @@ import PaidBills from "layouts/billing/components/PaidBills";
 function Billing() {
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute isMini />
+      <DashboardNavbar />
       <MDBox mt={8}>
         <MDBox mb={3}>
           <Grid container spacing={3}>
@@ -91,7 +91,7 @@ function Billing() {
                           sx={{ display: "flex", alignItems: "center" }}
                         >
                           <Icon sx={{ mr: 1 }}>receipt_long</Icon>
-                          Bảng quản lý hóa đơn
+                          Billing Table
                         </MDTypography>
                         {/* <MDTypography variant="button" color="white" opacity={0.8}>
                           Manage all fees
