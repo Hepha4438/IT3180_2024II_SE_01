@@ -11,6 +11,7 @@ import com.prototype.arpartment_managing.repository.FeeRepository;
 import com.prototype.arpartment_managing.repository.RevenueRepository;
 import com.prototype.arpartment_managing.repository.UserRepository;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -145,6 +146,16 @@ public class ApartmentService {
             PdfWriter.getInstance(document, out);
             document.open();
 
+            // Nhúng font Unicode (Times New Roman)
+            BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/Roboto-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font headerFont = new Font(baseFont, 24, Font.BOLD);
+            Font titleFont = new Font(baseFont, 18, Font.BOLD);
+            Font sectionFont = new Font(baseFont, 12, Font.BOLD);
+            Font tableHeaderFont = new Font(baseFont, 10, Font.BOLD);
+            Font tableCellFont = new Font(baseFont, 10);
+            Font totalFont = new Font(baseFont, 14, Font.BOLD);
+            Font smallFont = new Font(baseFont, 8, Font.ITALIC);
+
             // Add logo
             try {
                 String logoPath = "src/main/resources/static/images/logo.png";
@@ -158,21 +169,18 @@ public class ApartmentService {
             }
 
             // Add company name
-            Font headerFont = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD);
             Paragraph header = new Paragraph("BLUEMOON APARTMENT", headerFont);
             header.setAlignment(Element.ALIGN_CENTER);
             header.setSpacingAfter(20);
             document.add(header);
 
             // Add bill title
-            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
             Paragraph title = new Paragraph("BILL STATEMENT", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
 
             // Add bill information section
-            Font sectionFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
             Paragraph billInfo = new Paragraph("Bill Information", sectionFont);
             billInfo.setSpacingBefore(10);
             billInfo.setSpacingAfter(10);
@@ -184,14 +192,12 @@ public class ApartmentService {
             infoTable.setSpacingBefore(10);
             infoTable.setSpacingAfter(10);
 
-            // Get current month and year for the bill
             Calendar calendar = Calendar.getInstance();
             String currentMonth = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
 
-            // Add bill details
-            addTableRow(infoTable, "Bill Number:", "BILL-" + apartmentId + "-" + System.currentTimeMillis());
-            addTableRow(infoTable, "Issue Date:", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-            addTableRow(infoTable, "Bill Period:", currentMonth);
+            addTableRow(infoTable, "Bill Number:", "BILL-" + apartmentId + "-" + System.currentTimeMillis(), tableCellFont, tableCellFont);
+            addTableRow(infoTable, "Issue Date:", new SimpleDateFormat("dd/MM/yyyy").format(new Date()), tableCellFont, tableCellFont);
+            addTableRow(infoTable, "Bill Period:", currentMonth, tableCellFont, tableCellFont);
             document.add(infoTable);
 
             // Add apartment information section
@@ -206,12 +212,12 @@ public class ApartmentService {
             apartmentTable.setSpacingBefore(10);
             apartmentTable.setSpacingAfter(10);
 
-            addTableRow(apartmentTable, "Apartment ID:", apartment.getApartmentId());
-            addTableRow(apartmentTable, "Floor:", String.valueOf(apartment.getFloor()));
-            addTableRow(apartmentTable, "Area:", apartment.getArea() + " m²");
-            addTableRow(apartmentTable, "Type:", apartment.getApartmentType());
-            addTableRow(apartmentTable, "Owner:", apartment.getOwner() != null ? apartment.getOwner() : "Not assigned");
-            addTableRow(apartmentTable, "Number of Occupants:", String.valueOf(apartment.getOccupants()));
+            addTableRow(apartmentTable, "Apartment ID:", apartment.getApartmentId(), tableCellFont, tableCellFont);
+            addTableRow(apartmentTable, "Floor:", String.valueOf(apartment.getFloor()), tableCellFont, tableCellFont);
+            addTableRow(apartmentTable, "Area:", apartment.getArea() + " m²", tableCellFont, tableCellFont);
+            addTableRow(apartmentTable, "Type:", apartment.getApartmentType(), tableCellFont, tableCellFont);
+            addTableRow(apartmentTable, "Owner:", apartment.getOwner() != null ? apartment.getOwner() : "Not assigned", tableCellFont, tableCellFont);
+            addTableRow(apartmentTable, "Number of Occupants:", String.valueOf(apartment.getOccupants()), tableCellFont, tableCellFont);
             document.add(apartmentTable);
 
             // Add revenue details section
@@ -231,12 +237,10 @@ public class ApartmentService {
             revenueTable.setWidths(columnWidths);
 
             // Add table headers
-            Font tableHeaderFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
             addTableHeader(revenueTable, "Type", tableHeaderFont);
             addTableHeader(revenueTable, "Usage", tableHeaderFont);
             addTableHeader(revenueTable, "Unit", tableHeaderFont);
             addTableHeader(revenueTable, "Unit Price", tableHeaderFont);
-//            addTableHeader(revenueTable, "Status", tableHeaderFont);
             addTableHeader(revenueTable, "Total", tableHeaderFont);
 
             // Add revenue rows
@@ -257,32 +261,27 @@ public class ApartmentService {
                 String unit = getUnitForType(revenue.getType());
 
                 // Create cells with center alignment
-                PdfPCell typeCell = new PdfPCell(new Phrase(revenue.getType(), new Font(Font.FontFamily.HELVETICA, 10)));
+                PdfPCell typeCell = new PdfPCell(new Phrase(revenue.getType(), tableCellFont));
                 typeCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 typeCell.setPadding(5);
                 revenueTable.addCell(typeCell);
 
-                PdfPCell usageCell = new PdfPCell(new Phrase(String.format("%.2f", revenue.getUsed()), new Font(Font.FontFamily.HELVETICA, 10)));
+                PdfPCell usageCell = new PdfPCell(new Phrase(String.format("%.2f", revenue.getUsed()), tableCellFont));
                 usageCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 usageCell.setPadding(5);
                 revenueTable.addCell(usageCell);
 
-                PdfPCell unitCell = new PdfPCell(new Phrase(unit, new Font(Font.FontFamily.HELVETICA, 10)));
+                PdfPCell unitCell = new PdfPCell(new Phrase(unit, tableCellFont));
                 unitCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 unitCell.setPadding(5);
                 revenueTable.addCell(unitCell);
 
-                PdfPCell priceCell = new PdfPCell(new Phrase(String.format("%.2f VND", fee.getPricePerUnit()), new Font(Font.FontFamily.HELVETICA, 10)));
+                PdfPCell priceCell = new PdfPCell(new Phrase(String.format("%.2f VND", fee.getPricePerUnit()), tableCellFont));
                 priceCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 priceCell.setPadding(5);
                 revenueTable.addCell(priceCell);
 
-//                PdfPCell statusCell = new PdfPCell(new Phrase(revenue.getStatus(), new Font(Font.FontFamily.HELVETICA, 10)));
-//                statusCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                statusCell.setPadding(5);
-//                revenueTable.addCell(statusCell);
-
-                PdfPCell totalCell = new PdfPCell(new Phrase(String.format("%.2f VND", amount), new Font(Font.FontFamily.HELVETICA, 10)));
+                PdfPCell totalCell = new PdfPCell(new Phrase(String.format("%.2f VND", amount), tableCellFont));
                 totalCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 totalCell.setPadding(5);
                 revenueTable.addCell(totalCell);
@@ -290,21 +289,20 @@ public class ApartmentService {
             document.add(revenueTable);
 
             // Add total amount with right alignment
-            Paragraph total = new Paragraph(String.format("Total Amount Due: %.2f VND", totalAmount),
-                new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+            Paragraph total = new Paragraph(String.format("Total Amount Due: %.2f VND", totalAmount), totalFont);
             total.setAlignment(Element.ALIGN_RIGHT);
             total.setSpacingBefore(20);
             document.add(total);
             // QR code
             if(id != null && Objects.equals(isQR, "True")){
                 try {
-                    String qrBase64 = qrCodeService.generateQRCodeImage(apartment.getRevenueById(id).getPaymentToken()); // Replace with real token
+                    String qrBase64 = qrCodeService.generateQRCodeImage(apartment.getRevenueById(id).getPaymentToken());
                     byte[] qrBytes = Base64.getDecoder().decode(qrBase64);
                     Image qrImage = Image.getInstance(qrBytes);
-                    qrImage.scaleToFit(100, 100); // Kích thước mong muốn
+                    qrImage.scaleToFit(100, 100);
                     qrImage.setAlignment(Element.ALIGN_CENTER);
 
-                    Paragraph qrLabel = new Paragraph("Scan to Pay", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD));
+                    Paragraph qrLabel = new Paragraph("Scan to Pay", tableCellFont);
                     qrLabel.setAlignment(Element.ALIGN_CENTER);
                     qrLabel.setSpacingBefore(20);
 
@@ -325,7 +323,7 @@ public class ApartmentService {
                 "Please make your payment before the due date to avoid late payment charges.\n" +
                 "Payment can be made through our online portal or at the management office.\n" +
                 "For any queries, please contact the management office.",
-                new Font(Font.FontFamily.HELVETICA, 10)
+                tableCellFont
             );
             instructions.setSpacingBefore(10);
             document.add(instructions);
@@ -333,7 +331,7 @@ public class ApartmentService {
             // Add footer
             Paragraph footer = new Paragraph(
                 "This is a computer-generated document. No signature is required.",
-                new Font(Font.FontFamily.HELVETICA, 8, Font.ITALIC)
+                smallFont
             );
             footer.setAlignment(Element.ALIGN_CENTER);
             footer.setSpacingBefore(30);
@@ -354,11 +352,8 @@ public class ApartmentService {
         }
     }
 
-
-    private void addTableRow(PdfPTable table, String label, String value) {
-        Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
-        Font valueFont = new Font(Font.FontFamily.HELVETICA, 10);
-
+    // Sửa hàm addTableRow để nhận font
+    private void addTableRow(PdfPTable table, String label, String value, Font labelFont, Font valueFont) {
         PdfPCell labelCell = new PdfPCell(new Phrase(label, labelFont));
         labelCell.setBorder(Rectangle.NO_BORDER);
         labelCell.setPadding(5);
