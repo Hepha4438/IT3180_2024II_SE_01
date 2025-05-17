@@ -131,6 +131,7 @@ export default function data() {
       });
       setShowAlert(false);
       loadFees(); // reload lại danh sách
+      handleEditClose();
     } catch (error) {
       console.log(error.response);
       const message = error.response?.data?.error || "Undefined error";
