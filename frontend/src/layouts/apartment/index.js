@@ -204,6 +204,7 @@ function Apartment() {
       console.log("Removing resident with citizen ID:", citizenId);
       const response = await axios.put(
         `http://localhost:7070/apartment/remove-resident/${apartment.apartmentId}?citizenIdentification=${citizenId}`,
+        null,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       console.log("Remove resident response:", response);
@@ -394,28 +395,7 @@ function Apartment() {
                       <MDTypography variant="h5" fontWeight="medium">
                         Residents ({apartment.residents?.length || 0})
                       </MDTypography>
-                      <MDBox>
-                        {apartment.residents?.length > 0}
-                        <MDButton
-                          variant="contained"
-                          color="success"
-                          size="small"
-                          onClick={handleOpenAddResidentForm}
-                          startIcon={<PersonAddIcon />}
-                          sx={{ mr: 1 }}
-                        >
-                          Add Resident
-                        </MDButton>
-                        <MDButton
-                          variant="contained"
-                          color="error"
-                          size="small"
-                          onClick={handleOpenRemoveResidentForm}
-                          startIcon={<PersonAddIcon />}
-                        >
-                          Delete Resident
-                        </MDButton>
-                      </MDBox>
+                      <MDBox>{apartment.residents?.length > 0}</MDBox>
                     </MDBox>
                     {apartment.residents?.length > 0 ? (
                       <Grid container spacing={2}>
