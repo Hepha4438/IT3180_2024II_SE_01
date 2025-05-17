@@ -67,8 +67,17 @@ public class FeeController {
     @PutMapping("/{type}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateFee(@PathVariable String type, @RequestBody Fee fee) {
-        Fee updated = feeService.updateFee(fee, type);
-        return ResponseEntity.ok(updated);
+        try {
+            Fee updated = feeService.updateFee(fee, type);
+            return ResponseEntity.ok(updated);
+        } catch (FeeInUseException e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Update failed: " + e.getMessage()));
+        }
     }
 
     // Xóa phí theo type

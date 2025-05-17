@@ -109,7 +109,7 @@ function PaidBills() {
         p={0}
         m={0}
         sx={{
-          maxHeight: "400px", // Max height, adjustable
+          maxHeight: "815px", // Max height, adjustable
           overflowY: "auto", // Allow vertical scroll
           pr: 1, // Right padding to avoid content being hidden by scrollbar
         }}

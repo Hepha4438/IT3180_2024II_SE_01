@@ -86,17 +86,17 @@ function ContributionInformation() {
   const formatDeadline = (dateString) => {
     // Kiểm tra xem chuỗi đầu vào có hợp lệ không
     if (!dateString || typeof dateString !== "string") {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
     // Tách phần ngày tháng năm (bỏ phần thời gian sau 'T')
     const datePart = dateString.split("T")[0];
     if (!datePart) {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
     // Tách năm, tháng, ngày từ chuỗi
     const [year, month, day] = datePart.split("-");
     if (!year || !month || !day) {
-      return "Vô hạn thời gian";
+      return "Unlimited";
     }
     // Loại bỏ số 0 đứng đầu ở tháng và ngày
     const formattedMonth = parseInt(month, 10).toString();
@@ -107,21 +107,21 @@ function ContributionInformation() {
 
   return (
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
-      <MDBox pt={3} px={2}>
+      <MDBox pt={3} px={2} mb={2}>
         <MDTypography variant="h6" fontWeight="medium">
-          Thông tin chi tiết từng khoản thanh toán
+          Unpaid Contributons
         </MDTypography>
       </MDBox>
 
       {/* Ô tìm kiếm */}
-      <MDBox display="flex" gap={2} alignItems="center" mb={2}>
+      <MDBox display="flex" alignItems="center" mb={2}>
         {/* Select tiêu chí tìm kiếm */}
         <MDBox mr={1}>
           <select
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
             style={{
-              height: "42px",
+              height: "38px",
               padding: "0 15px",
               borderRadius: "8px",
               borderColor: "#d2d6da",
@@ -135,7 +135,7 @@ function ContributionInformation() {
               },
             }}
           >
-            <option value="type">Tên khoản thanh toán</option>
+            <option value="type">Fee Name</option>
             {/* <option value="endDate">Hạn thanh toán</option> */}
           </select>
         </MDBox>
@@ -143,12 +143,8 @@ function ContributionInformation() {
         {/* Input tìm kiếm */}
         <FormControl fullWidth variant="outlined" size="small">
           <OutlinedInput
-            placeholder={`Nhập ${
-              searchField === "type"
-                ? "tên khoản thu"
-                : searchField === "status"
-                ? "trạng thái"
-                : "hạn thanh toán"
+            placeholder={`Enter ${
+              searchField === "type" ? "fee name" : searchField === "status" ? "status" : "due date"
             }...`}
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
@@ -157,16 +153,17 @@ function ContributionInformation() {
       </MDBox>
       <MDBox pt={1} px={2}>
         <MDTypography variant="subtitle2" color="black" mb={1}>
-          Số lượng khoản đóng góp chưa thanh toán: <strong>{totalUnpaid}</strong> khoản
+          Number of unpaid contributions: <strong>{totalUnpaid}</strong>
         </MDTypography>
       </MDBox>
       <MDBox
         sx={{
-          maxHeight: "500px", // Giới hạn chiều cao
+          maxHeight: "510px", // Giới hạn chiều cao
           overflowY: "auto", // Thêm thanh cuộn
           border: "1px solid #ddd",
           borderRadius: "8px",
-          padding: "8px",
+          padding: "0 12px",
+          paddingBottom: "16px",
         }}
       >
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
@@ -178,10 +175,10 @@ function ContributionInformation() {
                   key={bill.id}
                   name={bill.type}
                   total={`${formatCurrency(bill.total)} VND`}
-                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Đang cập nhật..."}
+                  fee={fee ? `${formatCurrency(fee.pricePerUnit)} VND` : "Updating..."}
                   used={`${formatCurrency(bill.used)} đơn vị`}
                   endDate={`${formatDeadline(bill.endDate)}`}
-                  pay={`${bill.status == "Unpaid" ? "Chưa thanh toán" : "Đã thanh toán"}`}
+                  pay={`${bill.status == "Unpaid" ? "Unpaid" : "Paid"}`}
                   noGutter={index === filteredBills.length - 1}
                   bill={bill} // truyền cả bill để dùng khi gửi về backend
                   apartmentId={localStorage.getItem("apartmentId")}
@@ -192,8 +189,11 @@ function ContributionInformation() {
               );
             })
           ) : (
-            <MDTypography variant="body2" color="textSecondary">
-              Không có kết quả phù hợp.
+            <MDTypography
+              variant="caption"
+              sx={{ color: "red", display: "flex", paddingTop: "16px" }}
+            >
+              No matching results.
             </MDTypography>
           )}
         </MDBox>

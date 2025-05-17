@@ -47,7 +47,7 @@ import PaymentComplete from "layouts/payment";
 import BillingTable from "layouts/billing_management";
 import NotificationTable from "layouts/notification_management";
 import UserNotificationPage from "layouts/notification";
-import UserContributionTable from "layouts/contribution/UserContributionTable";
+import UserContributionTable from "layouts/contribution";
 import { jwtDecode } from "jwt-decode";
 
 // @mui icons

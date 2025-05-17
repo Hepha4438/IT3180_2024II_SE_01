@@ -5,6 +5,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
+import MDAlert from "components/MDAlert";
 
 export default function data() {
   const [fees, setFees] = useState([]);
@@ -12,6 +13,8 @@ export default function data() {
   const [selectedFee, setSelectedFee] = useState(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const [newFee, setNewFee] = useState({
     type: "",
@@ -73,7 +76,14 @@ export default function data() {
       loadFees();
       setDeleteDialogOpen(false);
     } catch (error) {
-      console.error("Failed to delete fee", error);
+      const errorData = error.response?.data;
+
+      const errorMessage = [errorData?.error, errorData?.message, errorData?.action]
+        .filter(Boolean)
+        .join(" - ");
+
+      setErrorMessage(errorMessage || "Xóa không thành công");
+      setShowAlert(true);
     }
   };
 
@@ -104,6 +114,7 @@ export default function data() {
   };
 
   const handleEditClick = (fee) => {
+    setShowAlert(false);
     setEditFee(fee);
     setEditDialogOpen(true);
   };
@@ -118,10 +129,13 @@ export default function data() {
       await axios.put(`http://localhost:7070/fees/${editFee.type}`, editFee, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      loadFees();
-      handleEditClose();
+      setShowAlert(false);
+      loadFees(); // reload lại danh sách
     } catch (error) {
-      console.error("Failed to update fee", error);
+      console.log(error.response);
+      const message = error.response?.data?.error || "Undefined error";
+      setErrorMessage(message);
+      setShowAlert(true);
     }
   };
 
@@ -132,6 +146,12 @@ export default function data() {
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (editFee.pricePerUnit?.toString().toLowerCase() === "1") {
+      alert("You can't edit the contribution");
+      return;
+    }
+
     setEditFee((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -283,6 +303,18 @@ export default function data() {
             <MDTypography>
               Are you sure you want to delete fee &quot;{selectedFee?.type}&quot;?
             </MDTypography>
+            {showAlert && (
+              <MDAlert
+                color="error"
+                dismissible
+                onClose={() => setShowAlert(false)}
+                sx={{ mt: 2 }} // pt = paddingTop, 2 tương đương 16px nếu dùng hệ thống spacing của MUI
+              >
+                <MDTypography variant="body2" color="inherit">
+                  {errorMessage}
+                </MDTypography>
+              </MDAlert>
+            )}
           </DialogContent>
           <DialogActions>
             <MDButton onClick={handleDeleteCancel} color="dark">
@@ -339,6 +371,13 @@ export default function data() {
                 fullWidth
               />
             </MDBox>
+            {showAlert && (
+              <MDAlert color="error" dismissible onClose={() => setShowAlert(false)} sx={{ mt: 2 }}>
+                <MDTypography variant="body2" color="inherit">
+                  {errorMessage}
+                </MDTypography>
+              </MDAlert>
+            )}
           </DialogContent>
           <DialogActions>
             <MDButton onClick={handleEditClose} color="dark">

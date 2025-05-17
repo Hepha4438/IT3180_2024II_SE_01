@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Icon from "@mui/material/Icon";
 import MDTypography from "components/MDTypography";
 import MDBox from "components/MDBox";
-import { getAllInvoices, getContribution } from "../billing/api";
+import { getAllInvoices, getContribution } from "../../billing/api";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
@@ -164,7 +164,7 @@ export default function userContributionData({ apartmentId }) {
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create Revenue", error);
-      alert("Tạo mới không thành công");
+      alert("Failed to create Revenue");
     }
   };
 
@@ -173,7 +173,6 @@ export default function userContributionData({ apartmentId }) {
   }, [editRevenue]);
 
   const handleEditClick = (item) => {
-    console.log("click nay");
     console.log("Bill Data:", item);
     setEditRevenue(item);
     console.log("Edit Revenue:", editRevenue);
@@ -210,16 +209,22 @@ export default function userContributionData({ apartmentId }) {
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (editRevenue.status?.toString().toLowerCase() === "paid") {
+      alert("You can't edit the paid one");
+      return;
+    }
+
     setEditRevenue((prev) => ({ ...prev, [name]: value }));
   };
 
   const columns = [
     { Header: "ID", accessor: "id", width: "5%" },
-    { Header: "Loại đóng góp", accessor: "type", width: "20%" },
-    { Header: "Tổng tiền", accessor: "total", width: "15%", align: "center" },
-    { Header: "Trạng thái", accessor: "status", width: "15%", align: "center" },
+    { Header: "Type", accessor: "type", width: "20%" },
+    { Header: "Total", accessor: "total", width: "15%", align: "center" },
+    { Header: "Status", accessor: "status", width: "15%", align: "center" },
     // { Header: "ID căn hộ", accessor: "apartmentId", width: "15%", align: "center" },
-    { Header: "Hành động", accessor: "action", width: "20%", align: "center" },
+    { Header: "Action", accessor: "action", width: "20%", align: "center" },
   ];
 
   // ham chuyen dinh dang ngay VD 2025-05-30T23:59:00 sang dd/MM/yyyy
@@ -316,7 +321,7 @@ export default function userContributionData({ apartmentId }) {
             },
           }}
         >
-          <Icon>add</Icon> Thêm khoản đóng góp
+          <Icon>add</Icon> CREATE CONTRIBUTION
         </MDButton>
         <MDBox mr={1}>
           <select
@@ -337,9 +342,9 @@ export default function userContributionData({ apartmentId }) {
               },
             }}
           >
-            <option value="type">Loại</option>
+            <option value="type">Type</option>
             {/* <option value="apartmentId">ID căn hộ</option> */}
-            <option value="status">Trạng thái</option>
+            <option value="status">Status</option>
           </select>
         </MDBox>
         <MDInput
@@ -391,7 +396,7 @@ export default function userContributionData({ apartmentId }) {
       </MDBox>
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onClose={handleEditClose}>
-        <DialogTitle>Chỉnh sửa thông tin khoản đóng góp</DialogTitle>
+        <DialogTitle>Edit Contribution</DialogTitle>
         <DialogContent>
           <MDBox display="flex" flexDirection="column" gap={2} mt={1}>
             <MDInput
@@ -409,7 +414,7 @@ export default function userContributionData({ apartmentId }) {
               fullWidth
             /> */}
             <MDInput
-              label="Số tiền"
+              label="Contribution amount"
               name="used"
               value={editRevenue.used}
               onChange={handleEditInputChange}
@@ -424,7 +429,7 @@ export default function userContributionData({ apartmentId }) {
               fullWidth
             /> */}
             <MDInput
-              label="ID căn hộ"
+              label="Apartment Id"
               name="apartmentId"
               value={editRevenue.apartmentId}
               disabled
@@ -443,11 +448,9 @@ export default function userContributionData({ apartmentId }) {
       </Dialog>
       {/* Delete Dialog */}
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Xóa khoản phí</DialogTitle>
+        <DialogTitle>Delete Contribution</DialogTitle>
         <DialogContent>
-          <MDTypography>
-            Bạn có muốn chắc xóa khoản phí &quot;{selectedRevenue?.type}&quot; này không?
-          </MDTypography>
+          <MDTypography> Are you sure to delete &quot;{selectedRevenue?.type}&quot ?;</MDTypography>
         </DialogContent>
         <DialogActions>
           <MDButton onClick={handleDeleteCancel} color="dark">
@@ -475,7 +478,7 @@ export default function userContributionData({ apartmentId }) {
         <DialogContent>
           <MDBox display="flex" flexDirection="row" gap={2}>
             <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
-              <DialogTitle>Tạo mới khoản đóng góp</DialogTitle>
+              <DialogTitle>Create Contribition</DialogTitle>
               <MDBox fullWidth label="Type">
                 <select
                   name="type"
@@ -507,7 +510,7 @@ export default function userContributionData({ apartmentId }) {
                 fullWidth
               /> */}
               <MDInput
-                label="Số tiền"
+                label="Contribution amount"
                 name="used"
                 value={newRevenue.used}
                 onChange={handleInputChange}

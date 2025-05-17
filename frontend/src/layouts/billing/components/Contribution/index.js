@@ -70,12 +70,12 @@ function Contribution({
           window.location.reload();
         }, 2000);
       } else {
-        alert("Không thể tải file PDF.");
+        alert("Cannot download PDF file.");
       }
       console.log("bill is: ---------------------", bill);
     } catch (err) {
       // alert("Không thể tạo QR. Vui lòng thử lại.");
-      alert("Có lỗi khi tạo hóa đơn PDF.");
+      alert("Error creating PDF invoice.");
     }
   };
 
@@ -114,7 +114,7 @@ function Contribution({
               color={darkMode ? "white" : "dark"}
               onClick={() => handlePayment(bill)}
             >
-              <Icon>payment</Icon>&nbsp;Thanh toán
+              <Icon>payment</Icon>&nbsp;PAY
             </MDButton>
           </MDBox>
         </MDBox>
@@ -133,7 +133,7 @@ function Contribution({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Tổng số tiền quyên góp:&nbsp;&nbsp;&nbsp;
+            Contribution amount:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {total}
             </MDTypography>
@@ -165,7 +165,7 @@ function Contribution({
         </MDBox> */}
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            :&nbsp;&nbsp;&nbsp;
+            Status:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {pay}
             </MDTypography>

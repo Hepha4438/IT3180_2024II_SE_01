@@ -140,7 +140,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Total amount due :&nbsp;&nbsp;&nbsp;
+            Total amount:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {total}
             </MDTypography>
@@ -148,7 +148,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Price per unit :&nbsp;&nbsp;&nbsp;
+            Price per unit:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {fee}
             </MDTypography>
@@ -156,7 +156,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Number of units used :&nbsp;&nbsp;&nbsp;
+            Number of units used:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {used}
             </MDTypography>

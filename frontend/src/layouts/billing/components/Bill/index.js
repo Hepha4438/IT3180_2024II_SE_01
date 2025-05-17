@@ -133,7 +133,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            Total amount due:&nbsp;&nbsp;&nbsp;
+            Total amount:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium" color="error">
               {total}
             </MDTypography>

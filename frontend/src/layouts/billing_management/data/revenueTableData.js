@@ -215,6 +215,12 @@ export default function revenueData() {
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (editRevenue.status?.toString().toLowerCase() === "paid") {
+      alert("You can't edit the paid one");
+      return;
+    }
+
     setEditRevenue((prev) => ({ ...prev, [name]: value }));
   };
 

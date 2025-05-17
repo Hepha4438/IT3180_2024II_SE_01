@@ -99,7 +99,7 @@ function Billing() {
                         </MDTypography> */}
                       </MDBox>
                     </MDBox>
-                    <MDBox px={2} py={3}>
+                    <MDBox px={2} py={1}>
                       <BillingInformation />
                       <ContributionInformation />
                       {/* <PaidBills /> */}

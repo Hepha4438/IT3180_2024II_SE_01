@@ -1,7 +1,7 @@
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
-import userContributionData from "./userContributionData";
+import userContributionData from "layouts/contribution/data/userContributionData";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
@@ -39,10 +39,10 @@ function UserContributionTable() {
                     sx={{ display: "flex", alignItems: "center" }}
                   >
                     <Icon sx={{ mr: 1 }}>receipt_long</Icon>
-                    Bảng đóng góp (Contribution)
+                    Contribution Table
                   </MDTypography>
                   <MDTypography variant="button" color="white" opacity={0.8}>
-                    Quản lý đóng góp của cư dân
+                    Manage your contributions
                   </MDTypography>
                 </MDBox>
               </MDBox>

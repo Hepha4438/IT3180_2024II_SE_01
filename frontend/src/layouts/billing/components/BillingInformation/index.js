@@ -105,6 +105,12 @@ function BillingInformation() {
 
   return (
     <Card id="billing-information" sx={{ boxShadow: "none", border: "none" }}>
+      <MDBox pt={3} px={2} mb={2}>
+        <MDTypography variant="h6" fontWeight="medium">
+          Unpaid Revenues
+        </MDTypography>
+      </MDBox>
+
       {/* Search box */}
       <MDBox display="flex" alignItems="center" mb={2}>
         {/* Select search criteria */}
@@ -145,16 +151,17 @@ function BillingInformation() {
       </MDBox>
       <MDBox pt={1} px={2}>
         <MDTypography variant="subtitle2" color="black" mb={1}>
-          Number of unpaid fees: <strong>{totalUnpaid}</strong>
+          Number of unpaid revenues: <strong>{totalUnpaid}</strong>
         </MDTypography>
       </MDBox>
       <MDBox
         sx={{
           maxHeight: "510px",
           overflowY: "auto",
-          border: "0px solid #ddd",
-          borderRadius: "2px",
-          padding: "0 0px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          padding: "0 12px",
+          paddingBottom: "16px",
         }}
       >
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
@@ -180,7 +187,10 @@ function BillingInformation() {
               );
             })
           ) : (
-            <MDTypography variant="body2" color="textSecondary">
+            <MDTypography
+              variant="caption"
+              sx={{ color: "red", display: "flex", paddingTop: "16px" }}
+            >
               No matching results.
             </MDTypography>
           )}
