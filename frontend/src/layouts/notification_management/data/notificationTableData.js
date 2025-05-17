@@ -428,16 +428,16 @@ export default function data() {
             <MDBox display="flex" flexDirection="row" gap={2}>
               {/* LEFT: FORM INPUTS */}
               <MDBox display="flex" flexDirection="column" gap={2} flex={1}>
-                <DialogTitle>Tạo mới thông báo</DialogTitle>
+                <DialogTitle>New Notification</DialogTitle>
                 <MDInput
-                  label="Tiêu đề"
+                  label="Title"
                   name="title"
                   value={newNotification.title}
                   onChange={handleInputChange}
                   fullWidth
                 />
                 <MDInput
-                  label="Nội dung thông báo"
+                  label="Content"
                   name="content"
                   value={newNotification.content}
                   onChange={handleInputChange}

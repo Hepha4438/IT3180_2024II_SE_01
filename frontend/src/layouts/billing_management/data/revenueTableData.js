@@ -169,7 +169,7 @@ export default function revenueData() {
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create Revenue", error);
-      alert("Tạo mới không thành công");
+      alert("Failed to create Revenu");
     }
   };
 
