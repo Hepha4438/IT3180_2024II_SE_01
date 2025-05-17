@@ -102,7 +102,7 @@ function Bill({
           color={darkMode ? "white" : "dark"}
           onClick={() => handleViewPDF(bill)}
         >
-          <Icon>description</Icon>&nbsp;Xem hóa đơn
+          <Icon>description</Icon>&nbsp;Bill
         </MDButton>
         <MDBox
           display="flex"
