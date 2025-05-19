@@ -54,7 +54,6 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<NotificationDTO> getByUser(@PathVariable Long userId) {
         return notificationService.getNotificationsByUser(userId);
     }
