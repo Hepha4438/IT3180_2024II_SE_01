@@ -127,10 +127,12 @@ export default function revenueData() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      alert("Delete revenue successfully!");
       setDeleteDialogOpen(false);
       loadRevenues();
     } catch (err) {
       console.error("Failed to delete revenue", err);
+      alert("Failed to delete revenue. Please try again!");
     }
   };
 
@@ -172,11 +174,12 @@ export default function revenueData() {
           }
         );
       }
+      alert("Create revenue successfully!");
       loadRevenues();
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create Revenue", error);
-      alert("Failed to create Revenu");
+      alert("Failed to create revenue. Please try again!");
     }
   };
 
@@ -212,10 +215,12 @@ export default function revenueData() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      alert("Edit revenue successfully!");
       loadRevenues();
       handleEditClose();
     } catch (error) {
       console.error("Failed to update revenue", error);
+      alert("Failed to edit revenue. Please try again!");
     }
   };
 

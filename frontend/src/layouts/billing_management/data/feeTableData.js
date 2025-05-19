@@ -76,6 +76,7 @@ export default function data() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      alert("Delete fee successfully!");
       loadFees();
       setDeleteDialogOpen(false);
     } catch (error) {
@@ -85,7 +86,7 @@ export default function data() {
         .filter(Boolean)
         .join(" - ");
 
-      setErrorMessage(errorMessage || "Xóa không thành công");
+      setErrorMessage(errorMessage || "Failed to delete fee. Please try again!");
       setShowAlert(true);
     }
   };
@@ -109,10 +110,12 @@ export default function data() {
       await axios.post("https://it3180-2024ii-se-01-final.onrender.com/fees", newFee, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create fee successfully!");
       loadFees();
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create fee", error);
+      alert("Failed to create fee. Please try again!");
     }
   };
 
@@ -136,6 +139,7 @@ export default function data() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      alert("Edit fee successfully!");
       setShowAlert(false);
       loadFees(); // reload lại danh sách
       handleEditClose();

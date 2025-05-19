@@ -33,7 +33,7 @@ export default function PaymentComplete() {
         setPaymentData(response.data); // Lưu thông tin giao dịch
         setLoading(false);
       } catch (err) {
-        setError("Không thể hoàn tất giao dịch. Vui lòng thử lại.");
+        setError("Transaction could not be completed. Please try again.");
         setLoading(false);
       }
     };
@@ -87,10 +87,10 @@ export default function PaymentComplete() {
                         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                       }
                     );
-                    alert("Giao dịch thành công!");
+                    alert("Transaction successful!");
                     navigate("/billing"); // Chuyển hướng sau khi thanh toán thành công
                   } catch (err) {
-                    alert("Có lỗi trong quá trình thanh toán.");
+                    alert("There was an error during payment!");
                   }
                 }}
               >

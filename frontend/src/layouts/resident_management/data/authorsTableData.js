@@ -190,12 +190,13 @@ export default function data() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      alert("Delete user successfully!");
       loadUsers(); // Reload the users list after successful deletion
-      setDeleteDialogOpen(false);
-      setSelectedUser(null);
+      handleDeleteCancel();
     } catch (error) {
       console.error("Error deleting user:", error);
       setErrorMessage("Failed to delete user. Please try again.");
+      handleDeleteCancel();
     }
   };
 
@@ -235,11 +236,13 @@ export default function data() {
       await axios.post("https://it3180-2024ii-se-01-final.onrender.com/user/create", newUser, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create user successfully!");
       loadUsers(); // Reload the users list after successful creation
       handleCreateClose();
     } catch (error) {
       console.error("Error creating user:", error);
       setErrorMessage("Failed to create user. Please try again.");
+      handleCreateClose();
     }
   };
 
