@@ -73,6 +73,7 @@ export default function data() {
       await axios.delete(`http://localhost:7070/fees/${selectedFee.type}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Delete fee successfully!");
       loadFees();
       setDeleteDialogOpen(false);
     } catch (error) {
@@ -106,10 +107,12 @@ export default function data() {
       await axios.post("http://localhost:7070/fees", newFee, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create fee successfully!");
       loadFees();
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create fee", error);
+      alert("Failed to create fee. Please try again!");
     }
   };
 
@@ -129,6 +132,7 @@ export default function data() {
       await axios.put(`http://localhost:7070/fees/${editFee.type}`, editFee, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Edit fee successfully!");
       setShowAlert(false);
       loadFees(); // reload lại danh sách
       handleEditClose();

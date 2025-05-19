@@ -184,6 +184,10 @@ export default function data() {
   const [newApartment, setNewApartment] = useState({
     apartmentId: "",
     floor: 1,
+    area: 100,
+    owner: "",
+    apartmentType: "",
+    occupants: 0,
   });
 
   useEffect(() => {
@@ -242,6 +246,10 @@ export default function data() {
     setNewApartment({
       apartmentId: "",
       floor: 1,
+      area: 100,
+      owner: "",
+      apartmentType: "",
+      occupants: 0,
     });
   };
 
@@ -249,7 +257,7 @@ export default function data() {
     const { name, value } = e.target;
     setNewApartment((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "floor" || name === "area" ? Number(value) : value,
     }));
   };
 
@@ -258,11 +266,13 @@ export default function data() {
       await axios.post("http://localhost:7070/apartment", newApartment, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create apartment successfully!");
       loadApartments(); // Reload the apartments list after successful creation
       handleCreateClose();
     } catch (error) {
       console.error("Error creating apartment:", error);
       setErrorMessage("Failed to create apartment. Please try again.");
+      handleCreateClose();
     }
   };
 

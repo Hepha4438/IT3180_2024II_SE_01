@@ -44,9 +44,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints - authentication and swagger
-                        .requestMatchers("/user/login", "/user/setup", "/user/forget-password", "/user/change-password", "/user/verify-otp", "/apartment/**", "/fees/**").permitAll()
+                        .requestMatchers("/user/login", "/user/setup", "/user/forget-password", "/user/change-password", "/user/verify-otp", "/apartment/**", "/fees/**", "/notifications/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/apartments", "/apartment/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/apartments").hasRole("ADMIN")
 
                         // Admin endpoints
                         .requestMatchers("/user/register", "/user/create", "/fees").hasRole("ADMIN")

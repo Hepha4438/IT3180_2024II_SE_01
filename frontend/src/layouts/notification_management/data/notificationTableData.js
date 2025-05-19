@@ -101,10 +101,12 @@ export default function data() {
       await axios.delete(`http://localhost:7070/notifications/${selectedNotification.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Delete notification successfully!");
       loadNotifications();
       setDeleteDialogOpen(false);
     } catch (error) {
       console.error("Failed to delete notification", error);
+      alert("Failed to delete notification. Please try again!");
     }
   };
 
@@ -138,10 +140,12 @@ export default function data() {
       await axios.post("http://localhost:7070/notifications", converted, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create notification successfully!");
       loadNotifications();
       setCreateDialogOpen(false);
     } catch (error) {
       console.error("Failed to create notification", error);
+      alert("Failed to create notification. Please try again!");
     }
   };
 
@@ -164,10 +168,12 @@ export default function data() {
       await axios.put(`http://localhost:7070/notifications/${editNotification.id}`, converted, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Edit notification successfully!");
       loadNotifications();
       setEditDialogOpen(false);
     } catch (error) {
       console.error("Failed to update notification", error);
+      alert("Failed to edit notification. Please try again!");
     }
   };
 

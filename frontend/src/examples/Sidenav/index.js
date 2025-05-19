@@ -64,7 +64,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   const handleLogout = () => {
     if (localStorage.getItem("token") === null) {
-      alert("Bạn chưa đăng nhập!");
+      alert("You are not logged in!");
       return;
     } else {
       localStorage.removeItem("token");
@@ -72,7 +72,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       localStorage.removeItem("role");
       localStorage.removeItem("id");
 
-      alert("Đăng xuất thành công!");
+      alert("Logout successful!");
 
       navigate("/home");
       window.location.reload();
