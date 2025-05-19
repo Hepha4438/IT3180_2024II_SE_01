@@ -57,7 +57,7 @@ export default function userContributionData({ apartmentId }) {
   const [searchType, setSearchType] = useState("type"); // Default search by 'type'
   const loadFees = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/fees", {
+      const response = await axios.get("https://it3180-2024ii-se-01-final.onrender.com/fees", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const filteredFees = response.data.filter((fee) => {
@@ -116,9 +116,12 @@ export default function userContributionData({ apartmentId }) {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:7070/revenue/delete?id=${selectedRevenue.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `https://it3180-2024ii-se-01-final.onrender.com/revenue/delete?id=${selectedRevenue.id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setDeleteDialogOpen(false);
       loadRevenues();
     } catch (err) {
@@ -157,9 +160,13 @@ export default function userContributionData({ apartmentId }) {
         apartmentId: apartmentId,
       };
       console.log("newconvertedRevenue:", converted);
-      await axios.post("http://localhost:7070/revenue/create-with-qr", converted, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.post(
+        "https://it3180-2024ii-se-01-final.onrender.com/revenue/create-with-qr",
+        converted,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadRevenues();
       handleCreateClose();
     } catch (error) {
@@ -192,9 +199,13 @@ export default function userContributionData({ apartmentId }) {
 
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`http://localhost:7070/revenue/${editRevenue.id}`, editRevenue, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.put(
+        `https://it3180-2024ii-se-01-final.onrender.com/revenue/${editRevenue.id}`,
+        editRevenue,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadRevenues();
       handleEditClose();
     } catch (error) {

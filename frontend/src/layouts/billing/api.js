@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:7070"; // URL
+const API_URL = "https://it3180-2024ii-se-01-final.onrender.com"; // URL
 
 // lấy danh sách hóa đơn
 export const getAllInvoices = async () => {
@@ -139,9 +139,12 @@ export const QRcode = async (paymentToken) => {
   console.log("paymentToken trong api.js la : ---------------------", paymentToken);
   try {
     // Gửi yêu cầu PUT đến server với id trong URL
-    const response = await axios.get(`http://localhost:7070/revenue/getQRCode/${paymentToken}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const response = await axios.get(
+      `https://it3180-2024ii-se-01-final.onrender.com/revenue/getQRCode/${paymentToken}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     console.log("response la: ---------------------", response.data);
     return response.data; // Dữ liệu trả về là đối tượng Revenue đã được cập nhật
     // console.log("Dữ liệu thanh toán:", data);
@@ -157,7 +160,7 @@ export const createPDF = async (apartmentId, id, isQR) => {
   try {
     // Gửi yêu cầu PUT đến server với id trong URL
     const response = await axios.get(
-      `http://localhost:7070/apartment/${apartmentId}/bill?id=${id}&isQR=${isQR}`,
+      `https://it3180-2024ii-se-01-final.onrender.com/apartment/${apartmentId}/bill?id=${id}&isQR=${isQR}`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         responseType: "blob", // Đặt responseType là blob để nhận dữ liệu nhị phân

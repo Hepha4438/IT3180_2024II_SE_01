@@ -25,11 +25,14 @@ function ForgetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:7070/user/forget-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: form.username, email: form.email }),
-      });
+      const response = await fetch(
+        "https://it3180-2024ii-se-01-final.onrender.com/user/forget-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: form.username, email: form.email }),
+        }
+      );
 
       const result = await response.json();
 
@@ -50,7 +53,9 @@ function ForgetPassword() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:7070/user/verify-otp?otp=${form.otp}`);
+      const response = await fetch(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/verify-otp?otp=${form.otp}`
+      );
 
       if (!response.ok) {
         const errorResult = await response.json().catch(() => null);
@@ -85,11 +90,14 @@ function ForgetPassword() {
         password: newPassword,
       };
 
-      const response = await fetch(`http://localhost:7070/user/change-password`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateData),
-      });
+      const response = await fetch(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/change-password`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updateData),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json().catch(() => null);

@@ -31,7 +31,7 @@ export default function data() {
 
   const loadFees = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/fees", {
+      const response = await axios.get("https://it3180-2024ii-se-01-final.onrender.com/fees", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setFees(response.data);
@@ -70,9 +70,12 @@ export default function data() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:7070/fees/${selectedFee.type}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `https://it3180-2024ii-se-01-final.onrender.com/fees/${selectedFee.type}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadFees();
       setDeleteDialogOpen(false);
     } catch (error) {
@@ -103,7 +106,7 @@ export default function data() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("http://localhost:7070/fees", newFee, {
+      await axios.post("https://it3180-2024ii-se-01-final.onrender.com/fees", newFee, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       loadFees();
@@ -126,9 +129,13 @@ export default function data() {
 
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`http://localhost:7070/fees/${editFee.type}`, editFee, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.put(
+        `https://it3180-2024ii-se-01-final.onrender.com/fees/${editFee.type}`,
+        editFee,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setShowAlert(false);
       loadFees(); // reload lại danh sách
       handleEditClose();

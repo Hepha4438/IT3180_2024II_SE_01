@@ -56,9 +56,12 @@ function ChangePassword({ onCancel, onSave }) {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`http://localhost:7070/user/profile/${userId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const result = await axios.get(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/profile/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setFormData({
         id: result.data.id,
         fullName: result.data.fullName || "",
@@ -97,9 +100,13 @@ function ChangePassword({ onCancel, onSave }) {
       setPasswordError("");
     }
     try {
-      await axios.put(`http://localhost:7070/user/${formData.id}`, formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.put(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/${formData.id}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       alert("Password updated successfully!");
       if (onSave) {
         onSave();

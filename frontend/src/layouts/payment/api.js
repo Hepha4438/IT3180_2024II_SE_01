@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:7070"; // URL
+const API_URL = "https://it3180-2024ii-se-01-final.onrender.com"; // URL
 export const fetchPaymentInfo = async () => {
   try {
     const response = await axios.get(`${API_URL}/payment/complete`, {

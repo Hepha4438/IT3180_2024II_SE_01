@@ -42,9 +42,12 @@ const UserNotificationPage = () => {
   const handleConfirmDelete = async () => {
     if (!selectedNotification) return;
     try {
-      await axios.delete(`http://localhost:7070/notifications/${selectedNotification.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `https://it3180-2024ii-se-01-final.onrender.com/notifications/${selectedNotification.id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setNotifications((prev) => prev.filter((noti) => noti.id !== selectedNotification.id));
     } catch (error) {
       console.error("Failed to delete notification", error);
@@ -57,9 +60,12 @@ const UserNotificationPage = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get(`http://localhost:7070/notifications/user/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+        const res = await axios.get(
+          `https://it3180-2024ii-se-01-final.onrender.com/notifications/user/${id}`,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          }
+        );
         setNotifications(res.data);
       } catch (error) {
         console.error("Failed to fetch notifications", error);

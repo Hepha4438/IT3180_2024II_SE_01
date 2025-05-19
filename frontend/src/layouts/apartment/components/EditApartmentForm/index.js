@@ -42,7 +42,7 @@ function EditApartmentForm({ onCancel, onSave }) {
         return;
       }
       const result = await axios.get(
-        `http://localhost:7070/apartment?apartmentId=${apartmentIdToUse}`,
+        `https://it3180-2024ii-se-01-final.onrender.com/apartment?apartmentId=${apartmentIdToUse}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setFormData({
@@ -71,7 +71,7 @@ function EditApartmentForm({ onCancel, onSave }) {
     try {
       console.log("Updating apartment with data:", formData);
       const response = await axios.put(
-        `http://localhost:7070/apartment/${formData.apartmentId}`,
+        `https://it3180-2024ii-se-01-final.onrender.com/apartment/${formData.apartmentId}`,
         formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );

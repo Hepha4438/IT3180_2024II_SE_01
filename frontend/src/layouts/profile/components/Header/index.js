@@ -63,9 +63,12 @@ function Header({ children }) {
         console.error("No user ID available");
         return;
       }
-      const result = await axios.get(`http://localhost:7070/user/profile/${userId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const result = await axios.get(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/profile/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setUser(result.data);
     } catch (error) {
       console.error("Error loading user profile:", error);

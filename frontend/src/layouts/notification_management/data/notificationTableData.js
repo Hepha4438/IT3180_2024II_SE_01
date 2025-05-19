@@ -40,7 +40,7 @@ export default function data() {
 
   const loadNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:7070/notifications", {
+      const res = await axios.get("https://it3180-2024ii-se-01-final.onrender.com/notifications", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const converted = res.data.map((notification) => ({
@@ -98,9 +98,12 @@ export default function data() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:7070/notifications/${selectedNotification.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `https://it3180-2024ii-se-01-final.onrender.com/notifications/${selectedNotification.id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadNotifications();
       setDeleteDialogOpen(false);
     } catch (error) {
@@ -135,7 +138,7 @@ export default function data() {
         ...newNotification,
         usernames: Array.from(newNotification.usernames),
       };
-      await axios.post("http://localhost:7070/notifications", converted, {
+      await axios.post("https://it3180-2024ii-se-01-final.onrender.com/notifications", converted, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       loadNotifications();
@@ -161,9 +164,13 @@ export default function data() {
         ...editNotification,
         usernames: Array.from(editNotification.usernames),
       };
-      await axios.put(`http://localhost:7070/notifications/${editNotification.id}`, converted, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.put(
+        `https://it3180-2024ii-se-01-final.onrender.com/notifications/${editNotification.id}`,
+        converted,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadNotifications();
       setEditDialogOpen(false);
     } catch (error) {

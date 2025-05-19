@@ -192,9 +192,12 @@ export default function data() {
 
   const loadApartments = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/apartment/all", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        "https://it3180-2024ii-se-01-final.onrender.com/apartment/all",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setApartments(response.data);
       setErrorMessage("");
     } catch (error) {
@@ -255,7 +258,7 @@ export default function data() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("http://localhost:7070/apartment", newApartment, {
+      await axios.post("https://it3180-2024ii-se-01-final.onrender.com/apartment", newApartment, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       loadApartments(); // Reload the apartments list after successful creation

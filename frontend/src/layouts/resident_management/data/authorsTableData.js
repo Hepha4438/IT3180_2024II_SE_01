@@ -138,7 +138,7 @@ export default function data() {
 
   const loadUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:7070/user/all", {
+      const response = await axios.get("https://it3180-2024ii-se-01-final.onrender.com/user/all", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUsers(response.data);
@@ -184,9 +184,12 @@ export default function data() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:7070/user/delete?id=${selectedUser.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `https://it3180-2024ii-se-01-final.onrender.com/user/delete?id=${selectedUser.id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       loadUsers(); // Reload the users list after successful deletion
       setDeleteDialogOpen(false);
       setSelectedUser(null);
@@ -229,7 +232,7 @@ export default function data() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("http://localhost:7070/user/create", newUser, {
+      await axios.post("https://it3180-2024ii-se-01-final.onrender.com/user/create", newUser, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       loadUsers(); // Reload the users list after successful creation

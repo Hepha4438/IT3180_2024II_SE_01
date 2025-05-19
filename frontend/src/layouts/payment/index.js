@@ -23,7 +23,7 @@ export default function PaymentComplete() {
     setLayout(dispatch, "page");
   }, [dispatch]);
   useEffect(() => {
-    const API_URL = "http://localhost:7070";
+    const API_URL = "https://it3180-2024ii-se-01-final.onrender.com";
     const fetchPaymentDetails = async () => {
       try {
         console.log("paymentToken trong paymentComplete là: ", paymentToken);
@@ -82,7 +82,7 @@ export default function PaymentComplete() {
                 onClick={async () => {
                   try {
                     const response = await axios.get(
-                      `http://localhost:7070/revenue/complete-payment/${paymentToken}`,
+                      `https://it3180-2024ii-se-01-final.onrender.com/revenue/complete-payment/${paymentToken}`,
                       {
                         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                       }
