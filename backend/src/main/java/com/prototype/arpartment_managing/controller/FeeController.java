@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/fees")
-@CrossOrigin("http://localhost:5000")
+@CrossOrigin("http://localhost:3000")
 public class FeeController {
 
     @Autowired

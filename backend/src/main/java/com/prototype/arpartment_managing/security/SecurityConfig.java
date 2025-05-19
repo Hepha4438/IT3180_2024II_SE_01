@@ -46,7 +46,7 @@ public class SecurityConfig {
                         // Public endpoints - authentication and swagger
                         .requestMatchers("/user/login", "/user/setup", "/user/forget-password", "/user/change-password", "/user/verify-otp", "/apartment/**", "/fees/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/apartments", "/apartment/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/apartments").hasRole("ADMIN")
 
                         // Admin endpoints
                         .requestMatchers("/user/register", "/user/create", "/fees").hasRole("ADMIN")
@@ -93,7 +93,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));
