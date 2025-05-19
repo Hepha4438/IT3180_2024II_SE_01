@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://it3180-2024ii-se-01-final.vercel.app/")
 @RequestMapping("/revenue")
 public class RevenueController {
     @Autowired
