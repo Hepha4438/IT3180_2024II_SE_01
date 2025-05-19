@@ -455,7 +455,7 @@ export default function userContributionData({ apartmentId }) {
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
         <DialogTitle>Delete Contribution</DialogTitle>
         <DialogContent>
-          <MDTypography>Are you sure to delete "{selectedRevenue?.type}"?</MDTypography>
+          <MDTypography>Are you sure to delete &quot;{selectedRevenue?.type}&quot;?</MDTypography>
         </DialogContent>
         <DialogActions>
           <MDButton onClick={handleDeleteCancel} color="dark">
