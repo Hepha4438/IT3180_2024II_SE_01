@@ -21,6 +21,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.itextpdf.text.Image;
+
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -147,7 +151,15 @@ public class ApartmentService {
             document.open();
 
             // Nhúng font Unicode (Times New Roman)
-            BaseFont baseFont = BaseFont.createFont("backend/src/main/resources/fonts/Roboto-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            InputStream fontStream = getClass().getResourceAsStream("/fonts/Roboto-Regular.ttf");
+            BaseFont baseFont = BaseFont.createFont(
+                    "Roboto-Regular.ttf",
+                    BaseFont.IDENTITY_H,
+                    BaseFont.EMBEDDED,
+                    true,
+                    fontStream.readAllBytes(),  // Java 9+
+                    null
+            );
             Font headerFont = new Font(baseFont, 24, Font.BOLD);
             Font titleFont = new Font(baseFont, 18, Font.BOLD);
             Font sectionFont = new Font(baseFont, 12, Font.BOLD);
@@ -158,8 +170,11 @@ public class ApartmentService {
 
             // Add logo
             try {
-                String logoPath = "backend/src/main/resources/static/images/logo.png";
-                Image logo = Image.getInstance(logoPath);
+                InputStream inputStream = getClass().getResourceAsStream("/static/images/logo.png");
+                if (inputStream == null) {
+                    throw new Exception("Logo image not found in resources");
+                }
+                Image logo = Image.getInstance(IOUtils.toByteArray(inputStream));
                 logo.scaleToFit(100, 100); // Adjust size as needed
                 logo.setAlignment(Element.ALIGN_CENTER);
                 document.add(logo);
