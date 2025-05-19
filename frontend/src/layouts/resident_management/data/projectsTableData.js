@@ -184,6 +184,10 @@ export default function data() {
   const [newApartment, setNewApartment] = useState({
     apartmentId: "",
     floor: 1,
+    area: 100,
+    owner: "",
+    apartmentType: "",
+    occupants: 0,
   });
 
   useEffect(() => {
@@ -249,7 +253,7 @@ export default function data() {
     const { name, value } = e.target;
     setNewApartment((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "floor" || name === "area" ? Number(value) : value,
     }));
   };
 
@@ -358,6 +362,32 @@ export default function data() {
                 onChange={handleInputChange}
                 fullWidth
                 required
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                label="Area"
+                name="area"
+                type="number"
+                value={newApartment.area}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                label="ApartmentType"
+                name="apartmentType"
+                value={newApartment.apartmentType}
+                onChange={handleInputChange}
+                fullWidth
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                label="Owner"
+                name="owner"
+                value={newApartment.owner}
+                onChange={handleInputChange}
+                fullWidth
                 inputProps={{ min: 1 }}
               />
             </MDBox>
