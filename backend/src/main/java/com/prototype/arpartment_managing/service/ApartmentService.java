@@ -147,7 +147,7 @@ public class ApartmentService {
             document.open();
 
             // Nhúng font Unicode (Times New Roman)
-            BaseFont baseFont = BaseFont.createFont("src/main/resources/fonts/Roboto-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont baseFont = BaseFont.createFont("backend/src/main/resources/fonts/Roboto-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font headerFont = new Font(baseFont, 24, Font.BOLD);
             Font titleFont = new Font(baseFont, 18, Font.BOLD);
             Font sectionFont = new Font(baseFont, 12, Font.BOLD);
@@ -158,7 +158,7 @@ public class ApartmentService {
 
             // Add logo
             try {
-                String logoPath = "src/main/resources/static/images/logo.png";
+                String logoPath = "backend/src/main/resources/static/images/logo.png";
                 Image logo = Image.getInstance(logoPath);
                 logo.scaleToFit(100, 100); // Adjust size as needed
                 logo.setAlignment(Element.ALIGN_CENTER);

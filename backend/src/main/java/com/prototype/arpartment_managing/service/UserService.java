@@ -5,8 +5,10 @@ import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundExceptionUsername;
 import com.prototype.arpartment_managing.model.Apartment;
+import com.prototype.arpartment_managing.model.Notification;
 import com.prototype.arpartment_managing.model.User;
 import com.prototype.arpartment_managing.repository.ApartmentRepository;
+import com.prototype.arpartment_managing.repository.NotificationRepository;
 import com.prototype.arpartment_managing.token.JwtUtil;
 import com.prototype.arpartment_managing.token.TokenBlackList;
 import jakarta.transaction.Transactional;
@@ -28,6 +30,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -164,6 +168,14 @@ public class UserService {
     public void deleteUser(Long id){
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException(id));
+
+        // 1. Gỡ liên kết giữa User và Notifications
+        Set<Notification> notifications = user.getNotifications();
+        for (Notification notification : notifications) {
+            notification.getUsers().remove(user);
+            notificationRepository.save(notification);
+        }
+        user.getNotifications().clear(); // gỡ liên kết từ phía user
 
         Apartment apartment = user.getApartment();
         if(apartment != null && apartment.getResidents() != null){

@@ -53,10 +53,10 @@ function Bill({
         window.location.href = pdfUrl;
         // window.open(url, "_self"); // mở trong cùng tab
       } else {
-        alert("Không thể tải hóa đơn.");
+        alert("Unable to load the bill!");
       }
     } catch (error) {
-      alert("Lỗi khi tải hóa đơn.");
+      alert("Error while loading the bill!");
     }
   };
 
@@ -172,7 +172,7 @@ function Bill({
         </MDBox>
         <MDBox mb={1} lineHeight={0}>
           <MDTypography variant="caption" color="text">
-            :&nbsp;&nbsp;&nbsp;
+            Status:&nbsp;&nbsp;&nbsp;
             <MDTypography variant="caption" fontWeight="medium">
               {pay}
             </MDTypography>

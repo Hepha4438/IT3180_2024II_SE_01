@@ -187,12 +187,13 @@ export default function data() {
       await axios.delete(`http://localhost:7070/user/delete?id=${selectedUser.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Delete user successfully!");
       loadUsers(); // Reload the users list after successful deletion
-      setDeleteDialogOpen(false);
-      setSelectedUser(null);
+      handleDeleteCancel();
     } catch (error) {
       console.error("Error deleting user:", error);
       setErrorMessage("Failed to delete user. Please try again.");
+      handleDeleteCancel();
     }
   };
 
@@ -232,11 +233,13 @@ export default function data() {
       await axios.post("http://localhost:7070/user/create", newUser, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create user successfully!");
       loadUsers(); // Reload the users list after successful creation
       handleCreateClose();
     } catch (error) {
       console.error("Error creating user:", error);
       setErrorMessage("Failed to create user. Please try again.");
+      handleCreateClose();
     }
   };
 

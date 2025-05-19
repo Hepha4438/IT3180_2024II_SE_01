@@ -119,10 +119,12 @@ export default function userContributionData({ apartmentId }) {
       await axios.delete(`http://localhost:7070/revenue/delete?id=${selectedRevenue.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Delete contribution successfully!");
       setDeleteDialogOpen(false);
       loadRevenues();
     } catch (err) {
       console.error("Failed to delete revenue", err);
+      alert("Failed to delete notification. Please try again!");
     }
   };
 
@@ -160,11 +162,12 @@ export default function userContributionData({ apartmentId }) {
       await axios.post("http://localhost:7070/revenue/create-with-qr", converted, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Create contribution successfully!");
       loadRevenues();
       handleCreateClose();
     } catch (error) {
       console.error("Failed to create Revenue", error);
-      alert("Failed to create Revenue");
+      alert("Failed to create revenue. Please try again!");
     }
   };
 
@@ -195,10 +198,12 @@ export default function userContributionData({ apartmentId }) {
       await axios.put(`http://localhost:7070/revenue/${editRevenue.id}`, editRevenue, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      alert("Edit contribution successfully!");
       loadRevenues();
       handleEditClose();
     } catch (error) {
       console.error("Failed to update revenue", error);
+      alert("Failed to edit contribution. Please try again!");
     }
   };
 
