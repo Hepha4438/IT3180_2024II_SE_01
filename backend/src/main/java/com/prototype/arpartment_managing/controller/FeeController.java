@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/fees")
-@CrossOrigin("https://it3180-2024ii-se-01-final.vercel.app/")
+@CrossOrigin("https://it3180-2024ii-se01-webapp.vercel.app/")
 public class FeeController {
 
     @Autowired

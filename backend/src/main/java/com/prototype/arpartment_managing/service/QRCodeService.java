@@ -15,7 +15,7 @@ import java.util.Base64;
 @Service
 public class QRCodeService {
 
-    @Value("${app.frontend-url:https://it3180-2024ii-se-01-final.vercel.app/}")
+    @Value("${app.frontend-url:https://it3180-2024ii-se01-webapp.vercel.app/}")
     private String baseUrl;
 
     public String generateQRCodeImage(String paymentToken) throws WriterException, IOException {

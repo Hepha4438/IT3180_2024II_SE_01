@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update FE">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update BE web">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/ApartmentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/controller/FeeController.java" afterDir="false" />
@@ -31,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="main_web" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -67,12 +65,12 @@
     "Application.ArpartmentManagingApplication.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main__web",
+    "git-widget-placeholder": "main__webapp",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/HIEU/Downloads/IT3180_2024II_SE_01/frontend/src/layouts/notification_management/data",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.4218391",
     "settings.editor.selected.configurable": "inlay.hints"
   }
 }]]></component>
@@ -283,7 +281,31 @@
       <option name="project" value="LOCAL" />
       <updated>1747613429266</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Update BE web">
+      <option name="closed" value="true" />
+      <created>1747617718435</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1747617718435</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Update BE web">
+      <option name="closed" value="true" />
+      <created>1747619425555</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1747619425555</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Update BE web">
+      <option name="closed" value="true" />
+      <created>1747620976617</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1747620976618</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -297,7 +319,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="main_webapp" />
                       </list>
                     </value>
                   </entry>
@@ -320,6 +342,7 @@
     <MESSAGE value="Update thêm về Revenue" />
     <MESSAGE value="Xoá isRead của Notification" />
     <MESSAGE value="Update FE" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update FE" />
+    <MESSAGE value="Update BE web" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update BE web" />
   </component>
 </project>

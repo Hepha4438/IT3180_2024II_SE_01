@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/notifications")
-@CrossOrigin("https://it3180-2024ii-se-01-final.vercel.app/")
+@CrossOrigin("https://it3180-2024ii-se01-webapp.vercel.app/")
 public class NotificationController {
 
     @Autowired

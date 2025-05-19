@@ -38,11 +38,11 @@ Lúc này, backend của ứng dụng sẽ bắt đầu chạy và phục vụ d
 1. Mở thư mục `frontend` trong IDE hoặc bất kỳ text editor nào hỗ trợ JavaScript như Visual Studio Code.
 2. Mở terminal trong thư mục `frontend` và chạy lần lượt các lệnh sau để cài đặt các package cần thiết:
    Sau khi quá trình cài đặt hoàn tất, bạn chạy lệnh sau để khởi động frontend: npm start
-3. Trình duyệt web của bạn sẽ tự động mở ra một cửa sổ với địa chỉ `https://it3180-2024ii-se-01-final.vercel.app/`. Đây là nơi bạn có thể truy cập và sử dụng ứng dụng.
+3. Trình duyệt web của bạn sẽ tự động mở ra một cửa sổ với địa chỉ `https://it3180-2024ii-se01-webapp.vercel.app/`. Đây là nơi bạn có thể truy cập và sử dụng ứng dụng.
 
 ### Kiểm tra hoạt động của ứng dụng
 
-Khi bạn đã chạy thành công cả backend và frontend, bạn có thể mở trình duyệt và truy cập vào địa chỉ `https://it3180-2024ii-se-01-final.vercel.app/`. Nếu mọi thứ đã được cấu hình đúng, bạn sẽ thấy giao diện chính của ứng dụng.
+Khi bạn đã chạy thành công cả backend và frontend, bạn có thể mở trình duyệt và truy cập vào địa chỉ `https://it3180-2024ii-se01-webapp.vercel.app/`. Nếu mọi thứ đã được cấu hình đúng, bạn sẽ thấy giao diện chính của ứng dụng.
 
 ## Đăng nhập vào ứng dụng
 
