@@ -75,12 +75,6 @@ export default function data() {
   }, [selectedUsernames]);
 
   useEffect(() => {
-    if (editDialogOpen && editNotification.usernames instanceof Set) {
-      setSelectedUsernames(editNotification.usernames);
-    }
-  }, [editDialogOpen, editNotification.usernames]);
-
-  useEffect(() => {
     setEditNotification((prev) => ({
       ...prev,
       usernames: new Set(selectedUsernames),
@@ -151,6 +145,7 @@ export default function data() {
 
   const handleEditClick = (notification) => {
     setEditNotification(notification);
+    setSelectedUsernames(notification.usernames);
     setEditDialogOpen(true);
   };
 
@@ -577,7 +572,7 @@ export default function data() {
                 <MDInput
                   label="Selected Usernames"
                   name="usernames"
-                  value={[...newNotification.usernames].join(", ")}
+                  value={[...selectedUsernames].join(", ")}
                   disabled
                   fullWidth
                 />
