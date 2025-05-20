@@ -138,6 +138,12 @@ export default function userContributionData({ apartmentId }) {
 
   const handleCreateClick = () => {
     loadFees();
+    setNewRevenue({
+      type: feeTypes[0] || "",
+      status: "Unpaid",
+      used: "",
+      endDate: "",
+    });
     setCreateDialogOpen(true);
   };
 
@@ -420,6 +426,7 @@ export default function userContributionData({ apartmentId }) {
               name="type"
               value={editRevenue.type}
               onChange={handleEditInputChange}
+              disabled
               fullWidth
             />
             {/* <MDInput
