@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update BE web">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/ApartmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/ApartmentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/prototype/arpartment_managing/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/examples/Sidenav/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/examples/Sidenav/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/billing/components/Paid/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/billing/components/Paid/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/billing_management/data/feeTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/billing_management/data/feeTableData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/billing_management/data/revenueTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/billing_management/data/revenueTableData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/contribution/data/userContributionData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/contribution/data/userContributionData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/notificationTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/notification_management/data/notificationTableData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/payment/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/payment/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/resident_management/data/authorsTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/resident_management/data/authorsTableData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layouts/resident_management/data/projectsTableData.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layouts/resident_management/data/projectsTableData.js" afterDir="false" />
-    </list>
+    <list default="true" id="2a16e60b-0639-4bb0-a8ea-0f80a6af4f6a" name="Changes" comment="Update BE web" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
