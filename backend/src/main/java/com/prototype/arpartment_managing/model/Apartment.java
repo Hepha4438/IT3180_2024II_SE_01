@@ -1,7 +1,6 @@
 package com.prototype.arpartment_managing.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -33,13 +32,11 @@ public class Apartment {
 
     @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
             fetch = FetchType.LAZY, orphanRemoval = false)
-    @JsonManagedReference
     @JsonIgnore
     private List<User> residents;
 
     @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
             fetch = FetchType.LAZY, orphanRemoval = false)
-    @JsonManagedReference
     @JsonIgnore
     private List<Revenue> revenues;
 

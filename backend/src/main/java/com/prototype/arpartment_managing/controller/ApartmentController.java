@@ -1,5 +1,6 @@
 package com.prototype.arpartment_managing.controller;
 
+import com.prototype.arpartment_managing.dto.UserDTO;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Apartment;
@@ -49,6 +50,23 @@ public class ApartmentController {
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     ResponseEntity<?> getApartment(@RequestParam(required = false) String apartmentId) {
         return apartmentService.getApartmentById(apartmentId);
+    }
+
+    // Get all residents of an apartment - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}/residents")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> getResidents(@PathVariable String apartmentId) {
+        try {
+            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            List<UserDTO> residents = apartmentService.getResidentsByApartmentId(apartmentId);
+            return ResponseEntity.ok(residents);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving residents: " + e.getMessage());
+        }
     }
 
     // Delete apartment - Admin only

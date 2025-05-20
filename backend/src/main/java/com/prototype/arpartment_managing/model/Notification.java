@@ -1,7 +1,7 @@
 package com.prototype.arpartment_managing.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class Notification {
         joinColumns = @JoinColumn(name = "notification_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonManagedReference
+    @JsonIgnore
     private Set<User> users;
 //    private Set<User> users = new HashSet<>();
 
