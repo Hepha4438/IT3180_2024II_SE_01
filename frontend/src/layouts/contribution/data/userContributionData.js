@@ -135,6 +135,12 @@ export default function userContributionData({ apartmentId }) {
 
   const handleCreateClick = () => {
     loadFees();
+    setNewRevenue({
+      type: feeTypes[0] || "",
+      status: "Unpaid",
+      used: "",
+      endDate: "",
+    });
     setCreateDialogOpen(true);
   };
 
@@ -280,7 +286,16 @@ export default function userContributionData({ apartmentId }) {
       // apartmentId: bill.apartmentId,
       action: (
         <MDBox display="flex" gap={1}>
-          <MDButton variant="text" color="info" onClick={() => handleEditClick(bill)}>
+          <MDButton
+            variant="text"
+            color="info"
+            onClick={() => handleEditClick(bill)}
+            disabled={bill.status?.toLowerCase().trim() === "paid"}
+            sx={{
+              opacity: bill.status?.toLowerCase().trim() === "paid" ? 0.5 : 1,
+              pointerEvents: bill.status?.toLowerCase().trim() === "paid" ? "none" : "auto",
+            }}
+          >
             <Icon>edit</Icon>
           </MDButton>
           <MDButton variant="text" color="error" onClick={() => handleDeleteClick(bill)}>
@@ -409,6 +424,7 @@ export default function userContributionData({ apartmentId }) {
               name="type"
               value={editRevenue.type}
               onChange={handleEditInputChange}
+              disabled
               fullWidth
             />
             {/* <MDInput
