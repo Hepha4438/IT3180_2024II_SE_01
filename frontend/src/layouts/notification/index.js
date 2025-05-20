@@ -42,9 +42,14 @@ const UserNotificationPage = () => {
   const handleConfirmDelete = async () => {
     if (!selectedNotification) return;
     try {
-      await axios.delete(`http://localhost:7070/notifications/${selectedNotification.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      await axios.delete(
+        `http://localhost:7070/notifications/user/${selectedNotification.id}/${localStorage.getItem(
+          "id"
+        )}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setNotifications((prev) => prev.filter((noti) => noti.id !== selectedNotification.id));
     } catch (error) {
       console.error("Failed to delete notification", error);

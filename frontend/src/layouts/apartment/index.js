@@ -75,6 +75,7 @@ function Apartment() {
     revenues: [],
     total: 0,
   });
+  const [residents, setResidents] = useState([]); // New state for residents
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddResidentForm, setShowAddResidentForm] = useState(false);
   const [citizenId, setCitizenId] = useState("");
@@ -86,6 +87,7 @@ function Apartment() {
 
   useEffect(() => {
     loadApartment();
+    loadResidents(); // Load residents from new endpoint
   }, [apartmentId]);
 
   const loadApartment = async () => {
@@ -108,6 +110,25 @@ function Apartment() {
       localStorage.setItem("apartmentId", result.data.apartmentId);
     } catch (error) {
       console.error("Error loading apartment information:", error);
+    }
+  };
+
+  // New function to load residents from the new endpoint
+  const loadResidents = async () => {
+    try {
+      const apartmentIdToUse = apartmentId || localStorage.getItem("apartmentId");
+      if (!apartmentIdToUse) {
+        setResidents([]);
+        return;
+      }
+      const response = await axios.get(
+        `http://localhost:7070/apartment/${apartmentIdToUse}/residents`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+      setResidents(response.data);
+    } catch (error) {
+      console.error("Error loading residents:", error);
+      setResidents([]);
     }
   };
 
@@ -181,6 +202,7 @@ function Apartment() {
       setAddingResident(false);
       handleCloseAddResidentForm();
       loadApartment(); // Reload apartment data after adding resident
+      loadResidents(); // Reload residents
       alert("Resident added successfully!");
     } catch (error) {
       setAddingResident(false);
@@ -211,6 +233,7 @@ function Apartment() {
       setRemovingResident(false);
       handleCloseRemoveResidentForm();
       loadApartment(); // Reload apartment data after removing resident
+      loadResidents(); // Reload residents
       alert("Resident removed successfully!");
     } catch (error) {
       setRemovingResident(false);
@@ -393,13 +416,13 @@ function Apartment() {
                   <MDBox p={3}>
                     <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                       <MDTypography variant="h5" fontWeight="medium">
-                        Residents ({apartment.residents?.length || 0})
+                        Residents ({residents.length})
                       </MDTypography>
-                      <MDBox>{apartment.residents?.length > 0}</MDBox>
+                      <MDBox>{residents.length > 0}</MDBox>
                     </MDBox>
-                    {apartment.residents?.length > 0 ? (
+                    {residents.length > 0 ? (
                       <Grid container spacing={2}>
-                        {apartment.residents.map((resident, index) => (
+                        {residents.map((resident, index) => (
                           <Grid item xs={12} md={6} lg={4} key={resident.id || `resident-${index}`}>
                             <Paper
                               elevation={1}
