@@ -151,6 +151,7 @@ export default function revenueData() {
       used: "",
       endDate: "",
     });
+    setSelectedApartments(new Set());
   };
 
   const handleCreateSubmit = async () => {

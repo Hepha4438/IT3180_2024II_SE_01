@@ -83,7 +83,7 @@ export default function data() {
         .filter(Boolean)
         .join(" - ");
 
-      setErrorMessage(errorMessage || "Xóa không thành công");
+      setErrorMessage(errorMessage || "Failed to delete fee. Please try again!");
       setShowAlert(true);
     }
   };
