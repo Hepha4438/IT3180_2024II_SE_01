@@ -33,13 +33,11 @@ public class Apartment {
 
     @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
             fetch = FetchType.LAZY, orphanRemoval = false)
-    @JsonManagedReference
     @JsonIgnore
     private List<User> residents;
 
     @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
             fetch = FetchType.LAZY, orphanRemoval = false)
-    @JsonManagedReference
     @JsonIgnore
     private List<Revenue> revenues;
 

@@ -1,6 +1,7 @@
 package com.prototype.arpartment_managing.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Set;
 
@@ -25,11 +26,11 @@ public class User {
     private String citizenIdentification;
     @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "apartment_id", referencedColumnName = "apartment_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference // Only this for bidirectional
     private Apartment apartment;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore // Prevent recursion
     private Set<Notification> notifications;
 
     public Long getId() {

@@ -43,7 +43,9 @@ const UserNotificationPage = () => {
     if (!selectedNotification) return;
     try {
       await axios.delete(
-        `https://it3180-2024ii-se-01-final.onrender.com/notifications/${selectedNotification.id}`,
+        `https://it3180-2024ii-se-01-final.onrender.com/notifications/user/${
+          selectedNotification.id
+        }/${localStorage.getItem("id")}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }

@@ -51,6 +51,23 @@ public class ApartmentController {
         return apartmentService.getApartmentById(apartmentId);
     }
 
+    // Get all residents of an apartment - Admin or resident of the apartment
+    @GetMapping("/{apartmentId}/residents")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
+    public ResponseEntity<?> getResidents(@PathVariable String apartmentId) {
+        try {
+            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            List<UserDTO> residents = apartmentService.getResidentsByApartmentId(apartmentId);
+            return ResponseEntity.ok(residents);
+        } catch (ApartmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving residents: " + e.getMessage());
+        }
+    }
+
     // Delete apartment - Admin only
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")

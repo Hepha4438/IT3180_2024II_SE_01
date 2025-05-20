@@ -68,6 +68,16 @@ public class NotificationService {
     }
 
     @Transactional
+    public void deleteNotiUser(Long id, Long userId) {
+        Notification notification = notificationRepository
+                .findById(id).orElseThrow(() -> new NotificationNotFoundException(id));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        user.getNotifications().remove(notification);
+        notification.getUsers().remove(user);
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
     public NotificationDTO updateNotification(Long id, NotificationDTO dto) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotificationNotFoundException(id));

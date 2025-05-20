@@ -1,5 +1,6 @@
 package com.prototype.arpartment_managing.service;
 
+import com.prototype.arpartment_managing.dto.UserDTO;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.FeeNotFoundException;
 import com.prototype.arpartment_managing.model.Fee;
@@ -403,5 +404,26 @@ public class ApartmentService {
             default:
                 return "piece";
         }
+    }
+
+    public List<UserDTO> getResidentsByApartmentId(String apartmentId) {
+        Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+        List<User> residents = apartment.getResidents();
+        List<UserDTO> residentDTOs = new ArrayList<>();
+        for (User resident : residents) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(resident.getId());
+            userDTO.setFullName(resident.getFullName());
+            userDTO.setUsername(resident.getUsername());
+            userDTO.setEmail(resident.getEmail());
+            userDTO.setPhoneNumber(resident.getPhoneNumber());
+            userDTO.setApartmentId(apartmentId);
+            userDTO.setRole(resident.getRole());
+            userDTO.setCitizenIdentification(resident.getCitizenIdentification());
+            userDTO.setPassword(resident.getPassword());
+            residentDTOs.add(userDTO);
+        }
+        return residentDTOs;
     }
 }

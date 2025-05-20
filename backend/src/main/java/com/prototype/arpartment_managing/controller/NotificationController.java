@@ -57,4 +57,11 @@ public class NotificationController {
     public List<NotificationDTO> getByUser(@PathVariable Long userId) {
         return notificationService.getNotificationsByUser(userId);
     }
+
+    @DeleteMapping("/user/{id}/{userId}")
+//    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteNoti(@PathVariable Long id, @PathVariable Long userId) {
+        notificationService.deleteNotiUser(id, userId);
+        return ResponseEntity.ok("Notification deleted");
+    }
 }
