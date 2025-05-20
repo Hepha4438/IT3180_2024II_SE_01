@@ -1,5 +1,6 @@
 package com.prototype.arpartment_managing.controller;
 
+import com.prototype.arpartment_managing.dto.UserDTO;
 import com.prototype.arpartment_managing.exception.ApartmentNotFoundException;
 import com.prototype.arpartment_managing.exception.UserNotFoundException;
 import com.prototype.arpartment_managing.model.Apartment;
