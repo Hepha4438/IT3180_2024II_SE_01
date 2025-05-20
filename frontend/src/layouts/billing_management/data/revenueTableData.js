@@ -140,6 +140,13 @@ export default function revenueData() {
 
   const handleCreateClick = () => {
     loadFees();
+    setNewRevenue({
+      type: feeTypes[0] || "",
+      status: "Unpaid",
+      used: "",
+      endDate: "",
+    });
+    console.log("Create Revenue:", newRevenue);
     setCreateDialogOpen(true);
   };
 
