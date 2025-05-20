@@ -126,6 +126,7 @@ export default function data() {
   const handleCreateClose = () => {
     setCreateDialogOpen(false);
     setNewNotification({ type: "", content: "", usernames: new Set() });
+    setSelectedUsernames(new Set());
   };
 
   const handleCreateSubmit = async () => {
@@ -148,12 +149,14 @@ export default function data() {
 
   const handleEditClick = (notification) => {
     setEditNotification(notification);
+    setSelectedUsernames(notification.usernames);
     setEditDialogOpen(true);
   };
 
   const handleEditClose = () => {
     setEditDialogOpen(false);
     setEditNotification({ type: "", content: "", listUser: new Set() });
+    setSelectedUsernames(new Set());
   };
 
   const handleEditSubmit = async () => {
