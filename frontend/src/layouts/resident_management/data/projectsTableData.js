@@ -370,6 +370,32 @@ export default function data() {
                 required
                 inputProps={{ min: 1 }}
               />
+              <TextField
+                label="Area"
+                name="area"
+                type="number"
+                value={newApartment.area}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                label="ApartmentType"
+                name="apartmentType"
+                value={newApartment.apartmentType}
+                onChange={handleInputChange}
+                fullWidth
+                inputProps={{ min: 1 }}
+              />
+              <TextField
+                label="Owner"
+                name="owner"
+                value={newApartment.owner}
+                onChange={handleInputChange}
+                fullWidth
+                inputProps={{ min: 1 }}
+              />
             </MDBox>
           </DialogContent>
           <DialogActions>
