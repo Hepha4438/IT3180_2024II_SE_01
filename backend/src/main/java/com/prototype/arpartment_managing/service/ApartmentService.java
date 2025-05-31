@@ -411,4 +411,134 @@ public class ApartmentService {
         }
         return residentDTOs;
     }
+    
+    /**
+     * Reset usage counters for all apartments or a specific apartment
+     * This is typically used after billing to start fresh usage tracking for the next billing cycle
+     * 
+     * @param apartmentId Optional ID of apartment to reset. If null, all apartments are reset.
+     * @return Number of apartments that were reset
+     */
+    @Transactional    
+    public int resetUsageCounters(String apartmentId) {
+        if (apartmentId != null) {
+            // Reset for a specific apartment
+            Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                    .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+            
+            // Reset all usage counters to zero
+            apartment.setServiceUsage(0.0);
+            apartment.setWaterUsage(0.0);
+            apartment.setElectricityUsage(0.0);
+            apartment.setVehicleCount(0);
+            
+            apartmentRepository.save(apartment);
+            return 1; // One apartment reset
+        } else {
+            // Reset for all apartments
+            List<Apartment> apartments = apartmentRepository.findAll();
+            
+            int count = 0;
+            for (Apartment apartment : apartments) {
+                // Reset all usage counters to zero
+                apartment.setServiceUsage(0.0);
+                apartment.setWaterUsage(0.0);
+                apartment.setElectricityUsage(0.0);
+                apartment.setVehicleCount(0);
+                
+                apartmentRepository.save(apartment);
+                count++;
+            }
+            
+            return count;
+        }
+    }
+
+    /**
+     * Update only the usage fields of an apartment (service, water, electricity, vehicle)
+     * This is useful for incrementing usage values during the billing cycle
+     * 
+     * @param apartmentId The ID of the apartment to update
+     * @param serviceUsage The service usage value to set (null to keep current value)
+     * @param waterUsage The water usage value to set (null to keep current value)
+     * @param electricityUsage The electricity usage value to set (null to keep current value)
+     * @param vehicleCount The vehicle count to set (null to keep current value)
+     * @return The updated apartment
+     */
+    @Transactional
+    public Apartment updateApartmentUsage(
+            String apartmentId,
+            Double serviceUsage,
+            Double waterUsage, 
+            Double electricityUsage,
+            Integer vehicleCount) {
+        
+        Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+        
+        // Only update fields that are provided (not null)
+        if (serviceUsage != null) {
+            apartment.setServiceUsage(serviceUsage);
+        }
+        
+        if (waterUsage != null) {
+            apartment.setWaterUsage(waterUsage);
+        }
+        
+        if (electricityUsage != null) {
+            apartment.setElectricityUsage(electricityUsage);
+        }
+        
+        if (vehicleCount != null) {
+            apartment.setVehicleCount(vehicleCount);
+        }
+        
+        return apartmentRepository.save(apartment);
+    }
+    
+    /**
+     * Increment the usage values of an apartment
+     * This is useful for adding to the current usage values during the billing cycle
+     * 
+     * @param apartmentId The ID of the apartment to update
+     * @param serviceUsage The service usage to add (null to leave unchanged)
+     * @param waterUsage The water usage to add (null to leave unchanged)
+     * @param electricityUsage The electricity usage to add (null to leave unchanged)
+     * @param vehicleCount The vehicle count to add (null to leave unchanged)
+     * @return The updated apartment
+     */
+    @Transactional
+    public Apartment incrementApartmentUsage(
+            String apartmentId,
+            Double serviceUsage,
+            Double waterUsage, 
+            Double electricityUsage,
+            Integer vehicleCount) {
+        
+        Apartment apartment = apartmentRepository.findByApartmentId(apartmentId)
+                .orElseThrow(() -> new ApartmentNotFoundException(apartmentId));
+        
+        // Add to existing values (if provided)
+        if (serviceUsage != null) {
+            double currentServiceUsage = apartment.getServiceUsage() != null ? apartment.getServiceUsage() : 0.0;
+            apartment.setServiceUsage(currentServiceUsage + serviceUsage);
+        }
+        
+        if (waterUsage != null) {
+            double currentWaterUsage = apartment.getWaterUsage() != null ? apartment.getWaterUsage() : 0.0;
+            apartment.setWaterUsage(currentWaterUsage + waterUsage);
+        }
+        
+        if (electricityUsage != null) {
+            double currentElectricityUsage = apartment.getElectricityUsage() != null ? apartment.getElectricityUsage() : 0.0;
+            apartment.setElectricityUsage(currentElectricityUsage + electricityUsage);
+        }
+        
+        if (vehicleCount != null) {
+            int currentVehicleCount = apartment.getVehicleCount() != null ? apartment.getVehicleCount() : 0;
+            apartment.setVehicleCount(currentVehicleCount + vehicleCount);
+        }
+        
+        return apartmentRepository.save(apartment);
+    }
 }

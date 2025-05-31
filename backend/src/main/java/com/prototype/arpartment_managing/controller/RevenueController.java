@@ -2,6 +2,7 @@ package com.prototype.arpartment_managing.controller;
 
 import com.prototype.arpartment_managing.dto.RevenueDTO;
 import com.prototype.arpartment_managing.model.Revenue;
+import com.prototype.arpartment_managing.scheduler.RevenueScheduler;
 import com.prototype.arpartment_managing.service.RevenueService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +24,12 @@ import java.util.Map;
 public class RevenueController {
     @Autowired
     private RevenueService revenueService;
+    
+    @Autowired
+    private RevenueScheduler revenueScheduler;
+    
+    @Autowired
+    private com.prototype.arpartment_managing.util.LogMonitor logMonitor;
 
     // Get all revenues - Admin only
     @GetMapping("/all")
@@ -171,13 +182,97 @@ public class RevenueController {
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     public List<RevenueDTO> getContribution(@PathVariable String apartmentId) {
         return revenueService.getAllContributions(apartmentId);
-    }
-
+    }    
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isResidentOfApartment(#apartmentId)")
     @GetMapping("/not-contribution/{apartmentId}")
     public List<RevenueDTO> getRevenueNotContribution(@PathVariable String apartmentId) {
         return revenueService.getRevenuesNotContribution(apartmentId);
     }
 
+    // Manually trigger revenue generation for testing - Admin only
+    @PostMapping("/generate-monthly")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> generateMonthlyRevenues() {
+        try {
+            // Record the count of revenues before
+            int countBefore = revenueService.getAllRevenues().size();
+            
+            // Trigger the scheduler manually
+            revenueScheduler.manuallyTriggerRevenueGeneration();
+            
+            // Get the count after generation
+            int countAfter = revenueService.getAllRevenues().size();
+            
+            // Return informative response
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("message", "Monthly revenue generation triggered successfully");
+            response.put("revenuesBefore", countBefore);
+            response.put("revenuesAfter", countAfter);
+            response.put("revenuesCreated", countAfter - countBefore);
+            response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to generate monthly revenues: " + e.getMessage());
+        }
+    }
+    
+    // Verify recently created revenues - Admin only
+    @GetMapping("/verify-generated")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> verifyGeneratedRevenues(
+            @RequestParam(required = false) String date) {
+        try {
+            LocalDate checkDate;
+            if (date != null && !date.isEmpty()) {
+                checkDate = LocalDate.parse(date);
+            } else {
+                checkDate = LocalDate.now();
+            }
+            
+            // Get revenues created today or on specified date
+            List<RevenueDTO> todayRevenues = revenueService.getRevenuesByCreateDate(checkDate);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("date", checkDate);
+            response.put("revenueCount", todayRevenues.size());
+            response.put("revenues", todayRevenues);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to verify generated revenues: " + e.getMessage());
+        }
+    }
 
+    // Get revenue generation logs - Admin only
+    @GetMapping("/logs")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getRevenueGenerationLogs(
+            @RequestParam(required = false) String date) {
+        try {
+            LocalDate checkDate = null;
+            if (date != null && !date.isEmpty()) {
+                checkDate = LocalDate.parse(date);
+            }
+            
+            List<String> logs = logMonitor.getRevenueGenerationLogs(checkDate);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("date", checkDate != null ? checkDate : "all");
+            response.put("logCount", logs.size());
+            response.put("logs", logs);
+            response.put("wereRevenuesGeneratedToday", logMonitor.wereRevenuesGeneratedToday());
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to retrieve revenue generation logs: " + e.getMessage());
+        }
+    }
 }

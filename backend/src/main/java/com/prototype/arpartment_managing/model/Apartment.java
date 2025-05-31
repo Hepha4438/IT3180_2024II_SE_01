@@ -23,12 +23,24 @@ public class Apartment {
     @Column(name = "apartmentType")
     private String apartmentType;
     @Column(name = "owner")
-    private String owner;
+    private String owner;    
     @Column(name = "occupants")
     private Integer occupants = 0;
 
     @Column(name = "is_occupied")
     private Boolean isOccupied = false;
+    
+    @Column(name = "service_usage")
+    private Double serviceUsage = 0.0;
+    
+    @Column(name = "water_usage")
+    private Double waterUsage = 0.0;
+    
+    @Column(name = "electricity_usage")
+    private Double electricityUsage = 0.0;
+    
+    @Column(name = "vehicle_count")
+    private Integer vehicleCount = 0;
 
     @OneToMany(mappedBy = "apartment", cascade = { CascadeType.ALL},
             fetch = FetchType.LAZY, orphanRemoval = false)
@@ -109,11 +121,43 @@ public class Apartment {
 
     public Boolean getIsOccupied() {
         return isOccupied;
-    }
-
+    }    
     public void setIsOccupied(Boolean isOccupied) {
         this.isOccupied = isOccupied;
     }
+    
+    public Double getServiceUsage() {
+        return serviceUsage;
+    }
+    
+    public void setServiceUsage(Double serviceUsage) {
+        this.serviceUsage = serviceUsage;
+    }
+    
+    public Double getWaterUsage() {
+        return waterUsage;
+    }
+    
+    public void setWaterUsage(Double waterUsage) {
+        this.waterUsage = waterUsage;
+    }
+    
+    public Double getElectricityUsage() {
+        return electricityUsage;
+    }
+    
+    public void setElectricityUsage(Double electricityUsage) {
+        this.electricityUsage = electricityUsage;
+    }
+    
+    public Integer getVehicleCount() {
+        return vehicleCount;
+    }
+    
+    public void setVehicleCount(Integer vehicleCount) {
+        this.vehicleCount = vehicleCount;
+    }
+    
     public List<User> getResidents() {
         return residents;
     }

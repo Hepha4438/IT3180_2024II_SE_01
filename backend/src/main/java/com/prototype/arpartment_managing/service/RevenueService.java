@@ -72,8 +72,8 @@ public class RevenueService {
 
     public List<Revenue> getRevenueByApartmentId(String apartmentId) {
         return revenueRepository.findByApartment_ApartmentId(apartmentId);
-    }
-
+    }    
+    
     @Transactional
     // Create Revenue
     public Revenue createRevenue(RevenueDTO revenueDTO) {
@@ -82,8 +82,19 @@ public class RevenueService {
             throw new IllegalArgumentException("Apartment ID must not be null");
         }
 
+        // Get the apartment first to access its properties
+        Apartment apartment = apartmentRepository.findByApartmentId(revenueDTO.getApartmentId())
+                .orElseThrow(() -> new ApartmentNotFoundException(revenueDTO.getApartmentId()));
+
         Revenue revenue = new Revenue();
-        revenue.setUsed(revenueDTO.getUsed());
+        
+        // For Service type, automatically use the apartment area as the used value
+        if ("Service".equals(revenueDTO.getType()) && apartment.getArea() != null) {
+            revenue.setUsed(apartment.getArea());
+        } else {
+            revenue.setUsed(revenueDTO.getUsed());
+        }
+        
         revenue.setStatus(revenueDTO.getStatus());
         revenue.setType(revenueDTO.getType());
         
@@ -93,12 +104,7 @@ public class RevenueService {
         }
 //        else{
 //            revenue.setEndDate(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).atStartOfDay());
-//        }
-
-        // Set apartment (required)
-        Apartment apartment = apartmentRepository.findByApartmentId(revenueDTO.getApartmentId())
-                .orElseThrow(() -> new ApartmentNotFoundException(revenueDTO.getApartmentId()));
-
+//        }        // Set apartment (already retrieved above)
         revenue.setApartment(apartment);
 
 
@@ -108,7 +114,7 @@ public class RevenueService {
 
         revenue = revenueRepository.save(revenue);
 
-        // Update âprtment
+        // Update apartment
         apartment.getRevenues().add(revenue);
         apartment.setTotal(calculateTotalPayment(apartment.getApartmentId()));
         apartmentRepository.save(apartment);
@@ -330,6 +336,31 @@ public class RevenueService {
                     Apartment apartment = revenue.getApartment();
                     return new RevenueDTO(revenue, apartment);
                 })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get revenues created on a specific date
+     * Useful for verifying that scheduled revenue generation is working
+     * 
+     * @param date The date to check for created revenues
+     * @return List of revenues created on the specified date
+     */
+    public List<RevenueDTO> getRevenuesByCreateDate(LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay().minusSeconds(1);
+        
+        List<Revenue> revenues = revenueRepository.findAll().stream()
+                .filter(revenue -> {
+                    LocalDateTime createDate = revenue.getCreateDate();
+                    return createDate != null && 
+                           createDate.isAfter(startOfDay) && 
+                           createDate.isBefore(endOfDay);
+                })
+                .collect(Collectors.toList());
+                
+        return revenues.stream()
+                .map(revenue -> new RevenueDTO(revenue, revenue.getApartment()))
                 .collect(Collectors.toList());
     }
 }
